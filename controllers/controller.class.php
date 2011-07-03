@@ -181,13 +181,13 @@ class controller {
     }
   }
   
-  function user_avatar($user) {
+  function user_avatar($user, $geo = '20x20') {
     $user_id = !empty($user->u_id) ? $user->u_id : $user->id;
     if (file_exists($this->image($user_id, NULL, 'avatars'))) {
-      return "/user/avatar/{$user_id}/20x20";
+      return "/user/avatar/{$user_id}/{$geo}";
     }
     else {
-      return "/user/avatar/0/20x20";
+      return "/user/avatar/0/{$geo}";
     }
   }
   

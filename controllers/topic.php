@@ -19,7 +19,7 @@ class topic_controller extends controller {
     $topics = array();
 
     $sql = "SELECT * FROM topics WHERE "
-      . "von = {$_SESSION['user']->id} ";
+      . "(shared = 1 OR von = {$_SESSION['user']->id}) ";
 
     if (!empty($_GET['term'])) {
       $sql .= "AND title LIKE '%" .  mysql_real_escape_string($_GET['term']) . "%' ";
