@@ -16,6 +16,11 @@ if ($page_head) {
 </head>
 <body id="<?php echo "{$this->name}-{$this->method}"; ?>">
   <?php echo $this->render('_status_message'); ?>
+  <?php
+  if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
+    $this->render('_chat');
+  ?>
+  
   <div id="page">
     <header>
       <img id="logo" src="http://static.pipinstrasse.de/img/pipinstrasse_logo.png" alt="Pipinstraße" />  
