@@ -34,7 +34,7 @@ echo $this->method == 'edit' ? "edit/{$_POST['id']}" : 'add';
     <label for="bild">Bild</label><input class="input" type="file" name="bild" value="" id="">
     
     <label for="topic">Album</label><input class="input" type="text" name="topic" value="" id="topic">
-    
+
     <input type="submit" value="Speichern">
 
   </div>
