@@ -38,7 +38,7 @@ class photo_controller extends controller {
           $photos[] = $_photo;
         }
 
-        $this->vars['blocks']['sidebar2'][] = $this->block(array(
+        $this->vars['blocks']['above'][] = $this->block(array(
           'name' => 'album',
           'title' => 'Mehr ' . $photo->topic,
           'view' => '_topic'
@@ -47,31 +47,31 @@ class photo_controller extends controller {
         ));
       }
     }
-  
-    if (!$_SESSION['user']->guest) {
-      /*
-       * Block "Neueste Alben"
-       */ 
-      $sql = "SELECT p.id as p_id, p.*, t.* FROM topics t "
-        . 'LEFT JOIN photos p ON p.topic_id = t.id '
-        . 'GROUP BY t.id '
-        . 'ORDER BY t.created DESC LIMIT 10';
-    
-      $topics = array();
-      $rs = mysql_query($sql);
-      while ($topic = mysql_fetch_object($rs)) {
-        $topics[] = $topic;
+    else {
+      if (!$_SESSION['user']->guest) {
+        /*
+         * Block "Neueste Alben"
+         */ 
+        $sql = "SELECT p.id as p_id, p.*, t.* FROM topics t "
+          . 'LEFT JOIN photos p ON p.topic_id = t.id '
+          . 'GROUP BY t.id '
+          . 'ORDER BY t.created DESC LIMIT 10';
+
+        $topics = array();
+        $rs = mysql_query($sql);
+        while ($topic = mysql_fetch_object($rs)) {
+          $topics[] = $topic;
+        }
+
+        $this->vars['blocks']['above'][] = $this->block(array(
+          'name' => 'topics',
+          'title' => 'Neueste Alben',
+          'view' => '_topics'
+        ), array(
+          'topics' => $topics,
+        ));
       }
-
-      $this->vars['blocks']['above'][] = $this->block(array(
-        'name' => 'topics',
-        'title' => 'Neueste Alben',
-        'view' => '_topics'
-      ), array(
-        'topics' => $topics,
-      ));
     }
-
     parent::before_layout();
   }
   
