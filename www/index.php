@@ -11,7 +11,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
-
 session_start();
 require_once '../config.php';
 
@@ -136,7 +135,6 @@ if (file_exists($file)) {
 
       if ($controller->layout) {
         $controller->before_layout();
-        
         $controller->render($controller->layout === TRUE ? 'layout' : "{$controller->layout}_layout");
       }
       else {

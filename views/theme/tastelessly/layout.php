@@ -44,31 +44,7 @@ if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
 <div id="logo">
   <h1><a href="/"><?php echo $title; ?></a></h1>
   <h2><?php echo $slogan; ?></h2>
-  
-  <?php
-  if (!empty($_SESSION['user'])) {
-    ?>
-    <div id="user">
-    <?php
-    if ($_SESSION['user']->guest) {
-      ?><a href="/user/logout">Gastzugang beenden</a><?php
-      
-    }
-    else {
-      ?>
-      <?php echo $this->user_link(); ?>
-      | <a href="/user/edit">Bearbeiten</a>
-      | <a href="/message/index">Nachrichten</a><?php
-      if ($message_count) { echo " <span title=\"ungelesene Nachrichten\">({$message_count})</span>"; }
-      ?>
-      | <a href="/user/logout">Abmelden</a>
-      <?php
-    }
-    ?>
-    </div>
-    <?php
-  }
-  ?>
+  <?php $this->render('_user'); ?>
 </div>
 <!-- end header -->
 <hr />
