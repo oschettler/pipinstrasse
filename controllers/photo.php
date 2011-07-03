@@ -63,7 +63,7 @@ class photo_controller extends controller {
         $topics[] = $topic;
       }
 
-      $this->vars['blocks']['sidebar2'][] = $this->block(array(
+      $this->vars['blocks']['above'][] = $this->block(array(
         'name' => 'topics',
         'title' => 'Neueste Alben',
         'view' => '_topics'

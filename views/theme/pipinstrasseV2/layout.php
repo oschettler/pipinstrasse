@@ -39,6 +39,7 @@ if ($page_head) {
     <aside id="slogan" class="startseite"></aside>  
     <section id="contentPart">
       <section>
+        <?php $this->blocks('above'); ?>
         <?php echo $contents; ?>
       </section>
       <?php
