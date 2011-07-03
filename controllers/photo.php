@@ -92,7 +92,7 @@ class photo_controller extends controller {
         . "title = '" .  mysql_real_escape_string($_POST['topic']) . "'"
       );
       if ($topic = mysql_fetch_object($rs)) {
-        if ($topic->von != $_SESSION['user']->id) {
+        if (!$topic->shared && $topic->von != $_SESSION['user']->id) {
           $this->message('Dieses Album gehört nicht Ihnen.');
           $this->redirect('/photo/index');
         }
