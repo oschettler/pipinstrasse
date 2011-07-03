@@ -38,8 +38,11 @@ class user_controller extends controller {
           . ')';
 
       $rs = mysql_query($sql);
-      $_SESSION['user'] = mysql_fetch_object($rs);
-      $_SESSION['user']->guest = FALSE;
+      $_SESSION['user'] = mysql_fetch_object($rs); 
+      
+      if ($_SESSION['user']) {
+        $_SESSION['user']->guest = FALSE;
+      }
       
       $this->redirect();
     }
