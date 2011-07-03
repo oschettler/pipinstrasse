@@ -1,7 +1,7 @@
 section#contentPart {
   background-color: #fff;
   width: 910px;
-  float: left;
+  margin: 0 auto;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
   border-radius: 3px;
   padding: 10px;
@@ -9,5 +9,33 @@ section#contentPart {
 }
 section {
   width: 670px;
-  float: left;
+  margin: 0 auto;
+}
+form {
+  width: 320px;
+}
+textarea, input.input {
+  display: block;
+  width: 100%;
+}
+ul.ui-autocomplete li {
+  background: #EEE;
+  cursor: pointer;
+  list-style-type: none;
+  padding: 4px;
+  width: 320px;
+}
+/*
+ * Chat
+ */
+#chat {
+  position: fixed;
+  display: none;
+  bottom: 0;
+  right: 0;
+  width: 10%;
+  height: 1em;
+  background-color: white;
+  border: solid 2px #888;
+  padding: 4px 10px;
 }

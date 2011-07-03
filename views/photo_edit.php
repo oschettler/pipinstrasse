@@ -6,8 +6,11 @@ $this->page_head();
 <script type="text/javascript" charset="utf-8">
 jQuery(function($) {
   $('#topic').autocomplete({
-    minLength: 2,
+    minLength: 0,
     source: '/topic/mine'
+  })
+  .click(function() {
+    $(this).autocomplete('search');
   });
 });
 </script>

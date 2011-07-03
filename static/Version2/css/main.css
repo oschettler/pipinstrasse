@@ -1,33 +1,217 @@
-*{margin:0;padding:0;}
-body{background-image:url(../img/background.jpg);font-family:'Open Sans',Arial;font-size:13px;}
-#page{margin:auto;width:1000px;}
-header{margin:25px 0 15px 90px;overflow:auto;}
-#logo{float:left;}
-#usermenu{float:right;margin-left:100px;height:70px;}
-#header{width:980px;height:55px;margin:0 auto;}
-#menu{float:left;}
-#menu ul{margin:0;padding:0;list-style:none;line-height:normal;}
-#menu li{float:left;}
-#menu a{display:block;float:left;height:25px;margin-right:1px;padding:10px 20px 0 20px;text-decoration:none;font-size:1.1em;font-weight:bold;color:#8C8F7D;}
-#menu a:hover{background:#F3F3F3;color:#2C2E22;}
-#menu .current_page_item a{background:#F3F3F3;color:#2C2E22;}
-section#contentPart{background-color:#fff;width:910px;float:left;box-shadow:0 1px 5px rgba(0, 0, 0, 0.1);border-radius:3px;padding:10px;overflow:auto;}
-section{width:670px;float:left;}
-aside#sideInfo{width:230px;margin-left:10px;float:left;}
-aside#slogan{width:70px;float:left;padding-top:20px;background-repeat:no-repeat;background-position:center bottom;background-color:none;margin:0;}
-aside.nachbarn{background-image:url(../img/slogan_nachbarn.png);height:174px;}
-aside.startseite{background-image:url(../img/slogan_startseite.png);height:203px;}
-aside.anmelden{background-image:url(../img/slogan_anmelden.png);height:171px;}
-aside.registrieren{background-image:url(../img/slogan_registrieren.png);height:229px;}
-aside.neues-kennwort{background-image:url(../img/slogan_neues-kennwort.png);height:321px;}
-footer{float:right;margin-right:5px;margin-top:5px;font-size:12px;}
-footer a{text-decoration:none;color:#aaa;}
-.message{padding:7px;}
-.message.error{color:#791010;background-color:#ffcfcf;border:1px solid #ff0000;}
-.message.status{color:#3d7910;background-color:#e3ffcf;border:1px solid #3d7910;}
-#boardList{list-style:none;overflow:auto;}#boardList li{width:auto;min-height:1px;margin-bottom:10px;}
-#boardList ul{list-style:none;}
-#boardList .entry{background-color:#eee;overflow:auto;border-radius:3px;}#boardList .entry .picture{height:150px;width:120px;background-color:#005511;float:left;margin-left:10px;margin-top:10px;display:block;}
-#boardList .entry .content{float:left;min-height:105px;width:540px;}#boardList .entry .content span{margin:20px;display:block;text-align:justify;font-family:'Waiting for the Sunrise';font-size:24px;color:#555;line-height:30px;}
-#boardList .entry .name{color:#555;font-size:30px;text-align:right;padding-right:10px;margin-right:10px;margin-top:5px;border-bottom:1px solid #fff;height:40px;width:510px;float:right;font-family:'Waiting for the Sunrise';font-weight:bolder;}
-#actions li{width:300px;height:250px;}
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-image: url(../img/background.jpg);
+  font-family: 'Open Sans', Arial;
+  font-size: 13px;
+}
+#page {
+  margin: auto;
+  width: 1000px;
+}
+header {
+  margin: 25px 0 15px 90px;
+  overflow: auto;
+}
+#logo {
+  float: left;
+}
+#usermenu {
+  float: right;
+  margin-left: 100px;
+  height: 70px;
+}
+#header {
+  width: 980px;
+  height: 55px;
+  margin: 0 auto;
+}
+#menu {
+  float: left;
+}
+#menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: normal;
+}
+#menu li {
+  float: left;
+}
+#menu a {
+  display: block;
+  float: left;
+  height: 25px;
+  margin-right: 1px;
+  padding: 10px 20px 0 20px;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #8C8F7D;
+}
+#menu a:hover {
+  background: #F3F3F3;
+  color: #2C2E22;
+}
+#menu .current_page_item a {
+  background: #F3F3F3;
+  color: #2C2E22;
+}
+section#contentPart {
+  background-color: #fff;
+  width: 910px;
+  margin: 0 auto;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 10px;
+  overflow: auto;
+}
+section {
+  width: 670px;
+  margin: 0 auto;
+}
+form {
+  width: 320px;
+}
+textarea, input.input {
+  display: block;
+  width: 100%;
+}
+ul.ui-autocomplete li {
+  background: #EEE;
+  cursor: pointer;
+  list-style-type: none;
+  padding: 4px;
+  width: 320px;
+}
+/*
+ * Chat
+ */
+#chat {
+  position: fixed;
+  display: none;
+  bottom: 0;
+  right: 0;
+  width: 10%;
+  height: 1em;
+  background-color: white;
+  border: solid 2px #888;
+  padding: 4px 10px;
+}
+aside#sideInfo {
+  width: 230px;
+  margin-left: 10px;
+  float: left;
+}
+aside#slogan {
+  width: 70px;
+  float: left;
+  padding-top: 20px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-color: none;
+  margin: 0;
+}
+aside.nachbarn {
+  background-image: url(../img/slogan_nachbarn.png);
+  height: 174px;
+}
+aside.startseite {
+  background-image: url(../img/slogan_startseite.png);
+  height: 203px;
+}
+aside.anmelden {
+  background-image: url(../img/slogan_anmelden.png);
+  height: 171px;
+}
+aside.registrieren {
+  background-image: url(../img/slogan_registrieren.png);
+  height: 229px;
+}
+aside.neues-kennwort {
+  background-image: url(../img/slogan_neues-kennwort.png);
+  height: 321px;
+}
+footer {
+  float: right;
+  margin-right: 5px;
+  margin-top: 5px;
+  font-size: 12px;
+}
+footer a {
+  text-decoration: none;
+  color: #aaa;
+}
+.message {
+  padding: 7px;
+}
+.message.error {
+  color: #791010;
+  background-color: #ffcfcf;
+  border: 1px solid #ff0000;
+}
+.message.status {
+  color: #3d7910;
+  background-color: #e3ffcf;
+  border: 1px solid #3d7910;
+}
+#boardList {
+  list-style: none;
+  overflow: auto;
+}
+#boardList li {
+  width: auto;
+  min-height: 1px;
+  margin-bottom: 10px;
+}
+#boardList ul {
+  list-style: none;
+}
+#boardList .entry {
+  background-color: #eee;
+  overflow: auto;
+  border-radius: 3px;
+}
+#boardList .entry .picture {
+  height: 150px;
+  width: 120px;
+  background-color: #005511;
+  float: left;
+  margin-left: 10px;
+  margin-top: 10px;
+  display: block;
+}
+#boardList .entry .content {
+  float: left;
+  min-height: 105px;
+  width: 540px;
+}
+#boardList .entry .content span {
+  margin: 20px;
+  display: block;
+  text-align: justify;
+  font-family: 'Waiting for the Sunrise';
+  font-size: 24px;
+  color: #555;
+  line-height: 30px;
+}
+#boardList .entry .name {
+  color: #555;
+  font-size: 30px;
+  text-align: right;
+  padding-right: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  border-bottom: 1px solid #fff;
+  height: 40px;
+  width: 510px;
+  float: right;
+  font-family: 'Waiting for the Sunrise';
+  font-weight: bolder;
+}
+#actions li {
+  width: 300px;
+  height: 250px;
+}

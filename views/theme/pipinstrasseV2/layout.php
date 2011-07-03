@@ -5,8 +5,8 @@
 <title><?php echo $title; ?></title> 
 <meta name="viewport" content="width=1030" /> 
 <link href='http://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise' rel='stylesheet' type='text/css'>
-<link href="http://static.pipinstrasse.de/Version2/css/main.css" rel="stylesheet" type="text/css" media="screen" /> 
-<script src="http://static.pipinstrasse.de/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="<?php echo $config['static_url']; ?>/Version2/css/main.css" rel="stylesheet" type="text/css" media="screen" /> 
+<script src="<?php echo $config['static_url']; ?>/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
 <?php echo $this->render('_head_javascript'); ?>
 <?php
 if ($page_head) {
@@ -24,7 +24,7 @@ if ($page_head) {
   
   <div id="page">
     <header>
-      <img id="logo" src="http://static.pipinstrasse.de/img/pipinstrasse_logo.png" alt="Pipinstraße" />  
+      <img id="logo" src="<?php echo $config['static_url']; ?>/img/pipinstrasse_logo.png" alt="Pipinstraße" />  
       
       <?php echo $this->render('_user'); ?>
       

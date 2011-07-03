@@ -17,16 +17,19 @@ class topic_controller extends controller {
   function do_mine() {
     $this->layout = FALSE;
     $topics = array();
-    if (!empty($_GET['term'])) {
-      $sql = "SELECT * FROM topics WHERE "
-        . "von = {$_SESSION['user']->id} "
-        . "AND title LIKE '%" .  mysql_real_escape_string($_GET['term']) . "%' "
-        . 'ORDER BY title';
 
-      $rs = mysql_query($sql);
-      while ($topic = mysql_fetch_object($rs)) {
-        $topics[] = $topic->title;
-      }
+    $sql = "SELECT * FROM topics WHERE "
+      . "von = {$_SESSION['user']->id} ";
+
+    if (!empty($_GET['term'])) {
+      $sql .= "AND title LIKE '%" .  mysql_real_escape_string($_GET['term']) . "%' ";
+    }
+    
+    $sql .= 'ORDER BY title LIMIT 10';
+
+    $rs = mysql_query($sql);
+    while ($topic = mysql_fetch_object($rs)) {
+      $topics[] = $topic->title;
     }
     echo $result = json_encode($topics);
   }
