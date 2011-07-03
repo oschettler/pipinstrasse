@@ -19,6 +19,7 @@ if ($page_head) {
   <?php
   if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
     $this->render('_chat');
+  }
   ?>
   
   <div id="page">
