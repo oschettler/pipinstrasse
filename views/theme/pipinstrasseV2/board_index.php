@@ -11,7 +11,7 @@ if ($messages) {
         <li class="name"><?php echo "{$message->vorname} {$message->nachname}"; ?></li>  
         <li class="content">
           <span> 
-            <?php echo "BLA: ", $this->format($message->nachricht); ?>
+            <?php echo $this->format($message->nachricht); ?>
           </span> <?php echo $this->reltime($message->m_created); ?>
         </li>
         
