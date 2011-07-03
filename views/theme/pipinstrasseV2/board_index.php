@@ -7,12 +7,12 @@ if ($messages) {
     ?>
     <li>
       <ul class="entry">     
-        <li class="picture"><img src="<?= $this->user_avatar($message, '120x150') ?>" /></li>    
-        <li class="name"><?= $message->vorname . ' ' . $message->nachname ?></li>  
+        <li class="picture"><img src="<?php echo $this->user_avatar($message, '120x150'); ?>" /></li>    
+        <li class="name"><?php echo "{$message->vorname} {$message->nachname}"; ?></li>  
         <li class="content">
           <span> 
-            <?php echo nl2br(preg_replace('#(http://(\S+))#', '<a href="$1">$2</a>', strip_tags($message->nachricht))); ?>
-          </span> <?= $this->reltime($message->m_created) ?>
+            <?php echo "BLA: ", $this->format($message->nachricht); ?>
+          </span> <?php echo $this->reltime($message->m_created); ?>
         </li>
         
       </ul>

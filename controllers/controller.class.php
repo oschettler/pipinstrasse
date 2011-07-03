@@ -536,4 +536,14 @@ class controller {
   function allowed() {
     return FALSE == $_SESSION['user']->guest;
   }
+  
+  /**
+   * Formatiere einen Text:
+   * - Entferne HTML-Tags
+   * - Mache URLs klickbar
+   * - Wandle Zeilenumbrüche in <br>
+   */
+  function format($text) {
+    return nl2br(preg_replace('#(http://(\S+))#', '<a href="$1">$2</a>', strip_tags($text)));
+  }
 }
