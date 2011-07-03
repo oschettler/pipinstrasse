@@ -1,5 +1,4 @@
 <?php
-krumo($blocks);
 $this->render('photo_edit');
 ?>
 

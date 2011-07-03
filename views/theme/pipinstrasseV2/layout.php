@@ -23,7 +23,7 @@ if ($page_head) {
       <?php echo $this->render('_user'); ?>
       
       <?php
-      if (!$_SESSION['user']->guest && !empty($_SESSION['user'])) {
+      if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
       ?>
         
         <div id="menu">
