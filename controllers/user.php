@@ -125,6 +125,7 @@ class user_controller extends controller {
         $user_id = $_SESSION['user']->id;
         $_SESSION['user'] = (object)$_POST;
         $_SESSION['user']->id = $user_id;
+        $_SESSION['user']->guest = FALSE;
         $this->redirect($this->user_link(NULL, /*url_only*/TRUE));
       }
     }
