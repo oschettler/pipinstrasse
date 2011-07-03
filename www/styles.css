@@ -1,0 +1,11 @@
+input,textarea {
+  display: block;
+}
+
+#message.status {
+  color: green;
+}
+
+#message.error {
+  color: red;
+}

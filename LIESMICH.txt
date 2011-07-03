@@ -1,0 +1,53 @@
+/***********************************************************************************
+Copyright (c) 2011 Olav Schettler <olav@schettler.net>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+----
+
+This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
+***********************************************************************************/
+
+Dieses Verzeichnis enthält die Software "Pipinstrasse". 
+
+Die Software implementiert auf der Basis von PHP5/MySQL, ohne Zuhilfenahme weiterer Software (ausser ImageMagick zur server-seitigen Bildbearbeitung) oder Frameworks, ein einfaches, soziales Netzwerk mit folgenden Eigenschaften:
+
+ - Nutzerkonten
+ - Fotoalben mit automatischer Bildskalierung 
+ - Scharzes Brett
+ - Privaten Nachrichten
+ - Chat
+ - Einladungsfunktion
+ - Gastzugang
+ - Startseite mit "Wall" = Liste der Mitgliederaktionen und "Like"-Funktion
+
+Typische Anwendungsfälle für diese Software sind geschlossene Websites für Nachbarschaften, Familien oder Vereine, die sich untereinander austauschen wollen und keine öffentliche Web-Präsenz benötigen.
+
+Die Nutzung ist generell nur angemeldeten Nutzern möglich. Neue Nutzer können sich über ein Webformular registrieren, müssen aber vom Administrator freigeschaltet werden. Es gibt allerdings einen Gastzugang, über den sich Einladungs-Codes gezielt an E-Mail-Nutzer versenden lassen. Über eine solche Einladung hat man Zugriff auf ein einzelnes Fotoalbum.  
+
+Die Gestaltung ist erweiterbar und in "theme"-Verzeichnissse ausgelagert.
+
+Wie aus dem Lizenztext oben hervorgeht, wird die Software quelloffen und kostenlos verteilt.
+
+Installation
+============
+
+ - Legen Sie eine MySQL Datenbank an, etwa mit "mysqladmin create pipinstrasse"
+ - Laden Sie die Datei schema.sql, etwa mit "mysql pipinstrasse < schema.sql"
+ - Kopieren Sie die Datei config.php.default nach config.php
+ - Tragen Sie in diese Datei die Zugangsdaten für Ihre Datenbank ein
+ - Konfigurieren Sie einen Webserver, dessen DocumentRoot auf das www-Verzeichnis zeigt. 
+   mod_rewrite muss aktiviert sein.
+ - Registrieren Sie als Nutzer und aktivieren diesen in der Datenbank,
+   etwa mit "echo 'UPDATE users SET active = 1' | mysql pipinstrasse"
+ - Laden Sie weitere Nutzer über den Knopf oben rechts ein. 
+   Diese sind direkt freigeschaltet.
+
+Viel Spaß mit der Software!
+Olav Schettler, Bonn
+
+
+PS. Wenn Sie sich an der Weiterentwicklung beteiligen wollen, Fragen haben oder Unterstützung bei der Installation benötigen, erreichen Sie den Autor unter http://olav.net/contact

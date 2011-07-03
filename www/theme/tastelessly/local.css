@@ -1,0 +1,244 @@
+/**
+ * Lokale Anpassungen am tastelessly-Theme
+ */
+#logo {
+  position: relative;
+}
+
+#logo #user {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  color: white;
+}
+
+#logo h2 {
+  clear: left;
+  padding: 0 0 0 20px;
+} 
+
+form {
+  padding: 10px;
+  background-color: #888;
+  margin-bottom: 10px;
+  color: white;
+}
+
+form label {
+  clear: left;
+  display: block;
+}
+
+form h2 {
+  margin: 0 0 10px 0;
+  color: white;
+}
+
+form a {
+  color: white;
+}
+
+li h2 {
+  margin: 0 0 10px 0;
+}
+
+label {
+  color: white;
+}
+
+textarea,
+input.input {
+  display: block;
+  width: 394px;
+  padding: 4px;
+  margin-bottom: 10px;
+}
+
+input[type=file] {
+  color: white;
+}
+
+#actions,
+#board,
+#messages,
+#photos,
+#comments,
+#users {
+  margin: 0;
+} 
+
+#actions li,
+#board li,
+#messages li,
+#photos li,
+#comments li,
+#users li.hausnummer {
+  background-color: #F3F3F3;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  list-style-type: none;
+  line-height: 1.2em;
+}
+
+#photos a.edit {
+  float: right;
+}
+
+img.avatar {
+  border: solid 4px white;
+  margin: 0 4px -4px 0;
+}
+ 
+#actions img.photo,
+#photos img.photo {
+  display: block;
+  border: solid 6px #CCC;
+  margin-bottom: 4px;
+}
+
+#avatar {
+  display: block;
+  border: solid 6px #CCC;
+  margin-bottom: 4px;
+}
+
+.sidebar li p {
+  margin: 0 0 0 15px;
+  padding: 0;
+}
+
+#sidebar2 li a {
+  padding: 0;
+}
+
+#random-user h2 span {
+  display: block;
+  font-size: 0.8em;
+  line-height: 0.8em;
+  font-weight: normal;
+  text-transform: none;
+}
+
+#random-photo img {
+  display: block;
+}
+
+#invite-link a {
+  background: #F3F3F3;
+  color: #2C2E22;
+  display: block;
+  float: right;
+  font-size: 1.1em;
+  font-weight: bold;
+  height: 25px;
+  margin-right: -20px;
+  padding: 10px 20px 0px;
+  text-decoration: none;
+}
+
+form p.explain {
+  margin: -8px 0 10px 0;
+  font-size: 1em;
+  line-height: 1.1em;
+}
+
+#map {
+  display: block;
+  float: right;
+  margin-right: 20px;
+}
+
+#gifts li {
+  list-style-type: none;
+  width: 140px;
+  overflow: hidden;
+  float: left;
+  text-align: center;
+  margin-right: 40px;
+}
+
+#gifts li img {
+  display: block;
+}
+
+.handle {
+  display: block;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.folded {
+  display: none;
+}
+
+.message {
+  position: absolute; 
+  top: 0; 
+  font-size: 1.4em; 
+  padding: 10px; 
+  width: 100%; 
+  z-index: 100;
+}
+
+.message.status {
+  background: #CFC;
+}
+
+.message.error {
+  background: #FCC;
+}
+
+ul.ui-autocomplete {
+  background: #EEE;
+  border: solid 1px #888;
+  list-style-type: none;
+  width: 200px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.ui-autocomplete-loading { 
+  background: white url('/static/jquery-ui/development-bundle/demos/autocomplete/images/ui-anim_basic_16x16.gif') right center no-repeat; 
+}
+
+#photo-view #content {
+  width: 670px;
+}
+
+.block {
+  overflow: hidden;
+  clear: left;
+}
+
+#album li,
+#topics li {
+  list-style-type: none;
+  float: left;
+  padding: 0;
+  margin: 0 10px 10px 0;
+}
+
+#album li a:hover,
+#topics li a:hover {
+  padding: 0;
+}
+
+a.thumb {
+  float: right;
+  cursor: pointer;
+}
+
+/*
+ * Chat
+ */
+#chat {
+  position: fixed;
+  display: none;
+  bottom: 0;
+  right: 0;
+  width: 10%;
+  height: 1em;
+  background-color: white;
+  border: solid 2px #888;
+  padding: 4px 10px;
+} 
