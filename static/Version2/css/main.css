@@ -74,6 +74,7 @@ section {
 }
 form {
   width: 320px;
+  clear: left;
 }
 textarea, input.input {
   display: block;
@@ -86,6 +87,14 @@ ul.ui-autocomplete li {
   padding: 4px;
   width: 320px;
 }
+.handle {
+  display: block;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.folded {
+  display: none;
+}
 /*
  * Chat
  */
@@ -94,11 +103,16 @@ ul.ui-autocomplete li {
   display: none;
   bottom: 0;
   right: 0;
-  width: 10%;
+  width: 16%;
   height: 1em;
   background-color: white;
   border: solid 2px #888;
   padding: 4px 10px;
+}
+#topics ul li {
+  list-style-type: none;
+  float: left;
+  margin-right: 10px;
 }
 aside#sideInfo {
   width: 230px;
