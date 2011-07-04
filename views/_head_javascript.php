@@ -1,3 +1,5 @@
+<script src="<?php echo $config['static_url']; ?>/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?php echo $config['static_url']; ?>/jquery-ui/js/jquery-ui-1.8.14.custom.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 jQuery(function($) {
   // Verstecke Statusmeldungen nach 3s

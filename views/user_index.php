@@ -21,12 +21,7 @@ if ($users) {
   ?>
   </ul>
   <hr>
-  <div id="paginate">
-    <p><?php echo $paginate['count']; ?> Nachbarn. Seite <?php echo $paginate['page']; ?> von <?php echo $paginate['page_count']; ?></p> 
-    <p>
-      <?php echo join(' | ', $paginate['links']); ?>
-    </p>
-  </div>
+  <?php $this->render('_paginate'); ?>
   <?php
 }
 else {

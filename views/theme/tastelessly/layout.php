@@ -7,7 +7,6 @@
 <meta name="description" content="" />
 <link href="/theme/tastelessly/style.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="/theme/tastelessly/local.css" rel="stylesheet" type="text/css" media="screen" />
-<script src="<?php echo $config['static_url']; ?>/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
 <?php echo $this->render('_head_javascript'); ?>
 <?php
 if ($page_head) {

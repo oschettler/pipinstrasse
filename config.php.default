@@ -33,10 +33,7 @@ $config = array(
   'theme' => 'tastelessly',
   
   'gifts' => array(
-    'coffee',
-    'flower',
-    'football',
-    'smile',
+    'gift',
   ),
   
   'navigation' => array(
@@ -45,4 +42,6 @@ $config = array(
     '/board/index' => 'Schwarzes Brett',
     '/photo/index' => 'Fotos',
   ),
+
+  'admin_email' => 'admin@pipinstrasse.de'
 );

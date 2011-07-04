@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=1030" /> 
 <link href='http://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise' rel='stylesheet' type='text/css'>
 <link href="<?php echo $config['static_url']; ?>/Version2/css/main.css" rel="stylesheet" type="text/css" media="screen" /> 
-<script src="<?php echo $config['static_url']; ?>/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
 <?php echo $this->render('_head_javascript'); ?>
 <?php
 if ($page_head) {

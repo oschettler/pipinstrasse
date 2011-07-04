@@ -5,20 +5,12 @@
   <title><?php echo $title; ?> | Pipinstraße</title>
   <link rel="stylesheet" href="http://static.pipinstrasse.de/css/design.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <meta name="robots" content="noindex, nofollow">
-  <script src="http://static.pipinstrasse.de/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript" charset="utf-8">
-    jQuery(function($) {
-      // Verstecke Statusmeldungen nach 3s
-      setTimeout(function() {
-        $('.message').slideUp('fast');
-      }, 3000);
-
-      // Änderen Theme
-      $('#switch-theme select').change(function() {
-        $(this).parent().submit();
-      });
-    });
-  </script>
+  <?php echo $this->render('_head_javascript'); ?>
+  <?php
+  if ($page_head) {
+    echo join("\n", $page_head);
+  }
+  ?>
 </head>
 <body>
   <div id="page">

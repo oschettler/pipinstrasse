@@ -12,16 +12,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
+define('ADMIN_USERS_PAGE_SIZE', 10);
+
 class admin_controller extends controller {
   
   /**
    * Teste auf Rolle "admin"
    */
-  function __construct() {
+  function allowed() {
     $roles = explode(',', $_SESSION['user']->roles);
-    if (!in_array('admin', $roles)) {
+
+    if (in_array('admin', $roles)) {
+      return TRUE;
+    }
+    else {
       $this->message('Sie dürfen den Verwaltungsbereich nicht nutzen', 'error');
-      $this->redirect('/');
+      return FALSE;
     }
   }
   
@@ -104,6 +110,56 @@ class admin_controller extends controller {
         rename($src, "{$target}/{$entry}");
       }
       closedir($d);
+    }
+  }
+  
+  function do_user() {
+    $this->layout = 'admin';
+    $this->vars['title'] = 'Verwalten von Nutzerkonten';
+
+    // Kehre nach bearbeiten eines Nutzers hierher zurück
+    $_SESSION['return_to'] = $_GET['url'];
+
+    if (!empty($_POST)) {
+      $sql = "UPDATE users SET"
+        . " vorname = '" . mysql_real_escape_string($_POST['vorname']) . "',"
+        . " nachname = '" . mysql_real_escape_string($_POST['nachname']) . "',"
+        . " mail = '" . mysql_real_escape_string($_POST['email']) . "',"
+        . " active = '" . mysql_real_escape_string($_POST['active']) . "',"
+        . " updated = NOW()";
+      
+      if (!empty($_POST['password'])) {
+        $sql .= ", password = MD5('" . mysql_real_escape_string($_POST['password']) . "'";
+      }
+      $sql .= " WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
+      
+      if (mysql_query($sql)) {
+        $this->message("Die Änderungen wurden gespeichert");
+      }
+      else {
+        $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+      }
+      $this->redirect();
+    }
+    else {
+      $sql = "SELECT COUNT(*) FROM users";
+      $rs = mysql_query($sql);
+      $counter = mysql_fetch_row($rs);
+
+      $page = $this->paginate(ADMIN_USERS_PAGE_SIZE, $counter[0], '/admin/users');
+
+      $sql = "SELECT * FROM users "
+        . 'ORDER BY nachname, vorname LIMIT ' . (($page-1)*ADMIN_USERS_PAGE_SIZE) . ',' . ADMIN_USERS_PAGE_SIZE;
+
+      $this->vars['users'] = array();
+
+      $rs = mysql_query($sql);
+
+      while ($users = mysql_fetch_object($rs)) {
+        $this->vars['users'][] = $users;
+      }
+
+      $this->render();
     }
   }
 }

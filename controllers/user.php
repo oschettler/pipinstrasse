@@ -60,6 +60,8 @@ class user_controller extends controller {
    * Action: Neues Nutzerkonto anlegen. Muss dann erst freigeschalten werden.
    */
   function do_register() {
+    global $config;
+    
     $this->vars['title'] = 'Nutzerkonto anlegen';
 
     if (!empty($_POST)) {
@@ -71,6 +73,13 @@ class user_controller extends controller {
       else {
         if ($this->save()) {
           $this->message("Herzlich willkommen, {$_POST['vorname']}. Ihr Nutzerkonto muss noch freigeschaltet werden.");
+
+          $user_id = $this->insert_id();
+
+          mail($config['admin_email'], "[pipinstrasse.de] Neuer Nutzer {$_POST['mail']}", 
+            "Nutzer #{$user_id} freischalten: http://{$_SERVER['HTTP_HOST']}/admin/user"
+          );
+
           $this->redirect();
         }
       }

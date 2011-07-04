@@ -8,20 +8,36 @@
   body {
     font-family: arial, helvetica, sans-serif;
   }
+
+  tr:nth-child(even) { background-color: #EEE }
+  tr:nth-child(odd) { background-color: #FFF }
+  
+  .message {
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    font-size: 1.4em; 
+    padding: 10px; 
+    width: 100%; 
+    z-index: 100;
+  }
+
+  .message.status {
+    background: #CFC;
+  }
+
+  .message.error {
+    background: #FCC;
+  }
+  
   </style>
-  <script src="http://static.pipinstrasse.de/js/jquery-1.6.1.min.js" type="text/javascript" charset="utf-8"></script>
-  <script type="text/javascript" charset="utf-8">
-    jQuery(function($) {
-      // Verstecke Statusmeldungen nach 3s
-      setTimeout(function() {
-        $('.message').slideUp('fast');
-      }, 3000);
-      
-      $('a.confirm').click(function() {
-        return confirm('Wirklich ' + $(this).text() + '?');
-      });
-    });
-  </script>
+  <link rel="stylesheet" href="<?php echo $config['static_url']; ?>/jquery-ui/css/smoothness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  <?php echo $this->render('_head_javascript'); ?>
+  <?php
+  if ($page_head) {
+    echo join("\n", $page_head);
+  }
+  ?>
 </head>
 <body id="admin">
   <?php
@@ -31,13 +47,15 @@
   echo $this->render('_nav', array('navigation' => array(
     '/' => 'Frontend',
     '/admin' => 'Admin Startseite',
-    'http://schettler.net/fossil/pipinstrasse' => 'Fossil Repository',
+    '/admin/user' => 'Nutzer verwalten',
+    '/admin/topic' => 'Alben verwalten',
+    // 'http://schettler.net/fossil/pipinstrasse' => 'Fossil Repository',
     '/admin/migrate' => array('confirm' => TRUE, 'Datenbank aktualisieren'),
-    '/admin/move_photos' => array('confirm' => TRUE, 'Fotos verschieben'),
+    // '/admin/move_photos' => array('confirm' => TRUE, 'Fotos verschieben'),
   )));
   
   ?>
   <h1><?php echo $title; ?></h1>
-  <pre><?php echo $contents; ?></pre>
+  <?php echo $contents; ?>
 </body>
 </html>
