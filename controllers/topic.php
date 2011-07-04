@@ -15,11 +15,17 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 class topic_controller extends controller {
   
   function do_mine() {
+    return $this->do_all(TRUE);
+  }
+  
+  function do_all($mine = FALSE) {
     $this->layout = FALSE;
     $topics = array();
 
-    $sql = "SELECT * FROM topics WHERE "
-      . "(shared = 1 OR von = {$_SESSION['user']->id}) ";
+    $sql = 'SELECT * FROM topics ';
+    if ($mine) {
+      $sql .= " WHERE (shared = 1 OR von = {$_SESSION['user']->id}) ";
+    } 
 
     if (!empty($_GET['term'])) {
       $sql .= "AND title LIKE '%" .  mysql_real_escape_string($_GET['term']) . "%' ";

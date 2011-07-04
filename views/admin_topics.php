@@ -16,6 +16,19 @@ $this->page_head();
     display: block;
     margin-left: 110px;
   }
+  
+  .photo {
+    margin-right: 4px;
+  }
+  
+  td.photos {
+    position: relative;
+  }
+  
+  input.select {
+    position: absolute;
+    z-index: 2;
+  }
 </style>
 <script type="text/javascript" charset="utf-8">
 var topics = 
@@ -52,11 +65,39 @@ jQuery(function($) {
       .dialog('open');
     return false;
   });
+  
+  $('#move-to').autocomplete({
+    minLength: 2,
+    source: '/topic/mine'
+  });
+  
+  $('a[href=#del]').click(function() {
+    alert("DEL");
+    return false;
+  });
+
+  $('a[href=#mov]').click(function() {
+    var to = $('#move-to').val();
+    if (confirm('Verschieben nach "' + to + '"?')) {
+      var ids = [];
+      $('input.select:checked').each(function() {
+        ids.push($(this).val());
+      });
+
+      $.post('/admin/movphotos', {
+        ids: ids,
+        to: to
+      });
+    }
+    return false;
+  });
+
 });
 </script>
 <?php
 $this->end_page_head();
 ?>
+<form>
 <table>
   <tr>
     <th>ID</th>
@@ -75,11 +116,28 @@ $this->end_page_head();
     <td><?php echo $topic->created; ?></td>
     <td><?php if ($topic->updated != '0000-00-00 00:00:00') { echo $topic->updated; } ?></td>
   </tr>
+  <tr>
+    <td colspan="5" class="photos">
+      <?php
+      foreach ($this->photos($topic->id) as $photo) {
+        echo "<input class=\"select\" value=\"{$photo->id}\" type=\"checkbox\"><img class=\"photo\" src=\"/photo/scaled/{$photo->id}/60x60\">";
+      }
+      ?>
+    </td>
+  </tr>
   <?php
   }
   ?>
 </table>
+</form>
 <?php $this->render('_paginate'); ?>
+
+<p>Ausgewählte&hellip;</p>
+<ul>
+  <li>&hellip;<a href="#mov">verschieben</a> nach <input id="move-to"></li>
+  <li>&hellip;<a href="#del">löschen</a></li>
+</ul>
+
 <form id="edit-topic" method="POST" action="/admin/topics">
   <input type="hidden" name="id" value="" id="edit-id">
   <label for="title">Titel</label><input class="input" type="text" name="title" value="" id="edit-title">

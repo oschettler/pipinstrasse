@@ -205,4 +205,24 @@ class admin_controller extends controller {
       $this->render();
     }
   }
+  
+  function photos($topic_id) {
+    $sql = 'SELECT * FROM photos WHERE ' 
+      . "topic_id = {$topic_id} "
+      . 'ORDER BY created DESC';
+
+    $photos = array();
+    $rs = mysql_query($sql);
+
+    while ($_photo = mysql_fetch_object($rs)) {
+      $photos[] = $_photo;
+    }
+    return $photos;
+  }
+  
+  function do_movphotos() {
+    $this->layout = FALSE;
+
+    
+  }
 }
