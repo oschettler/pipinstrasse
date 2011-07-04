@@ -88,7 +88,7 @@ $this->end_page_head();
   ?>
 </table>
 <?php $this->render('_paginate'); ?>
-<form id="edit-user" method="POST" action="/admin/user">
+<form id="edit-user" method="POST" action="/admin/users">
   <input type="hidden" name="id" value="" id="edit-id">
   <label for="vorname">Vorname</label><input class="input" type="text" name="vorname" value="" id="edit-vorname">
   <label for="nachname">Nachname</label><input class="input" type="text" name="nachname" value="" id="edit-nachname">
