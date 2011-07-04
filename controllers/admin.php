@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
-define('ADMIN_USERS_PAGE_SIZE', 10);
+define('ADMIN_PAGE_SIZE', 10);
 
 class admin_controller extends controller {
   
@@ -91,6 +91,10 @@ class admin_controller extends controller {
     echo "Fertig.\n";
   }
   
+  /**
+   * EINMALIG: Verschiebe Bilder aus www/avatar und www/photos
+   * nach www/img/avatar und www/img/photos
+   */
   function do_move_images() {
     $this->layout = 'admin';
     $this->vars['title'] = 'Verschiebe Fotos in hierarchische Struktur';
@@ -113,7 +117,31 @@ class admin_controller extends controller {
     }
   }
   
-  function do_user() {
+  function admin_paginate($model, $order = NULL) {
+    $sql = "SELECT COUNT(*) FROM {$model}";
+    $rs = mysql_query($sql);
+    $counter = mysql_fetch_row($rs);
+
+    $page = $this->paginate(ADMIN_PAGE_SIZE, $counter[0], '/admin/' . $model);
+
+    $sql = "SELECT * FROM {$model} ";
+    if ($order) {
+      $sql .= "ORDER BY {$order} ";
+    }
+    $sql .= 'LIMIT ' . (($page-1)*ADMIN_PAGE_SIZE) . ',' . ADMIN_PAGE_SIZE;
+
+    $this->vars[$model] = array();
+
+    $rs = mysql_query($sql);
+    while ($_ = mysql_fetch_object($rs)) {
+      $this->vars[$model][] = $_;
+    }
+  }
+  
+  /**
+   * Nutzerverwaltung, besonders aktivieren
+   */
+  function do_users() {
     $this->layout = 'admin';
     $this->vars['title'] = 'Verwalten von Nutzerkonten';
 
@@ -142,23 +170,38 @@ class admin_controller extends controller {
       $this->redirect();
     }
     else {
-      $sql = "SELECT COUNT(*) FROM users";
-      $rs = mysql_query($sql);
-      $counter = mysql_fetch_row($rs);
+      $this->admin_paginate('users', 'nachname, vorname');
+      $this->render();
+    }
+  }
+  
+  /**
+   * Albenverwaltung, besonders Setzen des "shared"-Zustanded
+   */
+  function do_topics() {
+    $this->layout = 'admin';
+    $this->vars['title'] = 'Verwalten von Fotoalben';
 
-      $page = $this->paginate(ADMIN_USERS_PAGE_SIZE, $counter[0], '/admin/users');
+    // Kehre nach bearbeiten eines Nutzers hierher zurück
+    $_SESSION['return_to'] = $_GET['url'];
 
-      $sql = "SELECT * FROM users "
-        . 'ORDER BY nachname, vorname LIMIT ' . (($page-1)*ADMIN_USERS_PAGE_SIZE) . ',' . ADMIN_USERS_PAGE_SIZE;
-
-      $this->vars['users'] = array();
-
-      $rs = mysql_query($sql);
-
-      while ($users = mysql_fetch_object($rs)) {
-        $this->vars['users'][] = $users;
+    if (!empty($_POST)) {
+      $sql = "UPDATE topics SET"
+        . " title = '" . mysql_real_escape_string($_POST['title']) . "',"
+        . " shared = '" . mysql_real_escape_string($_POST['shared']) . "',"
+        . " updated = NOW()"
+        . " WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
+      
+      if (mysql_query($sql)) {
+        $this->message("Die Änderungen wurden gespeichert");
       }
-
+      else {
+        $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+      }
+      $this->redirect();
+    }
+    else {
+      $this->admin_paginate('topics', 'title');
       $this->render();
     }
   }

@@ -47,8 +47,8 @@
   echo $this->render('_nav', array('navigation' => array(
     '/' => 'Frontend',
     '/admin' => 'Admin Startseite',
-    '/admin/user' => 'Nutzer verwalten',
-    '/admin/topic' => 'Alben verwalten',
+    '/admin/users' => 'Nutzer verwalten',
+    '/admin/topics' => 'Alben verwalten',
     // 'http://schettler.net/fossil/pipinstrasse' => 'Fossil Repository',
     '/admin/migrate' => array('confirm' => TRUE, 'Datenbank aktualisieren'),
     // '/admin/move_photos' => array('confirm' => TRUE, 'Fotos verschieben'),
