@@ -107,7 +107,7 @@ foreach (array(0,1) as $i) {
  * Aus den ersten beiden Pfadkomponenten wird eine Datei mit Controller-Klasse
  * und eine Methode ermittelt
  */
-$file = "{$config['dir_controllers']}{$path[0]}.php";
+$file = "{$config['dir_controllers']}{$path[0]}_controller.php";
 if (file_exists($file)) {
   include $file;
   $controller_name = "{$path[0]}_controller";

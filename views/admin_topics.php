@@ -77,7 +77,7 @@ jQuery(function($) {
   });
 
   $('a[href=#mov]').click(function() {
-    var to = $('#move-to').val();
+    var topic = $('#move-to').val();
     if (confirm('Verschieben nach "' + to + '"?')) {
       var ids = [];
       $('input.select:checked').each(function() {
@@ -86,7 +86,9 @@ jQuery(function($) {
 
       $.post('/admin/movphotos', {
         ids: ids,
-        to: to
+        topic: topic
+      }, function() {
+        location.reload();
       });
     }
     return false;
