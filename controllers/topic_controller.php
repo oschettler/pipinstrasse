@@ -20,7 +20,7 @@ class topic_controller extends controller {
   
   function do_all($mine = FALSE) {
     $this->layout = FALSE;
-    $topics = array();
+    $topics = array('Kein Album');
 
     $sql = 'SELECT * FROM topics ';
     if ($mine) {

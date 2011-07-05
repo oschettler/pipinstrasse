@@ -6,19 +6,19 @@ class topic extends model {
     if (is_array($obj)) {
       $obj = (object)$obj;
     }
-    $rs = mysql_query("SELECT id, von FROM topics WHERE "
-      . "title = '" .  mysql_real_escape_string($obj->topic) . "'"
-    );
-    if ($topic = mysql_fetch_object($rs)) {
+    $sql = "SELECT id, von FROM topics WHERE "
+      . "title = '" .  mysql_real_escape_string($obj->topic) . "'";
+
+    if ($topic = $this->one($sql)) {
       $topic_id = $topic->id;
     }
     else {
       $sql = "INSERT INTO topics SET "
         . "title = '" .  mysql_real_escape_string($obj->topic) . "', "
         . "von = {$_SESSION['user']->id}, "
-        . "slug = '" .  mysql_real_escape_string($this->slug($obj->topic)) . "', "
+        . "slug = '" .  mysql_real_escape_string(self::slug($obj->topic)) . "', "
         . 'created = NOW()';
-      mysql_query($sql);
+      $this->exec($sql);
 
       $topic_id = $this->insert_id();
     }

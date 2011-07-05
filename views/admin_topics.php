@@ -78,18 +78,8 @@ jQuery(function($) {
 
   $('a[href=#mov]').click(function() {
     var topic = $('#move-to').val();
-    if (confirm('Verschieben nach "' + to + '"?')) {
-      var ids = [];
-      $('input.select:checked').each(function() {
-        ids.push($(this).val());
-      });
-
-      $.post('/admin/movphotos', {
-        ids: ids,
-        topic: topic
-      }, function() {
-        location.reload();
-      });
+    if (confirm('Verschieben nach "' + topic + '"?')) {
+      $('#movphotos').submit();
     }
     return false;
   });
@@ -99,7 +89,7 @@ jQuery(function($) {
 <?php
 $this->end_page_head();
 ?>
-<form>
+<form id="movphotos" action="/admin/movphotos" method="POST">
 <table>
   <tr>
     <th>ID</th>
@@ -109,10 +99,18 @@ $this->end_page_head();
     <th>geändert</th>
   </tr>
   <?php
+  $no_topic = (object)array(
+    'id' => NULL,
+    'title' => '<em>Kein Album</em>',
+    'shared' => '',
+    'created' => '',
+    'updated' => '',
+  );
+  array_unshift($topics, $no_topic);
   foreach ($topics as $i => $topic) {
   ?>
   <tr>
-    <td><?php echo "<a class=\"edit\" href=\"{$topic->id}\">{$topic->id}</a>"; ?></td>
+    <td><?php if ($topic->id) { echo "<a class=\"edit\" href=\"{$topic->id}\">{$topic->id}</a>"; } ?></td>
     <td><?php echo $topic->title; ?></td>
     <td><?php echo $topic->shared; ?></td>
     <td><?php echo $topic->created; ?></td>
@@ -122,7 +120,7 @@ $this->end_page_head();
     <td colspan="5" class="photos">
       <?php
       foreach ($this->photos($topic->id) as $photo) {
-        echo "<input class=\"select\" value=\"{$photo->id}\" type=\"checkbox\"><img class=\"photo\" src=\"/photo/scaled/{$photo->id}/60x60\">";
+        echo "<input class=\"select\" name=\"ids[]\" value=\"{$photo->id}\" type=\"checkbox\"><img class=\"photo\" src=\"/photo/scaled/{$photo->id}/60x60\">";
       }
       ?>
     </td>
@@ -131,14 +129,14 @@ $this->end_page_head();
   }
   ?>
 </table>
-</form>
 <?php $this->render('_paginate'); ?>
 
 <p>Ausgewählte&hellip;</p>
 <ul>
-  <li>&hellip;<a href="#mov">verschieben</a> nach <input id="move-to"></li>
-  <li>&hellip;<a href="#del">löschen</a></li>
+  <li>&hellip;nach <input id="move-to" name="topic"> <a href="#mov">verschieben</a></li>
+  <!--li>&hellip;<a href="#del">löschen</a></li-->
 </ul>
+</form>
 
 <form id="edit-topic" method="POST" action="/admin/topics">
   <input type="hidden" name="id" value="" id="edit-id">

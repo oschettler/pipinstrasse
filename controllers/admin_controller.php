@@ -15,8 +15,6 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 define('ADMIN_PAGE_SIZE', 10);
 
 class admin_controller extends controller {
-  var $uses = array('topic');
-  
   /**
    * Teste auf Rolle "admin"
    */
@@ -207,10 +205,16 @@ class admin_controller extends controller {
     }
   }
   
-  function photos($topic_id) {
-    $sql = 'SELECT * FROM photos WHERE ' 
-      . "topic_id = {$topic_id} "
-      . 'ORDER BY created DESC';
+  function photos($topic_id = NULL) {
+
+    $sql = 'SELECT * FROM photos WHERE '; 
+    if ($topic_id === NULL) {
+      $sql .= "topic_id IS NULL ";
+    }
+    else {
+      $sql .= "topic_id = {$topic_id} ";
+    }
+    $sql .= 'ORDER BY created DESC';
 
     $photos = array();
     $rs = mysql_query($sql);
@@ -224,14 +228,33 @@ class admin_controller extends controller {
   function do_movphotos() {
     $this->layout = FALSE;
 
-    $topic_id = $this->topic->save($_POST);
+    $this->model('topic');
+    $this->model('photo');
+
+    if (empty($_POST['ids'])) {
+      $this->message('Wählen Sie erst Bilder aus', 'error');
+    }
     
-    $sql = "UPDATE photos SET topic_id = {$topic_id}, updated = NOW() WHERE id IN ({$ids})";
-    if (mysql_query($sql)) {
+    $sql = "UPDATE photos SET ";
+    
+    if ($_POST['topic'] == 'Kein Album') {
+      $sql .= 'topic = NULL ';
+    }
+    else {
+      $topic_id = $this->topic->save($_POST);
+      $sql .= "topic_id = {$topic_id}";
+    }
+    $sql .= ", updated = NOW() WHERE id IN (" 
+      . preg_replace('/[^,\d]/', '', join(',', $_POST['ids'])) . ')';
+    
+    error_log($sql);
+    
+    if ($this->photo->exec($sql)) {
       $this->message('Die Änderungen wurden gespeichert');
     }
     else {
       $this->messgage('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
     }
+    $this->redirect();
   }
 }
