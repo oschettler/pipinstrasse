@@ -247,13 +247,11 @@ class admin_controller extends controller {
     $sql .= ", updated = NOW() WHERE id IN (" 
       . preg_replace('/[^,\d]/', '', join(',', $_POST['ids'])) . ')';
     
-    error_log($sql);
-    
     if ($this->photo->exec($sql)) {
       $this->message('Die Änderungen wurden gespeichert');
     }
     else {
-      $this->messgage('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
+      $this->message('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
     }
     $this->redirect();
   }
