@@ -266,6 +266,7 @@ class admin_controller extends controller {
         $sql = "INSERT INTO pages SET";
       }
       $sql .= " title = '" . mysql_real_escape_string($_POST['title']) . "',"
+        . " slug = '" . mysql_real_escape_string(model::slug($_POST['title'])) . "',"
         . " public = '" . mysql_real_escape_string($_POST['public']) . "',"
         . " body = '" . mysql_real_escape_string($_POST['body']) . "',";
       
