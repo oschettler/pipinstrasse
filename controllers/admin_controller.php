@@ -238,7 +238,7 @@ class admin_controller extends controller {
     $sql = "UPDATE photos SET ";
     
     if ($_POST['topic'] == 'Kein Album') {
-      $sql .= 'topic = NULL ';
+      $sql .= 'topic_id = NULL ';
     }
     else {
       $topic_id = $this->topic->save($_POST);
