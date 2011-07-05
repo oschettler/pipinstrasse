@@ -33,7 +33,7 @@ jQuery(function($) {
   $('#edit-page').dialog({
     autoOpen: false,
     width: 600,
-    modal: true,
+    modal: false, // Funktioniert mit WYSIWYG-Editor nicht
     buttons: {
       'Speichern': function() {
         $('#edit-page').submit();
