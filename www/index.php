@@ -64,6 +64,7 @@ if (empty($_SESSION['user'])) {
       '/user/recover',
       '/user/code', 
       '/user/guest', 
+      '/page/view',
     ) as $url) {
     if (preg_match("#^{$url}(/.*)?$#", $_GET['url'])) {
       $allowed = TRUE;
