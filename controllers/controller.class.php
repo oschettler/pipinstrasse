@@ -26,15 +26,9 @@ class controller {
   var $layout = TRUE;
   
   /**
-   * Callback. Wird in Index vor Aufruf der eigentlichen Action aufgerufen
-   * und kann Controller-übergreifende Logik enthalten
+   * Füge Modelle früh hinzu so dass sie von allowed() genutzt werden können
    */
-  function before() {
-    global $config;
-    
-    $this->name = $this->path[0];
-    $this->method = $this->path[1];
-    
+  function __construct() {
     // user-, message-, photo- und stream-Modelle werden für Blöcke in jedem Fall eingebunden
     foreach (array('user', 'message', 'photo', 'stream') as $model) {
       if (!in_array($model, $this->uses)) {
@@ -44,7 +38,18 @@ class controller {
     foreach ($this->uses as $model_name) {
       $this->model($model_name);
     }
+  }
+  
+  /**
+   * Callback. Wird in Index vor Aufruf der eigentlichen Action aufgerufen
+   * und kann Controller-übergreifende Logik enthalten
+   */
+  function before() {
+    global $config;
     
+    $this->name = $this->path[0];
+    $this->method = $this->path[1];
+        
     $this->vars['title'] = ucfirst($this->name);
     $this->vars['slogan'] = 'Zu Hause in der Bonner Altstadt';
     $this->vars['theme'] = $this->theme;

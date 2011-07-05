@@ -30,6 +30,11 @@
     background: #FCC;
   }
   
+  textarea {
+    display: block;
+    width: 100%;
+  }
+  
   </style>
   <link rel="stylesheet" href="<?php echo $config['static_url']; ?>/jquery-ui/css/smoothness/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <?php echo $this->render('_head_javascript'); ?>
@@ -48,6 +53,7 @@
     '/' => 'Frontend',
     '/admin' => 'Admin Startseite',
     '/admin/users' => 'Nutzer verwalten',
+    '/admin/pages' => 'Seiten verwalten',
     '/admin/topics' => 'Alben verwalten',
     // 'http://schettler.net/fossil/pipinstrasse' => 'Fossil Repository',
     '/admin/migrate' => array('confirm' => TRUE, 'Datenbank aktualisieren'),

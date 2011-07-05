@@ -275,7 +275,7 @@ class photo_controller extends controller {
       if ($_SESSION['user']->object_type == 'topic') {   
         if (count($this->path) < 3) {
           $this->message('FALSCHE URL');
-          $this->redirect();
+          return FALSE;
         }
         $photo_id = $this->path[2];
       
@@ -283,12 +283,12 @@ class photo_controller extends controller {
         $photo = $this->photo->one($sql);
         if (!$photo) {
           $this->message('FALSCHE URL');
-          $this->redirect();
+          return FALSE;
         }
       
         if ($photo->topic_id != $_SESSION['user']->object_id) {
           $this->message('Sie haben kein Zugriff auf diese Inhalte');
-          $this->redirect();
+          return FALSE;
         }
         
         return TRUE;

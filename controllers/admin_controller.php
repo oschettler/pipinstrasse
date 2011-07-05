@@ -206,6 +206,7 @@ class admin_controller extends controller {
   }
   
   function photos($topic_id = NULL) {
+    $this->model('photo');
 
     $sql = 'SELECT * FROM photos WHERE '; 
     if ($topic_id === NULL) {
@@ -216,13 +217,7 @@ class admin_controller extends controller {
     }
     $sql .= 'ORDER BY created DESC';
 
-    $photos = array();
-    $rs = mysql_query($sql);
-
-    while ($_photo = mysql_fetch_object($rs)) {
-      $photos[] = $_photo;
-    }
-    return $photos;
+    return $this->photo->query($sql);
   }
   
   function do_movphotos() {
@@ -254,5 +249,44 @@ class admin_controller extends controller {
       $this->message('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
     }
     $this->redirect();
+  }
+  
+  function do_pages() {
+    $this->layout = 'admin';
+    $this->vars['title'] = 'Verwalten von Seiten';
+
+    // Kehre nach bearbeiten einer Seite hierher zurück
+    $_SESSION['return_to'] = $_GET['url'];
+
+    if (!empty($_POST)) {
+      if ($_POST['id']) {
+        $sql = "UPDATE pages SET";
+      }
+      else {
+        $sql = "INSERT INTO pages SET";
+      }
+      $sql .= " title = '" . mysql_real_escape_string($_POST['title']) . "',"
+        . " public = '" . mysql_real_escape_string($_POST['public']) . "',"
+        . " body = '" . mysql_real_escape_string($_POST['body']) . "',";
+      
+      if (empty($_POST['id'])) {
+        $sql .= " created = NOW()";
+      }
+      else {
+        $sql .= " updated = NOW() WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
+      }
+      
+      if (mysql_query($sql)) {
+        $this->message("Die Änderungen wurden gespeichert");
+      }
+      else {
+        $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+      }
+      $this->redirect();
+    }
+    else {
+      $this->admin_paginate('pages', 'title');
+      $this->render();
+    }
   }
 }
