@@ -65,9 +65,9 @@ if ($page_head) {
     </section> 
     <footer>   
       <p>
-        <a href="http://pages.pipinstrasse.de/kontakt">Kontakt</a>
+        <a href="http://login.pipinstrasse.de/page/view/kontakt">Kontakt</a>
         &nbsp;
-        <a href="http://pages.pipinstrasse.de/impressum">Impressum</a>
+        <a href="http://login.pipinstrasse.de/page/view/impressum">Impressum</a>
       </p>
       <p>
         <?php $this->render('_theme'); ?>
