@@ -20,6 +20,7 @@ $config = array(
   'db_password' => '*****',
   'db_name' => 'pipinstrasse.de',
   
+  'dir_models' => '../models/',
   'dir_controllers' => '../controllers/',
   'dir_views' => '../views/',
   'dir_lib' => '../lib/',

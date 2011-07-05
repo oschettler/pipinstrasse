@@ -36,6 +36,7 @@ else {
 }
 
 $include_path = '.' 
+  . ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/{$config['dir_models']}")
   . ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/{$config['dir_controllers']}");
 
 /*

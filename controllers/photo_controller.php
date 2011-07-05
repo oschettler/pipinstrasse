@@ -16,6 +16,7 @@ define('IMAGE_RESOLUTION', '1024x768');
 define('PHOTO_PAGE_SIZE', 5);
 
 class photo_controller extends controller {
+  var $uses = array('comment', 'topic');
   
   function before_layout() {
     
@@ -30,14 +31,9 @@ class photo_controller extends controller {
         . "AND id != {$photo->p_id} "
         . 'ORDER BY created DESC';
 
-      $photos = array();
-      $rs = mysql_query($sql);
+      $photos = $this->photo->query($sql);
 
-      if ($rs) {
-        while ($_photo = mysql_fetch_object($rs)) {
-          $photos[] = $_photo;
-        }
-
+      if ($photos) {
         $this->vars['blocks']['above'][] = $this->block(array(
           'name' => 'album',
           'title' => 'Mehr ' . $photo->topic,
@@ -57,11 +53,7 @@ class photo_controller extends controller {
           . 'GROUP BY t.id '
           . 'ORDER BY t.created DESC LIMIT 10';
 
-        $topics = array();
-        $rs = mysql_query($sql);
-        while ($topic = mysql_fetch_object($rs)) {
-          $topics[] = $topic;
-        }
+        $topics = $this->topic->query($sql);
 
         $this->vars['blocks']['above'][] = $this->block(array(
           'name' => 'topics',
@@ -88,10 +80,10 @@ class photo_controller extends controller {
     }
 
     if (!empty($_POST['topic'])) {
-      $rs = mysql_query("SELECT id, von FROM topics WHERE "
+      $topic = $this->topic->one("SELECT id, von FROM topics WHERE "
         . "title = '" .  mysql_real_escape_string($_POST['topic']) . "'"
       );
-      if ($topic = mysql_fetch_object($rs)) {
+      if ($topic) {
         if (!$topic->shared && $topic->von != $_SESSION['user']->id) {
           $this->message('Dieses Album gehört nicht Ihnen.');
           $this->redirect('/photo/index');
@@ -104,9 +96,9 @@ class photo_controller extends controller {
           . "von = {$_SESSION['user']->id}, "
           . "slug = '" .  mysql_real_escape_string($this->slug($_POST['topic'])) . "', "
           . 'created = NOW()';
-        mysql_query($sql);
+        $this->topic->exec($sql);
 
-        $topic_id = ', topic_id = ' . $this->insert_id();
+        $topic_id = ', topic_id = ' . $this->topic->insert_id();
       }
     }
     else {
@@ -131,7 +123,7 @@ class photo_controller extends controller {
       $sql .= ' WHERE id = ' . $id;
     }
 
-    $result = mysql_query($sql);
+    $result = $this->photos->exec($sql);
     if (!$result) {
       $this->message(mysql_error(), 'error');
       $this->redirect('/photo/index');
@@ -175,10 +167,9 @@ class photo_controller extends controller {
     $this->vars['title'] = "Fotos";
         
     $sql = 'SELECT COUNT(*) FROM photos';
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $count = $this->photo->count($sql);
     
-    $page = $this->paginate(PHOTO_PAGE_SIZE, $counter[0], '/photo/index');
+    $page = $this->paginate(PHOTO_PAGE_SIZE, $count, '/photo/index');
         
     $sql = 'SELECT p.created as p_created, p.id AS p_id, u.id AS u_id, t.title AS topic, t.*, u.*, p.* '
       . 'FROM photos p ' 
@@ -186,13 +177,7 @@ class photo_controller extends controller {
       . 'LEFT JOIN topics t ON p.topic_id = t.id '
       . 'ORDER BY p.created DESC LIMIT ' . (($page-1)*PHOTO_PAGE_SIZE) . ',' . PHOTO_PAGE_SIZE;
 
-    $this->vars['photos'] = array();
-
-    $rs = mysql_query($sql);
-    
-    while ($photo = mysql_fetch_object($rs)) {
-      $this->vars['photos'][] = $photo;
-    }
+    $this->vars['photos'] = $this->photo->query($sql);
     
     $this->render();
   }
@@ -221,8 +206,7 @@ class photo_controller extends controller {
     $sql = 'SELECT * FROM photos p WHERE '
       . "id = {$photo_id}";
 
-    $rs = mysql_query($sql);
-    $photo = mysql_fetch_object($rs);
+    $photo = $this->photo->one($sql);
     
     if (!$photo) {
       $this->message("Dieses Foto gibt es nicht");
@@ -256,8 +240,7 @@ class photo_controller extends controller {
     WHERE '
       . "p.id = '" . mysql_real_escape_string($this->path[2]) . "'";
 
-    $rs = mysql_query($sql);
-    $photo = mysql_fetch_object($rs);
+    $photo = $this->photo->one($sql);
     
     if (!$photo) {
       $this->message("Dieses Foto gibt es nicht");
@@ -278,9 +261,11 @@ class photo_controller extends controller {
    * Checke, ob Gast auf erlaubte Inhalte zugreift
    */
   function allowed() {
+    $this->model('invitation');
+    
     if ($_SESSION['user']->guest) {
       $sql = "SELECT * FROM invitations WHERE id = {$_SESSION['user']->id}";
-      $invite = mysql_fetch_object(mysql_query($sql));
+      $invite = $this->invitation->one($sql);
       if (!$invite) {
         $this->message('Ungültige Einladung');
         unset($_SESSION['user']);
@@ -295,7 +280,7 @@ class photo_controller extends controller {
         $photo_id = $this->path[2];
       
         $sql = "SELECT * FROM photos WHERE id = {$photo_id} LIMIT 1";
-        $photo = mysql_fetch_object(mysql_query($sql));
+        $photo = $this->photo->one($sql);
         if (!$photo) {
           $this->message('FALSCHE URL');
           $this->redirect();

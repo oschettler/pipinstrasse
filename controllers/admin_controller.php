@@ -15,6 +15,7 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 define('ADMIN_PAGE_SIZE', 10);
 
 class admin_controller extends controller {
+  var $uses = array('topic');
   
   /**
    * Teste auf Rolle "admin"
@@ -223,6 +224,14 @@ class admin_controller extends controller {
   function do_movphotos() {
     $this->layout = FALSE;
 
+    $topic_id = $this->topic->save($_POST);
     
+    $sql = "UPDATE photos SET topic_id = {$topic_id}, updated = NOW() WHERE id IN ({$ids})";
+    if (mysql_query($sql)) {
+      $this->message('Die Änderungen wurden gespeichert');
+    }
+    else {
+      $this->messgage('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
+    }
   }
 }

@@ -13,6 +13,7 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
 define('COMMENT_PAGE_SIZE', 10);
+require_once 'model.class.php';
 
 /**
  * Oberklasse für alle Controller.
@@ -20,7 +21,8 @@ define('COMMENT_PAGE_SIZE', 10);
  * Action-Methoden werden in Unterklassen als do_...() definiert.
  */
 class controller {
-  var $vars = array();
+  var $uses = array(); // Modelle
+  var $vars = array(); // View-Variable
   var $layout = TRUE;
   
   /**
@@ -32,11 +34,30 @@ class controller {
     
     $this->name = $this->path[0];
     $this->method = $this->path[1];
+    
+    // user-, message-, photo- und stream-Modelle werden für Blöcke in jedem Fall eingebunden
+    foreach (array('user', 'message', 'photo', 'stream') as $model) {
+      if (!in_array($model, $this->uses)) {
+        $this->uses[] = $model;
+      }
+    }
+    foreach ($this->uses as $model_name) {
+      $this->model($model_name);
+    }
+    
     $this->vars['title'] = ucfirst($this->name);
     $this->vars['slogan'] = 'Zu Hause in der Bonner Altstadt';
     $this->vars['theme'] = $this->theme;
     $this->vars['navigation'] = $config['navigation'];
     $this->vars['page_head'] = array();
+  }
+  
+  /**
+   * Setze Modell als Instanzvariable ein
+   */
+  function model($model_name) {
+    require_once "{$model_name}.php";
+    $this->$model_name = new $model_name;
   }
   
   /**
@@ -261,9 +282,7 @@ class controller {
       . "an = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
       . "AND viewed = '0000-00-00 00:00:00'";
 
-    $rs = mysql_query($sql);
-    $message_count = mysql_fetch_row($rs);
-    return $message_count[0];
+    return $this->message->count($sql);
   }
   
   function image_path($id, $type) {
@@ -305,7 +324,7 @@ class controller {
       . 'object_id = ' .  "'" . mysql_real_escape_string($id) . "', "
       . 'created = NOW()';
 
-    $result = mysql_query($sql);
+    $result = $this->stream->exec($sql);
   }
   
   /**
@@ -391,7 +410,7 @@ class controller {
       $sql = 'UPDATE users SET '
         . 'online = NOW() '
         . "WHERE id = {$_SESSION['user']->id}";  
-      mysql_query($sql);
+      $this->user->exec($sql);
     }
   }
   
@@ -402,21 +421,14 @@ class controller {
     else {
       $except_me = '';
     }
-    
+
     $sql = 'SELECT * FROM users WHERE active = 1 '
       . 'AND online >= DATE_SUB(NOW(), INTERVAL 5 MINUTE) '
       . $except_me
       . 'ORDER BY online DESC '
       . 'LIMIT 10';
 
-    $users_online = array();
-
-    $rs = mysql_query($sql); echo mysql_error();
-    
-    while ($users = mysql_fetch_object($rs)) {
-      $users_online[] = $users;
-    }
-    return $users_online;
+    return $this->user->query($sql);
   }
   
   /**
@@ -433,17 +445,15 @@ class controller {
     $sql = "SELECT COUNT(*) FROM users WHERE password != '' AND active = 1 "
       . $except_me;
       
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $count = $this->user->count($sql);
 
-    $index = rand(0, $counter[0]-1);
+    $index = rand(0, $count-1);
 
     $sql = 'SELECT * FROM users WHERE active = 1 '
       . $except_me
       . "LIMIT {$index},1";
 
-    $rs = mysql_query($sql);
-    return mysql_fetch_object($rs);
+    return $this->user->one($sql);
   }
   
   /**
@@ -451,16 +461,14 @@ class controller {
    */
   function random_photo() {
     $sql = 'SELECT COUNT(*) FROM photos';      
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $count = $this->photo->count($sql);
 
-    $index = rand(0, $counter[0]-1);
+    $index = rand(0, $count-1);
 
     $sql = 'SELECT * FROM photos '
       . "LIMIT {$index},1";
 
-    $rs = mysql_query($sql);
-    return mysql_fetch_object($rs);
+    return   $this->photo->one($sql);
   }
   
   /**
@@ -471,12 +479,11 @@ class controller {
       . "object_type = '{$type}' "
       . "AND object_id = {$id}"; 
     
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $count = $this->comment->count($sql);
 
-    $page = $this->paginate(COMMENT_PAGE_SIZE, $counter[0], $url, /*url_part*/3);
+    $page = $this->paginate(COMMENT_PAGE_SIZE, $count, $url, /*url_part*/3);
 
-    if ($counter[0] == 0) {
+    if ($count == 0) {
       return array();
     }
     
@@ -485,14 +492,7 @@ class controller {
       . "AND object_id = {$id} "
       . 'ORDER BY c.created DESC LIMIT ' . (($page-1)*COMMENT_PAGE_SIZE) . ',' . COMMENT_PAGE_SIZE; 
 
-    $comments = array();
-
-    $rs = mysql_query($sql);
-    
-    while ($comment = mysql_fetch_object($rs)) {
-      $comments[] = $comment;
-    }
-    return $comments;
+    return $this->comment->query($sql);
   }
   
   /**
@@ -525,11 +525,6 @@ class controller {
     $this->vars['page_head'][] = ob_get_clean();
   }
   
-  function insert_id() {
-    $insert_id = mysql_fetch_row(mysql_query('SELECT LAST_INSERT_ID()'));
-    return $insert_id[0];
-  }
-  
   /**
    * Generelles Verhalten: Gäste haben keinen Zugang
    */
@@ -547,22 +542,4 @@ class controller {
     return nl2br(preg_replace('#(http://(\S+))#', '<a href="$1">$2</a>', strip_tags($text)));
   }
   
-  function save_topic($title) {
-    $rs = mysql_query("SELECT id, von FROM topics WHERE "
-      . "title = '" .  mysql_real_escape_string($title) . "'"
-    );
-    if ($topic = mysql_fetch_object($rs)) {
-      $topic_id = $topic->id;
-    }
-    else {
-      $sql = "INSERT INTO topics SET "
-        . "title = '" .  mysql_real_escape_string($title) . "', "
-        . "von = {$_SESSION['user']->id}, "
-        . "slug = '" .  mysql_real_escape_string($this->slug($title)) . "', "
-        . 'created = NOW()';
-      mysql_query($sql);
-
-      $topic_id = $this->insert_id();
-    }
-  }
 }
