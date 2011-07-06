@@ -23,7 +23,9 @@ if ($page_head) {
   
   <div id="page">
     <header>
-      <img id="logo" src="<?php echo $config['static_url']; ?>/img/pipinstrasse_logo.png" alt="Pipinstraße" />  
+      <a href="/">
+        <img id="logo" src="<?php echo $config['static_url']; ?>/img/pipinstrasse_logo.png" alt="Pipinstraße" />
+      </a>
       
       <?php echo $this->render('_user'); ?>
       
