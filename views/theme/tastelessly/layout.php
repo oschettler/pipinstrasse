@@ -83,7 +83,7 @@ if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
 <hr />
 <!-- start footer -->
 <div id="footer">
-  <p>&copy; <?php echo date('Y'); ?> &nbsp;&bull;&nbsp; <a href="/impressum">Impressum</a> | <a href="/kontakt" >Kontakt</a></p>
+  <p>&copy; <?php echo date('Y'); ?> &nbsp;&bull;&nbsp; <a href="/page/view/impressum">Impressum</a> | <a href="/message/contact" >Kontakt</a></p>
   <?php $this->render('_theme'); ?>
 </div>
 <!-- end footer -->

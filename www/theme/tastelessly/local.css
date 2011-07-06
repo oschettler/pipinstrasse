@@ -58,6 +58,11 @@ input[type=file] {
   color: white;
 }
 
+form p {
+  margin: 4px 0 10px 0;
+  line-height: 1.0em;
+}
+
 #actions,
 #board,
 #messages,

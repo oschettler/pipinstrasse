@@ -532,7 +532,7 @@ class controller {
    * Generelles Verhalten: Gäste haben keinen Zugang
    */
   function allowed() {
-    return FALSE == $_SESSION['user']->guest;
+    return !(empty($_SESSION['user']) || $_SESSION['user']->guest);
   }
   
   /**
@@ -545,4 +545,63 @@ class controller {
     return nl2br(preg_replace('#(http://(\S+))#', '<a href="$1">$2</a>', strip_tags($text)));
   }
   
+  /**
+   * Erzeuge / prüfe eine einfache Rechnung
+   * Wenn Daten und Berechnung korrekt, TRUE
+   * sonst Berechnung als Array
+   */
+  function captcha($data = NULL) {
+    $op = array('plus', 'minus', 'mal');
+    $last = empty($_SESSION['captcha']) ? array() : $_SESSION['captcha'];
+
+    // Vermeide a==b, da das zu result==0 führt 
+    do {
+      $a = rand(1, 10);
+      $b = rand(1, 10);
+    }
+    while ($a == $b);
+
+    // Stelle sicher, dass minus ein positives Ergebnis hat
+    if ($a > $b) {
+      $captcha['a'] = $a;
+      $captcha['b'] = $b;
+    }
+    else {
+      $captcha['a'] = $b;
+      $captcha['b'] = $a;
+    }
+    $captcha['n'] = rand(0, 2);
+
+    $captcha += array(
+      'op' => $op,
+      'text' => "{$captcha['a']} {$op[$captcha['n']]} {$captcha['b']}",
+    );
+    $_SESSION['captcha'] = $captcha;  
+
+    if (!empty($data['captcha'])) {
+      $chk = intval($data['captcha']);
+      //D echo 'Aufgabe: ' . $last['a'] . $op[$last['n']] . $last['b'] . ' = ' . $chk . "\n";
+
+      switch ($last['n']) {
+        case 0:
+          if ($chk == $last['a'] + $last['b']) {
+            return TRUE;
+          }
+          break;
+
+        case 1:
+          if ($chk == $last['a'] - $last['b']) {
+            return TRUE;
+          }
+          break;
+
+        case 2:
+          if ($chk == $last['a'] * $last['b']) {
+            return TRUE;
+          }
+          break;
+      }
+    }    
+    return $captcha;
+  }
 }

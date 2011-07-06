@@ -25,6 +25,7 @@ if ($messages) {
   ?>
   </ul>
   <?php
+  require '_paginate.php';
 }
 else {
   echo "Keine Nachrichten";

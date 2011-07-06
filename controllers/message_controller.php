@@ -12,7 +12,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
+define('MESSAGE_PAGE_SIZE', 10);
+
 class message_controller extends controller {
+  
+  var $uses = array('message');
   
   /**
    * Action: Schreibe eine Nachricht
@@ -83,6 +87,13 @@ class message_controller extends controller {
   
   function do_index() {
     $this->vars['title'] = "Ihre letzten Nachrichten";
+
+    $sql = 'SELECT COUNT(*) FROM messages WHERE '
+      . "an = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
+      . "OR von = '" . mysql_real_escape_string($_SESSION['user']->id) . "'";
+    $count = $this->message->count($sql);
+    
+    $page = $this->paginate(MESSAGE_PAGE_SIZE, $count, '/message/index');
         
     $sql = 'SELECT 
       m.created as m_created, 
@@ -96,24 +107,50 @@ class message_controller extends controller {
     WHERE '
       . "an = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
       . "OR von = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
-      . 'ORDER BY m.created DESC LIMIT 20';
+      . 'ORDER BY m.created DESC LIMIT ' . (($page-1)*MESSAGE_PAGE_SIZE) . ',' . MESSAGE_PAGE_SIZE;
 
-    $this->vars['messages'] = array();
-
-    $rs = mysql_query($sql);
-    while ($message = mysql_fetch_object($rs)) {
-      
+    $this->vars['messages'] = $this->message->query($sql);
+    foreach ($this->vars['messages'] as $i => $message) {
       $sql = 'SELECT * 
       FROM users  
       WHERE '
         . "id = {$message->an_id}";
       
-      $message->an = mysql_fetch_object(mysql_query($sql));
-            
-      $this->vars['messages'][] = $message;
+      $this->vars['messages'][$i]->an = $this->user->one($sql);
     }
-    //krumo($this->vars['messages']);
     $this->render();
+  }
+  
+  function do_contact() {
+    global $config;
+    
+    $this->vars['title'] = "Ihre Nachricht an uns";
+
+    $this->vars['captcha'] = $captcha = $this->captcha($_POST);
+
+    if (!empty($_POST)) {
+      $success = TRUE;
+      if (empty($_POST['user']) || $_POST['user']->guest) {
+        if ($captcha !== TRUE) {
+          $this->message('Bitte lösen Sie die Rechenaufgabe', 'error');
+          $success = FALSE;
+        }
+      }
+      
+      if ($success) {
+        mail($config['admin_email'], "[pipinstrasse.de] Kontaktformular",
+          "Browser: {$_SERVER['HTTP_USER_AGENT']}\n"
+          . "Nachricht: {$_POST['nachricht']}\n"
+        );
+        $this->message('Ihre Nachricht wurde verschickt');
+      }
+    }
+
+    $this->render();
+  }
+  
+  function allowed() {
+    return $this->method == 'do_contact';
   }
 }
 
