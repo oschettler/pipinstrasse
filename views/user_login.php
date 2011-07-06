@@ -5,6 +5,6 @@
   <input type="submit" name="op" value="Anmelden" id="some_name">
   
   <a href="/user/register">Nutzerkonto anlegen</a>
-  <a href="/user/recover">Kennwort vergessen</a>
+  | <a href="/user/recover">Kennwort vergessen</a>
   
 </form>

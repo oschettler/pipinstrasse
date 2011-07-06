@@ -64,7 +64,7 @@ if (empty($_SESSION['user'])) {
       '/user/recover',
       '/user/code', 
       '/user/guest', 
-      '/page/view',
+      '/page',
       '/message/contact',
     ) as $url) {
     if (preg_match("#^{$url}(/.*)?$#", $_GET['url'])) {
@@ -76,7 +76,7 @@ if (empty($_SESSION['user'])) {
   if (!$allowed) {
     $_SESSION['return_to'] = $_GET['url'];
     $_SESSION['message'] = array(
-      'text' => 'Die Inhalte auf diesen Seiten sind nur angemeldet zu sehen. Bitte melden Sie sich an.',
+      'text' => 'Die Inhalte auf diesen Seiten sind nur angemeldet zu sehen.<br>Bitte melden Sie sich an oder besuchen Sie unsere <a href="/page/intro">öffentlichen Seiten</a>.',
       'class' => 'error',
     );
     header('Location: /user/login');
@@ -117,15 +117,18 @@ if (file_exists($file)) {
 
   if (class_exists($controller_name)) {
     $controller = new $controller_name;
-    $controller->method = $method = "do_{$path[1]}";
     $controller->path = $path;
+    $controller->name = $path[0];
     $controller->theme = $theme;
+
+    $controller->method = $controller->method();
+    $method = "do_{$controller->method}";
 
     if (!$controller->allowed()) {
       $controller->redirect();
     }
 
-    $controller->before();
+    $controller->before(); 
 
     if (method_exists($controller, $method)) {
       

@@ -67,7 +67,7 @@ if ($page_head) {
       <p>
         <a href="/message/contact">Kontakt</a>
         &nbsp;
-        <a href="/page/view/impressum">Impressum</a>
+        <a href="/page/impressum">Impressum</a>
       </p>
       <p>
         <?php $this->render('_theme'); ?>

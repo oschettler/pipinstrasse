@@ -265,8 +265,13 @@ class admin_controller extends controller {
       else {
         $sql = "INSERT INTO pages SET";
       }
+      
+      $slug = empty($_POST['slug'])
+        ? model::slug($_POST['title'])
+        : model::slug($_POST['slug']);
+      
       $sql .= " title = '" . mysql_real_escape_string($_POST['title']) . "',"
-        . " slug = '" . mysql_real_escape_string(model::slug($_POST['title'])) . "',"
+        . " slug = '" . mysql_real_escape_string($slug) . "',"
         . " public = '" . mysql_real_escape_string($_POST['public']) . "',"
         . " body = '" . mysql_real_escape_string($_POST['body']) . "',";
       

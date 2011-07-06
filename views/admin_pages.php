@@ -60,6 +60,7 @@ jQuery(function($) {
     var p = pages[$(this).attr('href')];
     $('#edit-page #edit-id').val(p.id);
     $('#edit-page #edit-title').val(p.title);
+    $('#edit-page #edit-slug').val(p.slug);
     $('#edit-page #edit-body').val(p.body);
     $('#edit-page #edit-public').val(p.public);
     $('#edit-page')
@@ -84,6 +85,7 @@ $this->end_page_head();
   <tr>
     <th>ID</th>
     <th>Titel</th>
+    <th>URL</th>
     <th>öffentlich</th>
     <th>seit</th>
     <th>geändert</th>
@@ -93,7 +95,8 @@ $this->end_page_head();
   ?>
   <tr>
     <td><?php echo "<a class=\"edit\" href=\"{$page->id}\">{$page->id}</a>"; ?></td>
-    <td><?php echo "<a target=\"_blank\" href=\"/page/view/{$page->slug}\">{$page->title}</a>"; ?></td>
+    <td><?php echo "<a target=\"_blank\" href=\"/page/{$page->slug}\">{$page->title}</a>"; ?></td>
+    <td><?php echo "/page/{$page->slug}"; ?></td>
     <td><?php echo $page->public; ?></td>
     <td><?php echo $page->created; ?></td>
     <td><?php if ($page->updated != '0000-00-00 00:00:00') { echo $page->updated; } ?></td>
@@ -115,6 +118,7 @@ $this->end_page_head();
 <form id="edit-page" method="POST" action="/admin/pages">
   <input type="hidden" name="id" value="" id="edit-id">
   <label for="title">Titel</label><input class="input" type="text" name="title" value="" id="edit-title">
+  <label for="slug">URL</label><input class="input" type="text" name="slug" value="" id="edit-slug">
   <label for="public">Öffentlich</label>
   <select name="public" id="edit-public">
     <option value="1">ja</option>

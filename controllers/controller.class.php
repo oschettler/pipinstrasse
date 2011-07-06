@@ -41,15 +41,19 @@ class controller {
   }
   
   /**
+   * Callback. Erlaubt die Manipulation der aufgerufenen Methode in Unterklassen
+   */
+  function method() {
+    return $this->path[1];
+  }
+
+  /**
    * Callback. Wird in Index vor Aufruf der eigentlichen Action aufgerufen
    * und kann Controller-übergreifende Logik enthalten
    */
   function before() {
     global $config;
     
-    $this->name = $this->path[0];
-    $this->method = $this->path[1];
-        
     $this->vars['title'] = ucfirst($this->name);
     $this->vars['slogan'] = 'Zu Hause in der Bonner Altstadt';
     $this->vars['theme'] = $this->theme;

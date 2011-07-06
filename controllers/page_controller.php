@@ -30,4 +30,14 @@ class page_controller extends controller {
     }
     return TRUE;
   }
+  
+  function method() { 
+    if (count($this->path) == 2) {
+      $this->path = array('page', 'view', $this->path[1]);
+      return 'view';
+    }
+    else {
+      return parent::method();
+    }
+  }
 }

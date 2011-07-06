@@ -1,5 +1,9 @@
 <ul>
   <?php
+  if (in_array('admin', explode(',', $_SESSION['user']->roles))) {
+    $navigation['/admin'] = 'Verwaltung';
+  }
+  
   foreach ($navigation as $_url => $_title) {
     $_confirm = '';
     
