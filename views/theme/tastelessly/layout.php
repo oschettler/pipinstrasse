@@ -65,6 +65,7 @@ if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
     ?>
   <!-- start sidebar one -->
   <div id="sidebar1" class="sidebar">
+    <?php $this->blocks('above'); ?>
     <?php $this->blocks('sidebar1'); ?>
   </div>
   <!-- end sidebar one -->
