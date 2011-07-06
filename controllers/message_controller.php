@@ -151,7 +151,7 @@ class message_controller extends controller {
   
   function allowed() {
     if (empty($_SESSION['user']) || $_SESSION['user']->guest) {
-      return $this->method == 'do_contact';
+      return $this->method == 'contact';
     }
     else {
       return TRUE;
