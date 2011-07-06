@@ -15,6 +15,7 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 define('BOARD_PAGE_SIZE', 10);
 
 class board_controller extends controller {
+  var $uses = array('board');
 
   /**
    * Action: Das schwarze Brett anschauen
@@ -34,28 +35,20 @@ class board_controller extends controller {
       }
       else {
         $this->message('Ihre Nachricht wurde gespeichert');
-        $this->log('board', $this->insert_id(), $_POST['nachricht']);
+        $this->log('board', $this->message->insert_id(), $_POST['nachricht']);
       }
       $this->redirect('/board/index');
     }
 
     $sql = 'SELECT COUNT(*) FROM board';
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $count = $this->board->count($sql);
     
-    $page = $this->paginate(BOARD_PAGE_SIZE, $counter[0], '/board/index');
+    $page = $this->paginate(BOARD_PAGE_SIZE, $count, '/board/index');
         
     $sql = 'SELECT m.created as m_created, m.id AS m_id, m.*, u.* FROM board m LEFT JOIN users u ON m.von = u.id '
       . 'ORDER BY m.created DESC LIMIT ' . (($page-1)*BOARD_PAGE_SIZE) . ',' . BOARD_PAGE_SIZE;
 
-    $this->vars['messages'] = array();
-
-    $rs = mysql_query($sql);
-    
-    while ($message = mysql_fetch_object($rs)) {
-      $this->vars['messages'][] = $message;
-    }
-    
+    $this->vars['messages'] = $this->board->query($sql);
     $this->render();
   }  
 }
