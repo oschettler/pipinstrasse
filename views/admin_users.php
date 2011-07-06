@@ -45,6 +45,7 @@ jQuery(function($) {
   $('.edit').click(function() { 
     var u = users[$(this).attr('href')];
     $('#edit-user #edit-id').val(u.id);
+    $('#edit-user #edit-hausnummer').val(u.hausnummer);
     $('#edit-user #edit-vorname').val(u.vorname);
     $('#edit-user #edit-nachname').val(u.nachname);
     $('#edit-user #edit-email').val(u.mail);
@@ -62,6 +63,7 @@ $this->end_page_head();
 <table>
   <tr>
     <th>ID</th>
+    <th>Hausnummer</th>
     <th>Nachname</th>
     <th>Vorname</th>
     <th>E-Mail</th>
@@ -75,6 +77,7 @@ $this->end_page_head();
   ?>
   <tr>
     <td><?php echo "<a class=\"edit\" href=\"{$user->id}\">{$user->id}</a>"; ?></td>
+    <td><?php echo $user->hausnummer; ?></td>
     <td><?php echo $user->nachname; ?></td>
     <td><?php echo $user->vorname; ?></td>
     <td><?php echo $user->mail; ?></td>
@@ -90,6 +93,7 @@ $this->end_page_head();
 <?php $this->render('_paginate'); ?>
 <form id="edit-user" method="POST" action="/admin/users">
   <input type="hidden" name="id" value="" id="edit-id">
+  <label for="hausnummer">Hausnummer</label><input class="input" type="text" name="hausnummer" value="" id="edit-hausnummer">
   <label for="vorname">Vorname</label><input class="input" type="text" name="vorname" value="" id="edit-vorname">
   <label for="nachname">Nachname</label><input class="input" type="text" name="nachname" value="" id="edit-nachname">
   <label for="password">Kennwort</label><input class="input" type="password" name="password" value="" id="edit-password">
