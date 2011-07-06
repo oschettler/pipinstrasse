@@ -80,7 +80,7 @@ class photo_controller extends controller {
     }
 
     if (!empty($_POST['topic'])) {
-      $topic = $this->topic->one("SELECT id, von FROM topics WHERE "
+      $topic = $this->topic->one("SELECT id, von, shared FROM topics WHERE "
         . "title = '" .  mysql_real_escape_string($_POST['topic']) . "'"
       );
       if ($topic) {
@@ -123,7 +123,7 @@ class photo_controller extends controller {
       $sql .= ' WHERE id = ' . $id;
     }
 
-    $result = $this->photos->exec($sql);
+    $result = $this->photo->exec($sql);
     if (!$result) {
       $this->message(mysql_error(), 'error');
       $this->redirect('/photo/index');
@@ -139,7 +139,7 @@ class photo_controller extends controller {
       }
     }
     else {
-      $id = $this->insert_id();
+      $id = $this->photo->insert_id();
     }
 
     // Ab hier wird in jedem Fall ein Bild hochgeladen
