@@ -3,6 +3,7 @@ $this->page_head();
 ?>
 <link rel="stylesheet" href="<?php echo $config['static_url']; ?>/jquery-ui/css/smoothness/jquery-ui-1.8.13.custom.css" type="text/css" media="screen" title="no title" charset="utf-8">
 <script src="<?php echo $config['static_url']; ?>/jquery-ui/js/jquery-ui-1.8.13.custom.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/picup.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 jQuery(function($) {
   $('#topic').autocomplete({
@@ -12,6 +13,14 @@ jQuery(function($) {
   .click(function() {
     $(this).autocomplete('search');
   });
+  
+  Picup.callbackHandler = function(params) {
+    for (var key in params) {
+      alert(key+' == '+params[key]);
+    }
+  }
+  // Für Picup
+  window.name = 'photo_upload';
 });
 </script>
 <?php
