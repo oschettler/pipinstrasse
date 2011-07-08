@@ -78,15 +78,15 @@ class controller {
     }
 
     $this->vars['message_count'] = $this->message_count();
-    
+
     $this->vars['blocks']['sidebar2'][] = $this->block(array(
       'name' => 'users-online',
       'title' => 'Online',
       'view' => '_online'
     ));
-    
+
     $random_user = $this->random_user(); 
-    
+
     $this->vars['blocks']['sidebar2'][] = $this->block(array(
       'name' => 'random-user',
       'title' => '<span>Kurz vorgestellt:</span><a href="' 
@@ -96,8 +96,8 @@ class controller {
     ), array(
       'random_user' => $random_user,
     ));
-    
-    if (!($this->name == 'photo' && $this->method == 'view')) {
+   
+    if ($this->name != 'photo') {
       $this->vars['blocks']['sidebar1'][] = $this->block(array(
         'name' => 'random-photo',
         'title' => 'Foto aus der Nachbarschaft',

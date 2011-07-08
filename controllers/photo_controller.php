@@ -23,15 +23,27 @@ class photo_controller extends controller {
     /*
      * Block "Mehr aus Album"
      */
-    if ($this->method == 'view') {
+    if (in_array($this->method, array('view', 'full'))) {
       $photo = $this->vars['photo'];
 
       $sql = 'SELECT * FROM photos WHERE ' 
-        . "topic_id = {$photo->topic_id} "
-        . "AND id != {$photo->p_id} "
-        . 'ORDER BY created DESC';
+        . "topic_id = {$photo->topic_id} ";
+      
+      if ($this->method == 'view') {
+        $sql .= "AND id != {$photo->p_id} ";
+      }
+      
+      $sql .= 'ORDER BY created DESC';
 
       $photos = $this->photo->query($sql);
+      foreach ($photos as $i => $_photo) {
+        if ($_photo->id == $photo->p_id) {
+          $photos[$i]->current = TRUE;
+        }
+        else {
+          $photos[$i]->current = FALSE;
+        }
+      }
 
       if ($photos) {
         $this->vars['blocks']['above'][] = $this->block(array(
@@ -44,7 +56,7 @@ class photo_controller extends controller {
       }
     }
     else {
-      if (!$_SESSION['user']->guest) {
+      if ($this->method != 'full' && !$_SESSION['user']->guest) {
         /*
          * Block "Neueste Alben"
          */ 
@@ -255,6 +267,11 @@ class photo_controller extends controller {
     $_SESSION['return_to'] = $_GET['url'];
 
     $this->render();
+  }
+  
+  function do_full() {
+    $this->layout = 'photo';
+    return $this->do_view();
   }
   
   /**
