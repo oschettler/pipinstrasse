@@ -254,7 +254,7 @@ class user_controller extends controller {
       $message[] = 'Bitte geben Sie eine gültige E-Mail-Adresse an';
     }
     
-    if ($this->method == 'do_register') {
+    if ($this->method == 'register') {
       // Bei der Registrierung ist das Kennwort Pflichtfeld
       if (empty($_POST['password']) || empty($_POST['password2']) || $_POST['password'] != $_POST['password2']) {
         $message[] = 'Bitte geben Sie das Kennwort zweimal an';
