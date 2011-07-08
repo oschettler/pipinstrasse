@@ -17,6 +17,7 @@ define('USER_RESOLUTION', '100x100');
 define('USER_EMAIL_RE', '/^[-\.+\w]+@\w[-\w\.]+\w$/');
 
 class user_controller extends controller {
+  var $uses = array('user');
   
   /**
    * Action: Als Nutzer anmelden
@@ -74,7 +75,7 @@ class user_controller extends controller {
         if ($this->save()) {
           $this->message("Herzlich willkommen, {$_POST['vorname']}. Ihr Nutzerkonto muss noch freigeschaltet werden.");
 
-          $user_id = $this->insert_id();
+          $user_id = $this->user->insert_id();
 
           mail($config['admin_email'], "[pipinstrasse.de] Neuer Nutzer {$_POST['mail']}", 
             "Nutzer #{$user_id} freischalten: http://{$_SERVER['HTTP_HOST']}/admin/user"
@@ -318,7 +319,7 @@ class user_controller extends controller {
       }
 
       if (!$user) {
-        $user_id = $this->insert_id();
+        $user_id = $this->user->insert_id();
       }
 
       $src = $_FILES['avatar']['tmp_name'];
