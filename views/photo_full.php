@@ -27,7 +27,7 @@ $this->page_head();
   }
   
   #blocks-above h2,
-  #invite-link {
+  #links {
     display: none;
   }
   
@@ -38,13 +38,26 @@ $this->page_head();
     background: red;
     color: white;
   }
+  
+  #ctrl {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: block;
+    padding: 4px 10px;
+    background-color: black;
+    color: white;
+  }
+  
 </style>
 <script type="text/javascript" charset="utf-8">
+var timer;
+
 $(window).load(function() {    
-  var w = $(window),
-      $bg = $("#bg"),
-      bg_width = $bg.width(),
-      bg_height = $bg.height();
+  var w = $(window);
+  var $bg = $("#bg");
+  var bg_width = $bg.width();
+  var bg_height = $bg.height();
   var aspect_ratio = bg_width / bg_height;
 
   function resize_bg() {
@@ -74,22 +87,39 @@ $(window).load(function() {
     resize_bg();
   }).trigger("resize");
   
-  setInterval(function() {
-    var next_img; 
-    if (location.pathname == $('#photos a:last').attr('href')) {
-      next_img = $('#photos a:first').attr('href');
-    }
-    else {
-      next_img = $('#photos li.current').next('li').children('a').attr('href');
-    }
-    location.href = next_img;
-  }, 10000);
-  
+  start();
 });
+
+function start() {
+  timer = setInterval(diashow, 10000);
+  $('#ctrl')
+    .attr('href', 'javascript:stop()')
+    .text('stop');
+}
+
+function diashow() {
+  var next_img; 
+  if (location.pathname == $('#photos a:last').attr('href')) {
+    next_img = $('#photos a:first').attr('href');
+  }
+  else {
+    next_img = $('#photos li.current').next('li').children('a').attr('href');
+  }
+  location.href = next_img;
+}
+  
+function stop() {
+  clearInterval(timer);
+  $('#ctrl')
+    .attr('href', 'javascript:start()')
+    .text('start');
+  return false;
+}
 </script
 <?php
 $this->end_page_head();
 ?>
 
 <img id="bg" src="/photo/scaled/<?php echo $photo->p_id; ?>/1024x768">
+<a href="javascript:stop()" id="ctrl">stop</a>
 <?php /* ?>/<div id="info"></div><?php */ ?>

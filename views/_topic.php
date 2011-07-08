@@ -10,9 +10,11 @@ foreach ($photos as $_photo) {
 }
 ?>
 </ul>
-<a href="/photo/full/<?php echo $photo->p_id; ?>">Diashow</a>
-<?php
-if (!$_SESSION['user']->guest && $_SESSION['user']->id == $photo->u_id) {
-  ?> | <a id="invite-link" href="/user/guests/<?php echo $photo->topic_id; ?>">Gäste hierher einladen</a><?php
-}
-?>
+<div id="links">
+  <a href="/photo/full/<?php echo $photo->p_id; ?>">Diashow</a>
+  <?php
+  if (!$_SESSION['user']->guest && $_SESSION['user']->id == $photo->u_id) {
+    ?> | <a id="invite-link" href="/user/guests/<?php echo $photo->topic_id; ?>">Gäste hierher einladen</a><?php
+  }
+  ?>
+</div>
