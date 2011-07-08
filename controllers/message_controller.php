@@ -41,7 +41,7 @@ class message_controller extends controller {
           . "'" . mysql_real_escape_string($_POST['an']) . "'");
         $recipient = mysql_fetch_object($rs);
 
-        $insert_id = $this->insert_id();
+        $insert_id = $this->message->insert_id();
 
         $sender = $_SESSION['user'];
 
