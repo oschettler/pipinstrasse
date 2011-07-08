@@ -49,6 +49,10 @@ $this->page_head();
     color: white;
   }
   
+  #ctrl a {
+    color: white;
+  }
+  
 </style>
 <script type="text/javascript" charset="utf-8">
 var timer;
@@ -92,7 +96,7 @@ $(window).load(function() {
 
 function start() {
   timer = setInterval(diashow, 10000);
-  $('#ctrl')
+  $('#startstop')
     .attr('href', 'javascript:stop()')
     .text('stop');
 }
@@ -110,7 +114,7 @@ function diashow() {
   
 function stop() {
   clearInterval(timer);
-  $('#ctrl')
+  $('#startstop')
     .attr('href', 'javascript:start()')
     .text('start');
   return false;
@@ -121,5 +125,7 @@ $this->end_page_head();
 ?>
 
 <img id="bg" src="/photo/scaled/<?php echo $photo->p_id; ?>/1024x768">
-<a href="javascript:stop()" id="ctrl">stop</a>
+<div id="ctrl">
+  <a href="/photo">Mehr Fotos</a> | <a href="javascript:stop()" id="startstop">stop</a>
+</div>
 <?php /* ?>/<div id="info"></div><?php */ ?>
