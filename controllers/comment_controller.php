@@ -13,14 +13,18 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
 class comment_controller extends controller {
+  var $uses = array('comment');
+  
   function do_add() {
     if (!empty($_POST)) {
+      $like = empty($_POST['like']) || !$_POST['like'] ? 0 : 1;
+      
       $sql = 'INSERT INTO comments SET '
         . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
         . 'object_type = ' .  "'" . mysql_real_escape_string($_POST['type']) . "', "
         . 'object_id = ' .  "'" . mysql_real_escape_string($_POST['id']) . "', "
         . 'comment = ' .  "'" . mysql_real_escape_string($_POST['comment']) . "', "
-        . 'liked = ' .  "'" . mysql_real_escape_string($_POST['like']) . "', "
+        . "liked = {$like}, "
         . 'created = NOW()';
 
       $result = mysql_query($sql);
@@ -34,7 +38,7 @@ class comment_controller extends controller {
           . "'" . mysql_real_escape_string($_POST['an']) . "'");
         $recipient = mysql_fetch_object($rs);
 
-        $this->log('comment', $this->insert_id(), $_POST['comment']);
+        $this->log('comment', $this->comment->insert_id(), $_POST['comment']);
 
         $sender = $_SESSION['user'];
 

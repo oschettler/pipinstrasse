@@ -26,23 +26,28 @@ class photo_controller extends controller {
     if (in_array($this->method, array('view', 'full'))) {
       $photo = $this->vars['photo'];
 
-      $sql = 'SELECT * FROM photos WHERE ' 
-        . "topic_id = {$photo->topic_id} ";
-      
-      if ($this->method == 'view') {
-        $sql .= "AND id != {$photo->p_id} ";
-      }
-      
-      $sql .= 'ORDER BY created DESC';
+      if ($photo->topic_id) {
+        $sql = 'SELECT * FROM photos WHERE ' 
+          . "topic_id = {$photo->topic_id} ";
 
-      $photos = $this->photo->query($sql);
-      foreach ($photos as $i => $_photo) {
-        if ($_photo->id == $photo->p_id) {
-          $photos[$i]->current = TRUE;
+        if ($this->method == 'view') {
+          $sql .= "AND id != {$photo->p_id} ";
         }
-        else {
-          $photos[$i]->current = FALSE;
+
+        $sql .= 'ORDER BY created DESC';
+
+        $photos = $this->photo->query($sql);
+        foreach ($photos as $i => $_photo) {
+          if ($_photo->id == $photo->p_id) {
+            $photos[$i]->current = TRUE;
+          }
+          else {
+            $photos[$i]->current = FALSE;
+          }
         }
+      }
+      else {
+        $photos = array();
       }
 
       if ($photos) {
