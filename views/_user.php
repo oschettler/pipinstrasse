@@ -12,8 +12,7 @@ if (!empty($_SESSION['user'])) {
     <?php echo $this->user_link(); ?>
     | <a href="/user/edit">Bearbeiten</a>
     | <a href="/message">Nachrichten</a>
-    | <a href="/list">Listen</a><?php
-    if ($message_count) { echo " <span title=\"ungelesene Nachrichten\">({$message_count})</span>"; }
+   if ($message_count) { echo " <span title=\"ungelesene Nachrichten\">({$message_count})</span>"; }
     ?>
     | <a href="/user/logout">Abmelden</a>
     <?php
