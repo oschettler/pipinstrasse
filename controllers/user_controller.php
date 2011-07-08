@@ -135,14 +135,17 @@ class user_controller extends controller {
     else {
       if ($this->save()) {
         $this->message('Ihre Änderungen wurden gespeichert');
+        
+        // Neu laden für Session
         $user_id = $_SESSION['user']->id;
-        $_SESSION['user'] = (object)$_POST;
-        $_SESSION['user']->id = $user_id;
-        $_SESSION['user']->guest = FALSE;
+        $sql = 'SELECT * FROM users WHERE active = 1'
+             . " AND id = " . $user_id;
+
+        $_SESSION['user'] = $this->user->one($sql);
+
         $this->redirect($this->user_link(NULL, /*url_only*/TRUE));
       }
     }
-    
     $this->render();
   }
   
