@@ -157,7 +157,7 @@ class controller {
   
   function redirect($url = NULL) {
     if ($url == NULL) {
-      if (!empty($_SESSION['return_to'])) {
+      if (!empty($_SESSION['return_to']) && $_SESSION['return_to'] != '/char/users') {
         $url = $_SESSION['return_to'];
         unset($_SESSION['return_to']);
       }
