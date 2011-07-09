@@ -156,7 +156,7 @@ class admin_controller extends controller {
         . " updated = NOW()";
       
       if (!empty($_POST['password'])) {
-        $sql .= ", password = MD5('" . mysql_real_escape_string($_POST['password']) . "'";
+        $sql .= ", password = MD5('" . mysql_real_escape_string($_POST['password']) . "')";
       }
       $sql .= " WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
       
