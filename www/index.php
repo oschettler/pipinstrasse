@@ -18,7 +18,7 @@ require_once '../config.php';
  * Debugging. Aktivieren mit Cookie "XDEBUG_SESSION", 
  * z.B. per Safari-Extension Xdebug-Toggler
  */
-if (isset($_COOKIE['XDEBUG_SESSION'])) {
+if (isset($_COOKIE['XDEBUG_SESSION']) || !empty($_GET['t'])) {
   error_reporting(E_ALL);
   ini_set('display_errors', TRUE);
   require_once '../lib/krumo/class.krumo.php';
