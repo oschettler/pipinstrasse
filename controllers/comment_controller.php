@@ -13,6 +13,7 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
 class comment_controller extends controller {
+  
   var $uses = array('comment');
   
   function do_add() {
