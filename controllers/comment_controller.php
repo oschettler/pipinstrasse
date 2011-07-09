@@ -61,7 +61,7 @@ class comment_controller extends controller {
 
       $result = mysql_query($sql);
 
-      $this->log('like', $this->insert_id());
+      $this->log('like', $this->comment->insert_id());
     }
   }
 }
