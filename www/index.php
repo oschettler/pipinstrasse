@@ -56,6 +56,10 @@ ini_set('include_path', $include_path);
 
 require_once "controller.class.php";
 
+if (empty($_GET['url'])) {
+  $_GET['url'] = '/home';
+}
+
 if (empty($_SESSION['user'])) {
   $allowed = FALSE;
   foreach (array(
@@ -68,6 +72,7 @@ if (empty($_SESSION['user'])) {
       '/message/contact',
       '/home/theme',
     ) as $url) {
+
     if (preg_match("#^{$url}(/.*)?$#", $_GET['url'])) {
       $allowed = TRUE;
       break;
@@ -89,12 +94,7 @@ mysql_select_db($config['db_name']);
 mysql_query('SET NAMES UTF8');
 //mysql_query('SET CHARACTER SET UTF8');
 
-if (empty($_GET['url'])) {
-  $path = array('home', 'index');
-}
-else {
-  $path = explode('/', substr($_GET['url'], 1));
-}
+$path = explode('/', substr($_GET['url'], 1));
 
 if (count($path) < 2) {
   $path[1] = 'index';
