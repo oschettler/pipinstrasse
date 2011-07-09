@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
-define('USERS_PAGE_SIZE', 4);
+define('USERS_PAGE_SIZE', 250);
 define('USER_RESOLUTION', '100x100');
 define('USER_EMAIL_RE', '/^[-\.+\w]+@\w[-\w\.]+\w$/');
 
