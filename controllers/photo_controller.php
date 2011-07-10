@@ -274,16 +274,16 @@ class photo_controller extends controller {
     header('Content-type: text/javascript');
     $this->layout = FALSE;
     
-    $sql = "SELECT id, seq FROM photos WHERE topic_id = {$photo->topic_id} AND seq = " . ($photo->seq + 1);
+    $sql = "SELECT id, title, seq FROM photos WHERE topic_id = {$photo->topic_id} AND seq = " . ($photo->seq + 1);
     $next = $this->photo->one($sql);
     //krumo($photo, $sql, $next); exit;
     
     if (!$next) {
-      $sql = "SELECT id, seq FROM photos WHERE topic_id = {$photo->topic_id} AND seq = 1";
+      $sql = "SELECT id, title, seq FROM photos WHERE topic_id = {$photo->topic_id} AND seq = 1";
       $next = $this->photo->one($sql);
     }
     
-    $sql = "SELECT id FROM photos WHERE topic_id = {$photo->topic_id}"
+    $sql = "SELECT id, title FROM photos WHERE topic_id = {$photo->topic_id}"
       . " AND seq >= " . ($next->seq - 5)
       . " AND seq <= " . ($next->seq + 5)
       . ' ORDER BY seq ASC';
@@ -291,10 +291,11 @@ class photo_controller extends controller {
     $links = array();
     foreach ($this->photo->query($sql) as $link) {
       $class = $link->id == $next->id ? ' class="current"' : '';
-      $links[] = "<li{$class}><a href=\"/photo/full/{$link->id}\"><img class=\"photo\" src=\"/photo/scaled/{$link->id}/x50\"></a></li>";
+      $links[] = "<li{$class}><a title=\"" . addslashes($link->title) . "\"href=\"/photo/full/{$link->id}\"><img class=\"photo\" src=\"/photo/scaled/{$link->id}/x50\"></a></li>";
     }
 
     $data = (object)array(
+      'title' => $next->title,
       'next' => '/photo/scaled/' . $next->id,
       'links' => join('', $links)
     );

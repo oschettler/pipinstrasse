@@ -95,7 +95,7 @@ $(window).load(function() {
 });
 
 function start() {
-  timer = setInterval(diashow, 3000);
+  timer = setInterval(diashow, 10000);
   $('#startstop')
     .attr('href', 'javascript:stop()')
     .text('stop');
@@ -104,6 +104,7 @@ function start() {
 function diashow() { 
   var src = $('#bg').attr('src').split('/');
   $.getJSON('/photo/next/' + src[3], function(data) { 
+    $('title').text(data.title);
     $('#bg')
       .css({ opacity: 0.0 })
       .attr('src', data.next)
