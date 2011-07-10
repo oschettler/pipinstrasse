@@ -97,6 +97,7 @@ $this->end_page_head();
     <th>gemeinsam</th>
     <th>seit</th>
     <th>geändert</th>
+    <th></th>
   </tr>
   <?php
   $no_topic = (object)array(
@@ -115,6 +116,7 @@ $this->end_page_head();
     <td><?php echo $topic->shared; ?></td>
     <td><?php echo $topic->created; ?></td>
     <td><?php if ($topic->updated != '0000-00-00 00:00:00') { echo $topic->updated; } ?></td>
+    <td><?php if ($topic->id) { echo "<a href=\"/admin/topicseq/{$topic->id}\">Reihenfolge reparieren</a>"; } ?></td>
   </tr>
   <tr>
     <td colspan="5" class="photos">

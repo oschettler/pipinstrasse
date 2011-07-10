@@ -34,7 +34,7 @@ class photo_controller extends controller {
           $sql .= "AND id != {$photo->p_id} ";
         }
 
-        $sql .= 'ORDER BY created DESC';
+        $sql .= 'ORDER BY seq ASC';
 
         $photos = $this->photo->query($sql);
         foreach ($photos as $i => $_photo) {
@@ -243,21 +243,14 @@ class photo_controller extends controller {
       return $this->do_add($photo_id);
     }
   }
-  
+
   function do_view() {
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       $this->redirect('/photo/index');
     }
     
-    $sql = 'SELECT p.created AS p_created, p.updated AS p_updated, p.id AS p_id, u.id AS u_id, t.title AS topic, p.*, u.* 
-    FROM photos p 
-    LEFT JOIN users u ON p.von = u.id 
-    LEFT JOIN topics t ON p.topic_id = t.id 
-    WHERE '
-      . "p.id = '" . mysql_real_escape_string($this->path[2]) . "'";
-
-    $photo = $this->photo->one($sql);
+    $photo = $this->photo->load($this->path[2]);
     
     if (!$photo) {
       $this->message("Dieses Foto gibt es nicht");
@@ -277,6 +270,56 @@ class photo_controller extends controller {
   function do_full() {
     $this->layout = 'photo';
     return $this->do_view();
+  }
+  
+  /**
+   * Liefere das nächste Bild in der Diashow, nach dem Feld photos.seq
+   * Beim letzten Bild wird das erste Bild im Album geliefert
+   * Zusätzlich werden bis zu 5 Bilder vor und 5 Bilder nach dem Bild als Navigation geliefert
+   * Aufruf per $.getJSON von /photo/full
+   */
+  function do_next() {
+    if (count($this->path) != 3) {
+      $this->message('FALSCHE URL');
+      return;
+    }
+    
+    $photo = $this->photo->load($this->path[2]);
+    
+    if (!$photo) {
+      $this->message("Dieses Foto gibt es nicht");
+      return;
+    }
+
+    header('Content-type: text/javascript');
+    $this->layout = FALSE;
+    
+    $sql = "SELECT id, seq FROM photos WHERE topic_id = {$photo->topic_id} AND seq = " . ($photo->seq + 1);
+    $next = $this->photo->one($sql);
+    //krumo($photo, $sql, $next); exit;
+    
+    if (!$next) {
+      $sql = "SELECT id, seq FROM photos WHERE topic_id = {$photo->topic_id} AND seq = 1";
+      $next = $this->photo->one($sql);
+    }
+    
+    $sql = "SELECT id FROM photos WHERE topic_id = {$photo->topic_id}"
+      . " AND seq >= " . ($next->seq - 5)
+      . " AND seq <= " . ($next->seq + 5)
+      . ' ORDER BY seq ASC';
+      
+    $links = array();
+    foreach ($this->photo->query($sql) as $link) {
+      $class = $link->id == $next->id ? ' class="current"' : '';
+      $links[] = "<li{$class}><a href=\"/photo/full/{$link->id}\"><img class=\"photo\" src=\"/photo/scaled/{$link->id}/x50\"></a></li>";
+    }
+
+    $data = (object)array(
+      'next' => '/photo/scaled/' . $next->id,
+      'links' => join('', $links)
+    );
+
+    echo json_encode($data);
   }
   
   /**

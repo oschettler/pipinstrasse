@@ -95,21 +95,18 @@ $(window).load(function() {
 });
 
 function start() {
-  timer = setInterval(diashow, 10000);
+  timer = setInterval(diashow, 3000);
   $('#startstop')
     .attr('href', 'javascript:stop()')
     .text('stop');
 }
 
-function diashow() {
-  var next_img; 
-  if (location.pathname == $('#photos a:last').attr('href')) {
-    next_img = $('#photos a:first').attr('href');
-  }
-  else {
-    next_img = $('#photos li.current').next('li').children('a').attr('href');
-  }
-  location.href = next_img;
+function diashow() { 
+  var src = $('#bg').attr('src').split('/');
+  $.getJSON('/photo/next/' + src[3], function(data) { 
+    $('#bg').attr('src', data.next);
+    $('#photos').html(data.links);
+  });
 }
   
 function stop() {
@@ -124,7 +121,7 @@ function stop() {
 $this->end_page_head();
 ?>
 
-<img id="bg" src="/photo/scaled/<?php echo $photo->p_id; ?>/1024x768">
+<img id="bg" src="/photo/scaled/<?php echo $photo->p_id; ?>">
 <div id="ctrl">
   <a href="/photo">Mehr Fotos</a> | <a href="javascript:stop()" id="startstop">stop</a>
 </div>

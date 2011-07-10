@@ -52,7 +52,7 @@ class admin_controller extends controller {
     $this->layout = 'admin';
     $migration = mysql_fetch_object(mysql_query('SELECT last_id FROM migrations'));
 
-    echo "Aktualisiere die Datenbank seit Migration #{$migration->last_id} ...\n";
+    echo "Aktualisiere die Datenbank seit Migration #{$migration->last_id} ...<pre>\n";
     
     $dir = realpath("{$_SERVER['DOCUMENT_ROOT']}/{$config['dir_migrations']}");
     $d = opendir($dir);
@@ -71,9 +71,11 @@ class admin_controller extends controller {
       switch ($entry[1]) {
         case 'sql':
           // Benutze Kommandozeile, um mehrer SQL-Befehle ausführen zu können
-          exec("{$config['mysql']} -h{$config['db_host']} -u{$config['db_user']} -p{$config['db_password']} {$config['db_name']} < {$dir}/{$entry[0]}", $out, $status);
+          $cmd = "{$config['mysql']} -h{$config['db_host']} -u{$config['db_user']} -p{$config['db_password']} {$config['db_name']} 2>&1 < {$dir}/{$entry[0]}";
+          $out = array();
+          exec($cmd, $out, $status);
           if ($status != 0) {
-            echo "ERROR " . join("\n", $out). ". Migration abgebrochen\n";
+            echo join("\n", $out) . "</pre>Migration abgebrochen\n";
             return;
           }
           break;
@@ -87,7 +89,7 @@ class admin_controller extends controller {
       }
       mysql_query("UPDATE migrations SET last_id = {$n}, updated = NOW()");
     }
-    echo "Fertig.\n";
+    echo "</pre>Fertig.\n";
   }
   
   /**
@@ -249,6 +251,20 @@ class admin_controller extends controller {
       $this->message('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
     }
     $this->redirect();
+  }
+  
+  function do_topicseq() {
+    $topic_id = $this->path[2];
+    
+    $this->model('photo');
+
+    $sql = "SELECT id FROM photos WHERE topic_id={$topic_id} ORDER BY seq, updated ASC";
+    foreach ($this->photo->query($sql) as $i => $photo) {
+      // Anfang bei 1
+      $this->photo->exec('UPDATE photos SET seq = ' . ($i + 1) . ", updated = NOW() WHERE id={$photo->id}");
+    }
+    $this->message("Reihenfolge repariert");
+    $this->redirect('/admin/topics');
   }
   
   function do_pages() {
