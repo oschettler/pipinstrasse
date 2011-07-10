@@ -83,7 +83,15 @@ jQuery(function($) {
     }
     return false;
   });
-
+  
+  $('a.confirm').click(function() {
+    if (confirm('Wirklich ' + $(this).attr('title') + '?')) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
 });
 </script>
 <?php
@@ -116,7 +124,14 @@ $this->end_page_head();
     <td><?php echo $topic->shared; ?></td>
     <td><?php echo $topic->created; ?></td>
     <td><?php if ($topic->updated != '0000-00-00 00:00:00') { echo $topic->updated; } ?></td>
-    <td><?php if ($topic->id) { echo "<a href=\"/admin/topicseq/{$topic->id}\">Reihenfolge reparieren</a>"; } ?></td>
+    <td>
+      <?php 
+      if ($topic->id) { 
+        echo "<a href=\"/admin/topicseq/{$topic->id}\">Reihenfolge reparieren</a>"; 
+        echo " | <a class=\"confirm\" title=\"alle Fotos im import-Verzeichnis importieren\" href=\"/admin/topicimport/{$topic->id}\">Massenimport</a>"; 
+      } 
+      ?>
+    </td>
   </tr>
   <tr>
     <td colspan="5" class="photos">

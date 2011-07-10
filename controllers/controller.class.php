@@ -293,7 +293,7 @@ class controller {
     return $this->message->count($sql);
   }
   
-  function image_path($id, $type) {
+  static function image_path($id, $type) {
     $dirs = array();
     $path = sprintf('%06s', $id);
     while ($path) {
@@ -303,8 +303,8 @@ class controller {
     return '/img/' . $type . '/' . join('/', $dirs);
   }
   
-  function image($id, $geo = NULL, $type = 'photos') {
-    $image_path = $_SERVER['DOCUMENT_ROOT'] . $this->image_path($id, $type);
+  static function image($id, $geo = NULL, $type = 'photos') {
+    $image_path = $_SERVER['DOCUMENT_ROOT'] . self::image_path($id, $type);
     @mkdir($image_path, 0775, /*recursive*/TRUE);
 
     if ($geo == NULL) {

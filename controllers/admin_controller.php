@@ -267,6 +267,50 @@ class admin_controller extends controller {
     $this->redirect('/admin/topics');
   }
   
+  function do_topicimport() {
+    $topic_id = $this->path[2];
+        
+    $this->model('photo');
+
+    $dir = realpath($_SERVER['DOCUMENT_ROOT'] . '/../import');
+    $d = opendir($dir);
+    $n = 0;
+    
+    $msg = array();
+    while ($entry = readdir($d)) {
+      if (strpos($entry, '.') === 0) {
+        continue;
+      }
+      $path = "{$dir}/{$entry}";
+      if (is_dir($path)) {
+        continue;
+      }
+
+      $n++;
+
+      $id = $this->photo->save(array(
+        'topic_id' => $topic_id,
+        'title' => $entry,
+        'von' => $_SESSION['user']->id, 
+        'batch' => TRUE,
+        'upload' => array(
+          'name' => $entry,
+          'tmp_name' => $path,
+        ),
+      ));
+      if ($id) {
+        $msg[] = "<a href=\"/photo/view/{$id}\">{$entry}</a>";
+      }
+      else {
+        $msg[] = "Fehler bei {$entry}";
+      }
+    }
+    closedir($d);
+    
+    $this->message("{$n} Einträge:<br>" . join('<br>', $msg));
+    $this->redirect('/admin/topics');
+  }
+  
   function do_pages() {
     $this->layout = 'admin';
     $this->vars['title'] = 'Verwalten von Seiten';

@@ -104,7 +104,10 @@ function start() {
 function diashow() { 
   var src = $('#bg').attr('src').split('/');
   $.getJSON('/photo/next/' + src[3], function(data) { 
-    $('#bg').attr('src', data.next);
+    $('#bg')
+      .css({ opacity: 0.0 })
+      .attr('src', data.next)
+      .animate({ opacity: 1.0 }, 200);
     $('#photos').html(data.links);
   });
 }

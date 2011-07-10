@@ -12,7 +12,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
-define('IMAGE_RESOLUTION', '1024x768');
 define('PHOTO_PAGE_SIZE', 5);
 
 class photo_controller extends controller {
@@ -34,7 +33,7 @@ class photo_controller extends controller {
           $sql .= "AND id != {$photo->p_id} ";
         }
 
-        $sql .= 'ORDER BY seq ASC';
+        $sql .= 'ORDER BY seq ASC LIMIT 10';
 
         $photos = $this->photo->query($sql);
         foreach ($photos as $i => $_photo) {
@@ -105,7 +104,7 @@ class photo_controller extends controller {
           $this->message('Dieses Album gehört nicht Ihnen.');
           $this->redirect('/photo/index');
         }
-        $topic_id = ", topic_id = {$topic->id}";
+        $topic_id = $topic->id;
       }
       else {
         $sql = "INSERT INTO topics SET "
@@ -115,66 +114,47 @@ class photo_controller extends controller {
           . 'created = NOW()';
         $this->topic->exec($sql);
 
-        $topic_id = ', topic_id = ' . $this->topic->insert_id();
+        $topic_id = $this->topic->insert_id();
       }
     }
     else {
-      $topic_id = '';
+      $topic_id = 0;
     }
 
-    if ($id) {
-      $sql = 'UPDATE photos SET '      
-      . 'updated = NOW(), ';
+    if (empty($_POST['title'])) {
+      if (empty($_FILES['bild']['name'])) {
+        $title = '';
+      }
+      else {
+        $title = $_FILES['bild']['name'];
+      }
     }
     else {
-      $sql = 'INSERT INTO photos SET '
-        . 'created = NOW(), ';
-    }
-    
-    $sql .=
-        'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-      . 'title = ' .  "'" . mysql_real_escape_string($_POST['title']) . "' "
-      . $topic_id;
-      
-    if ($id) {
-      $sql .= ' WHERE id = ' . $id;
+      $title = $_FILES['bild']['name'];
     }
 
-    $result = $this->photo->exec($sql);
-    if (!$result) {
-      $this->message(mysql_error(), 'error');
-      $this->redirect('/photo/index');
-    }
-    
-    if ($id) {
-      // Action: edit
-      
-      if (!$_FILES['bild']['name']) {
+    $result_id = $this->photo->save(array(
+      'id' => $id,
+      'topic_id' => $topic_id,
+      'title' => $title,
+      'von' => $_SESSION['user']->id, 
+      'upload' => $_FILES['bild']
+    ));
+
+    if ($result_id) {
+      if ($id) {
         $this->message('Ihre Änderungen wurden gespeichert');
-        $this->log('photo', $id, $_POST['title']);
-        $this->redirect("/photo/view/{$id}");
       }
+      else {
+        $this->message('Das Bild wurde gespeichert');
+      }
+      $this->log('photo', $result_id, $title);
     }
     else {
-      $id = $this->photo->insert_id();
+      $this->message('Das Bild konnte nicht gespeichert werden: ' . mysql_error(), 'error');
     }
 
-    // Ab hier wird in jedem Fall ein Bild hochgeladen
-
-    $src = $_FILES['bild']['tmp_name'];
-    if (is_uploaded_file($src)) {
-      $target = $this->image($id);
-      // Speichere Bilder in einer Auflösung von 1024x768
-      system("{$config['convert']} {$src} -strip -geometry " . IMAGE_RESOLUTION . " {$target}");
-      unlink($src);
-      
-      $this->message('Das Bild wurde gespeichert');
-
-      $this->log('photo', $id, $_POST['title']);
-    } else {
-      $this->message('Das Bild konnte nicht gespeichert werden');
-    }
-    $this->redirect("/photo/view/{$id}");
+    $this->redirect("/photo/view/{$result_id}");
   }
   
   /**
