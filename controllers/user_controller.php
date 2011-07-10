@@ -159,7 +159,7 @@ class user_controller extends controller {
     $page = $this->paginate(USERS_PAGE_SIZE, $counter[0], '/user/index');
         
     $sql = "SELECT * FROM users WHERE active = 1  AND password != '' "
-      . 'ORDER BY hausnummer, nachname, vorname LIMIT ' . (($page-1)*USERS_PAGE_SIZE) . ',' . USERS_PAGE_SIZE;
+      . 'ORDER BY hausnr_sort, nachname, vorname LIMIT ' . (($page-1)*USERS_PAGE_SIZE) . ',' . USERS_PAGE_SIZE;
 
     $this->vars['users'] = array();
 
@@ -307,6 +307,7 @@ class user_controller extends controller {
         . 'vorname = ' .  "'" . mysql_real_escape_string($_POST['vorname']) . "', "
         . 'nachname = ' .  "'" . mysql_real_escape_string($_POST['nachname']) . "', "
         . 'hausnummer = ' .  "'" . mysql_real_escape_string($_POST['hausnummer']) . "', "
+        . 'hausnr_sort = ' . intval($_POST['hausnummer']) . ', '
         . 'bio = ' .  "'" . mysql_real_escape_string($_POST['bio']) . "', "
         . 'created = NOW(), '
         . 'updated = NOW()';
