@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
-define('PHOTO_PAGE_SIZE', 5);
+define('PHOTO_PAGE_SIZE', 30);
 
 class photo_controller extends controller {
   var $uses = array('comment', 'topic');
