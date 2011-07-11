@@ -89,7 +89,7 @@ class controller {
     if ($random_user) {
       $this->vars['blocks']['sidebar2'][] = $this->block(array(
         'name' => 'random-user',
-        'title' => '<span>Kurz vorgestellt:</span><a href="' 
+        'title' => '<span>Kurz vorgestellt:</span> <a href="' 
           . $this->user_link($random_user, /*url_only*/TRUE) . '">'
           . "{$random_user->vorname} {$random_user->nachname}</a>",
         'view' => '_random_user'
