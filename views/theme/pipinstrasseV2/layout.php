@@ -52,7 +52,7 @@ if ($page_head) {
       <?php
       if (empty($_SESSION['user'])) {
       ?>
-      <img id="map"  src="http://maps.google.com/maps/api/staticmap?markers=Pipinstrasse%2C+53111+Bonn&zoom=16&size=470x470&sensor=false" />
+     
       <?php
       }
       else {
@@ -70,10 +70,7 @@ if ($page_head) {
         <a href="/message/contact">Kontakt</a>
         &nbsp;
         <a href="/page/impressum">Impressum</a>
-      </p>
-      <p>
-        <?php $this->render('_theme'); ?>
-      </p>
+      </p>  
     </footer>
   </div>
 </body>
