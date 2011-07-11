@@ -1,3 +1,11 @@
+<form method="POST">
+  <label for="nachricht">Geben Sie hier Ihre Nachricht ein.</label>
+  <textarea name="nachricht" rows="8" cols="40"></textarea>
+  <input type="submit" value="Schreiben">
+</form>
+
+<hr>
+
 <?php
 if ($messages) {
   ?>
