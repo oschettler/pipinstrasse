@@ -1,0 +1,62 @@
+#boardList {
+  list-style: none; 
+  overflow: auto;
+  
+  li {
+    width: auto;
+    min-height: 1px;
+    margin-bottom: 10px;
+  }              
+  
+  ul {
+    list-style: none;
+  }
+  
+  .entry {     
+    background-color: #eee;  
+    overflow: auto; 
+    border-radius: 3px;
+
+    .picture {
+      height: 150px;
+      width: 120px;
+      background-color: #005511;    
+      float: left;    
+      margin-left: 10px;
+      margin-top: 10px;
+      display: block;
+    } 
+
+    .content {
+      float: left;        
+      min-height: 105px;
+      width: 540px; 
+      
+      span {
+        margin: 20px;  
+        display: block; 
+        text-align: justify; 
+        font-family: 'Waiting for the Sunrise'; 
+        font-size: 24px;
+        color: #555;
+        line-height: 30px;
+      }
+    }
+    
+    .name {
+      color: #555;
+      font-size: 30px;
+      text-align: right;  
+      padding-right: 10px;  
+      margin-right: 10px;   
+      margin-top: 5px;
+      border-bottom: 1px solid #fff;          
+      height: 40px;      
+      width: 510px; 
+      float: right; 
+      font-family: 'Waiting for the Sunrise';
+      font-weight: bolder;    
+    }
+  } 
+  
+}                 
