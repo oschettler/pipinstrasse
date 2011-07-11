@@ -5,7 +5,7 @@
 <title><?php echo $title; ?></title> 
 <meta name="viewport" content="width=1030" /> 
 <link href='http://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise' rel='stylesheet' type='text/css'>
-<link href="<?php echo $config['static_url']; ?>/Version2/css/main.css" rel="stylesheet" type="text/css" media="screen" /> 
+<link href="/themes/pipinstrasse/css/main.css" rel="stylesheet" type="text/css" media="screen" /> 
 <?php echo $this->render('_head_javascript'); ?>
 <?php
 if ($page_head) {
