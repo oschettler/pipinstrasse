@@ -508,7 +508,7 @@ class controller {
    */
   function themes() {
     $themes = array('---');
-    $base = '../views/theme';
+    $base = 'themes';
     $d = opendir($base);
     while ($entry = readdir($d)) {
       if (strpos($entry, '.') === 0) {

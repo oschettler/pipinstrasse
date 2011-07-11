@@ -33,6 +33,9 @@ ul.ui-autocomplete li{background:#EEE;cursor:pointer;list-style-type:none;paddin
 #topics ul li,#album ul li{list-style-type:none;float:left;margin-right:10px;}
 #blocks-above{margin-bottom:10px;overflow:hidden;}
 #photo{clear:left;}
+div#photos{clear:left;overflow:hidden;}
+div.photo{display:block;float:left;position:relative;margin:0 10px 6px 0;}
+a.edit{display:block;position:absolute;background:white;}
 .makeComment{margin-top:20px;margin-bottom:10px;}
 .allComments{margin-top:20px;margin-bottom:10px;}
 #comments{margin-bottom:20px;}#comments li{margin-bottom:5px;}
