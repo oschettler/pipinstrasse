@@ -45,9 +45,10 @@ $include_path = '.'
  */
 if ($theme) {
   $include_path .= 
-    ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/www/themes/{$theme}/templates");
-}
+    ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/themes/{$theme}/templates/");
+}    
 
+             
 $include_path .=
   ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/{$config['dir_views']}");
   
