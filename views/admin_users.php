@@ -93,7 +93,7 @@ $this->end_page_head();
 <?php $this->render('_paginate'); ?>
 <form id="edit-user" method="POST" action="/admin/users">
   <input type="hidden" name="id" value="" id="edit-id">
-  <label for="hausnummer">Hausnummer</label><input class="input" type="text" name="hausnummer" value="" id="edit-hausnummer">
+  <label for="hausnummer">Hausnr.</label><input class="input" type="text" name="hausnummer" value="" id="edit-hausnummer">
   <label for="vorname">Vorname</label><input class="input" type="text" name="vorname" value="" id="edit-vorname">
   <label for="nachname">Nachname</label><input class="input" type="text" name="nachname" value="" id="edit-nachname">
   <label for="password">Kennwort</label><input class="input" type="password" name="password" value="" id="edit-password">

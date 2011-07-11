@@ -146,29 +146,28 @@ class admin_controller extends controller {
     $this->layout = 'admin';
     $this->vars['title'] = 'Verwalten von Nutzerkonten';
 
-    // Kehre nach bearbeiten eines Nutzers hierher zurück
+    // Kehre nach Bearbeiten eines Nutzers hierher zurück
     $_SESSION['return_to'] = $_GET['url'];
 
     if (!empty($_POST)) {
-      $sql = "UPDATE users SET"
-        . " vorname = '" . mysql_real_escape_string($_POST['vorname']) . "',"
-        . " nachname = '" . mysql_real_escape_string($_POST['nachname']) . "',"
-        . " mail = '" . mysql_real_escape_string($_POST['email']) . "',"
-        . " active = '" . mysql_real_escape_string($_POST['active']) . "',"
-        . " updated = NOW()";
+      $this->model('user');
       
-      if (!empty($_POST['password'])) {
-        $sql .= ", password = MD5('" . mysql_real_escape_string($_POST['password']) . "')";
-      }
-      $sql .= " WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
-      
-      if (mysql_query($sql)) {
-        $this->message("Die Änderungen wurden gespeichert");
+      $validation_messages = $this->user->validate($_POST);
+
+      if ($validation_messages) {
+        $this->message(join('<br>', $validation_messages), 'error');
+        $this->redirect();
       }
       else {
-        $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+        $result = $this->user->save($_POST);
+        if ($result) {
+          $this->message("Die Änderungen wurden gespeichert");
+        }
+        else {
+          $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+        }
+        $this->redirect();
       }
-      $this->redirect();
     }
     else {
       $this->admin_paginate('users', 'nachname, vorname');

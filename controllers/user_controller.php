@@ -13,8 +13,6 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 ***********************************************************************************/
 
 define('USERS_PAGE_SIZE', 250);
-define('USER_RESOLUTION', '100x100');
-define('USER_EMAIL_RE', '/^[-\.+\w]+@\w[-\w\.]+\w$/');
 
 class user_controller extends controller {
   var $uses = array('user');
@@ -143,6 +141,7 @@ class user_controller extends controller {
 
         $_SESSION['user'] = $this->user->one($sql);
 
+        $this->log('user');
         $this->redirect($this->user_link(NULL, /*url_only*/TRUE));
       }
     }
@@ -251,90 +250,18 @@ class user_controller extends controller {
   function save() {
     global $config;
     
-    // Validierung
-    $message = array();
-    if (empty($_POST['mail']) || !preg_match(USER_EMAIL_RE, $_POST['mail'])) {
-      $message[] = 'Bitte geben Sie eine gültige E-Mail-Adresse an';
-    }
-    
-    if ($this->method == 'register') {
-      // Bei der Registrierung ist das Kennwort Pflichtfeld
-      if (empty($_POST['password']) || empty($_POST['password2']) || $_POST['password'] != $_POST['password2']) {
-        $message[] = 'Bitte geben Sie das Kennwort zweimal an';
-      }
-    }
-    else {
-      // Sonst wird nur geprüft, ob beide Kennwort gleich
-      if (!empty($_POST['password']) && $_POST['password'] != $_POST['password2']) {
-        $message[] = 'Bitte geben Sie das Kennwort zweimal an';
-      }
-    }
-    if (empty($_POST['vorname'])) {
-      $message[] = 'Bitte geben Sie Ihren Vornamen an';
-    }
-    if (empty($_POST['nachname'])) {
-      $message[] = 'Bitte geben Sie Ihren Nachnamen an';
-    }
-    if (empty($_POST['hausnummer'])) {
-      $message[] = 'Bitte geben Sie Ihre Hausnummer an';
-    }
-    
-    if ($message) {
-      $this->message(join('<br>', $message), 'error');
+    $this->model('user');
+
+    $validation_messages = $this->user->validate($_POST, array(
+      'password_is_mandatory' => $this->method == 'register'
+    ));
+
+    if ($validation_messages) {
+      $this->message(join('<br>', $validation_messages), 'error');
       return FALSE;
     }
     else {
-      $rs = mysql_query('SELECT id FROM users WHERE mail = '
-        . "'" . mysql_real_escape_string($_POST['mail']) . "'");
-        
-      $user = mysql_fetch_object($rs);
-      if ($user) { 
-        $sql = 'UPDATE users SET ';
-      }
-      else {
-        $sql = 'INSERT INTO users SET ';
-      }
-
-      if (!empty($_POST['password'])) {
-        $sql .= 'password = MD5(' .  "'" . mysql_real_escape_string($_POST['password']) . "'), ";
-      }
-      
-      $slug = $this->slug("{$_POST['hausnummer']}-{$_POST['vorname']}-{$_POST['nachname']}");
-      
-      $sql .= 
-          'slug = ' . "'" . mysql_real_escape_string($slug) . "', "
-        . 'mail = ' . "'" . mysql_real_escape_string($_POST['mail']) . "', "
-        . 'vorname = ' .  "'" . mysql_real_escape_string($_POST['vorname']) . "', "
-        . 'nachname = ' .  "'" . mysql_real_escape_string($_POST['nachname']) . "', "
-        . 'hausnummer = ' .  "'" . mysql_real_escape_string($_POST['hausnummer']) . "', "
-        . 'hausnr_sort = ' . intval($_POST['hausnummer']) . ', '
-        . 'bio = ' .  "'" . mysql_real_escape_string($_POST['bio']) . "', "
-        . 'created = NOW(), '
-        . 'updated = NOW()';
-
-      if ($user) {
-        $user_id = $user->id;
-        $sql .= " WHERE id = {$user_id}";
-      }
-
-      $result = mysql_query($sql);
-      if (!$result) {
-        $this->message(mysql_error(), 'error');
-      }
-
-      if (!$user) {
-        $user_id = $this->user->insert_id();
-      }
-
-      $src = $_FILES['avatar']['tmp_name'];
-      if (is_uploaded_file($src)) {
-        $target = $this->image($user_id, NULL, 'avatars');
-        // Speichere Bilder in einer Auflösung von 100x100
-        // Erst auf Minimalwerte skalieren, dann beschneiden.
-        system("{$config['convert']} {$src} -strip -gravity center -geometry '" . USER_RESOLUTION . "^' -crop " . USER_RESOLUTION . "+0+0 {$target}");
-        unlink($src);
-      }
-      
+      $result = $this->user->save(array_merge($_POST, array('avatar' => $_FILES['avatar'])));
       return $result;
     }
   }
