@@ -1,5 +1,6 @@
-<h1>In nur drei Schritten</h1>
+<h1>So melden Sie sich an!</h1>
 <p> 
+  <br />
 Wenn Sie <b>neu</b> hier sind, dann klicken Sie bitte auf "<a href="/user/register">Nutzerkonto anmelden</a>". Dort füllen Sie dann das Formular aus und klicken am Ende der Seite auf "Änderungen speichern". <br />Sie landen anschließend wieder auf der Startseite. Nun prüfen wir die Anmeldung und schalten Sie frei. <br />Wenn Sie freigeschaltet sind, erhalten Sie von uns eine E-Mail. Anschließend können Sie sich unten mit E-Mail-Adresse und Kennwort anmelden.   <br /><br />
 </p>              
 <p>
