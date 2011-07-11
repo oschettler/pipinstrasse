@@ -7,12 +7,19 @@ header {
   float: left;
 } 
  
-#usermenu {
+#user {
   float: right;
   margin-left: 100px; 
   height: 70px; 
-}
+} 
 
+#user a {
+  text-decoration: none;
+}
+   
+#user img {
+  margin-right: 3px;  
+}
 
 #header {
 	width: 980px;
@@ -22,6 +29,8 @@ header {
 
 #menu {
 	float: left;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 #menu ul {
@@ -33,6 +42,11 @@ header {
 
 #menu li {
 	float: left;
+	background-color: #fff;
+	margin-right: 8px;
+	border-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); 
+  border: 1px solid #ccc;
 }
 
 #menu a {
@@ -45,14 +59,51 @@ header {
 	font-size: 1.1em;
 	font-weight: bold;
 	color: #8C8F7D;
+}  
+
+#menu .current_page_item a {
+	color: #2C2E22;
+}                           
+
+#menu .current_page_item {
+  background-color: #eee;
 }
 
 #menu a:hover {
-	background:  #F3F3F3;
 	color: #2C2E22;
-}
+}                                 
 
-#menu .current_page_item a {
-	background:  #F3F3F3;
-	color: #2C2E22;
+#menu li:hover {
+  background-color:  #F3F3F3;  
+}
+  
+#invite-link {
+  float: right;  
+	height: 25px;
+	margin-right: 1px;
+	padding: 10px 20px 0 20px;
+	text-decoration: none;
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #8C8F7D;  
+	background-color: #fff;
+	margin-right: 8px;
+	border-radius: 3px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); 
+  border: 1px solid #ccc;
+  margin-top: 5px;   
+  margin-right: 0px;
+} 
+
+#invite-link a {
+	color: #8C8F7D;  
+	text-decoration: none;  
+}   
+
+#invite-link:hover {
+  background-color: #F3F3F3;
+}                           
+
+#invite-link a:hover {
+  color: #2C2E22;
 }
