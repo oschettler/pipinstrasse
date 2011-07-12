@@ -32,14 +32,16 @@ ul.ui-autocomplete li{background:#EEE;cursor:pointer;list-style-type:none;paddin
 #chat{position:fixed;display:none;bottom:0;right:0;width:16%;height:1em;background-color:white;border:solid 2px #888;padding:4px 10px;}
 #topics ul li,#album ul li{list-style-type:none;float:left;margin-right:10px;}
 #blocks-above{margin-bottom:10px;overflow:hidden;}
-#photo{clear:left;}
-div#photos{clear:left;overflow:hidden;}
-div.photo{display:block;float:left;position:relative;margin:0 10px 6px 0;}
-a.edit{display:block;position:absolute;background:white;}
+#photos{padding-top:10px;clear:left;}
+#photo{clear:left;overflow:hidden;}
+div.photo{display:block;float:left;position:relative;margin:0 10px 6px 0;}div.photo div.vignette{position:absolute;top:-10px;left:-10px;z-index:10;width:200px;height:100px;padding:10px;background-color:#BBB;color:white;opacity:0;overflow:hidden;}div.photo div.vignette img{float:left;margin-right:10px;}
+div.photo div.vignette span{display:block;}
+div.photo a.edit{display:block;position:absolute;background:white;}
 .makeComment{margin-top:20px;margin-bottom:10px;}
 .allComments{margin-top:20px;margin-bottom:10px;}
 #comments{margin-bottom:20px;}#comments li{margin-bottom:5px;}
 #comments li:last-child{margin-bottom:0px;}
+#paginate{clear:left;}
 aside#sideInfo{width:230px;margin-left:10px;float:left;}aside#sideInfo ul{list-style:none;margin-bottom:15px;}aside#sideInfo ul li h2{font-size:26px;}
 aside#slogan{width:70px;float:left;padding-top:20px;background-repeat:no-repeat;background-position:center bottom;background-color:none;margin:0;}
 aside.nachbarn{background-image:url(../img/slogan_nachbarn.png);height:174px;}

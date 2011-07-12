@@ -75,11 +75,12 @@ ul.ui-autocomplete li {
   overflow: hidden;
 }
 
-#photo {
+#photos {
+  padding-top: 10px;
   clear: left;
-} 
+}
 
-div#photos {
+#photo {
   clear: left;
   overflow: hidden;
 }
@@ -89,12 +90,35 @@ div.photo {
   float: left;
   position: relative;
   margin: 0 10px 6px 0;
-}
 
-a.edit {
-  display: block;
-  position: absolute;
-  background: white;
+  div.vignette {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    z-index: 10;
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    background-color: #BBB;
+    color: white;
+    opacity: 0;
+    overflow: hidden;
+
+    img {
+      float: left;
+      margin-right: 10px;
+    }
+
+    span {
+      display: block;
+    }
+  }
+
+  a.edit {
+    display: block;
+    position: absolute;
+    background: white;
+  }
 }
 
 .makeComment {
@@ -117,4 +141,8 @@ a.edit {
   li:last-child {
     margin-bottom: 0px;
   }
+}
+
+#paginate {
+  clear: left;
 }

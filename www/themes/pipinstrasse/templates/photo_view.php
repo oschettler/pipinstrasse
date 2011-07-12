@@ -32,8 +32,6 @@ if ($_SESSION['user']->guest) {
   <input type="hidden" name="an" value="<?php echo $photo->id; ?>">
   <input type="hidden" name="url" value="<?php echo $_GET['url']; ?>">
 
-  
-
   <textarea name="comment" rows="4" cols="40"></textarea>
 
   <input type="submit" value="Speichern">
@@ -47,7 +45,7 @@ if ($comments) {
   <ul id="comments">
     <?php
     foreach ($comments as $comment) {
-      echo "<li>", $this->user_link($comment), ' ', $this->reltime($comment->c_created), ': <b>', $comment->comment, '</b> ', $comment->liked ? '<strong>+1</strong>' : '', '</li>';
+      echo "<li>", $this->user_link($comment), ' ', $this->reltime($comment->c_created), ': ', $comment->comment, $comment->liked ? '<strong>+1</strong>' : '', '</li>';
     }
     ?>
   </ul>
