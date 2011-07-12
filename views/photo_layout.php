@@ -5,8 +5,8 @@
 <title><?php echo $title; ?></title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-<link href="/theme/tastelessly/style.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="/theme/tastelessly/local.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="/themes/tastelessly/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="/themes/tastelessly/local.css" rel="stylesheet" type="text/css" media="screen" />
 <?php echo $this->render('_head_javascript'); ?>
 <?php
 if ($page_head) {

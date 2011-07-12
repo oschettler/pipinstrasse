@@ -9,13 +9,21 @@ $this->page_head();
     bottom: 0;
     left: 0;
     margin: 0;
+    padding: 0;
     z-index: 10;
   }
   
   #blocks-above ul {
     background-color: black;
     overflow: hidden;
+    margin: 0;
     padding: 10px 0 0 10px;
+  }
+  
+  #blocks-above ul#photos li {
+    float: left;
+    list-style-type: none;
+    margin: 0 10px 6px 0;
   }
 
   #blocks-above img.photo {
