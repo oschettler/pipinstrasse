@@ -80,7 +80,7 @@ class user extends model {
 
     $src = $data['avatar']['tmp_name'];
     if (is_uploaded_file($src)) {
-      $target = $this->image($user_id, NULL, 'avatars');
+      $target = controller::image($user_id, NULL, 'avatars');
       // Speichere Bilder in einer Auflösung von 100x100
       // Erst auf Minimalwerte skalieren, dann beschneiden.
       system("{$config['convert']} {$src} -strip -gravity center -geometry '" . USER_RESOLUTION . "^' -crop " . USER_RESOLUTION . "+0+0 {$target}");
