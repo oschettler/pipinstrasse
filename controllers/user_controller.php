@@ -89,7 +89,7 @@ class user_controller extends controller {
   /**
    * Action: Nutzerinfo ansehen und Nachricht schreiben
    */  
-  function do_view() {
+  function do_view() { krumo($_SESSION['user']);
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       $this->redirect();
@@ -140,6 +140,7 @@ class user_controller extends controller {
              . " AND id = " . $user_id;
 
         $_SESSION['user'] = $this->user->one($sql);
+        $_SESSION['user']->guest = FALSE;
 
         $this->log('user');
         $this->redirect($this->user_link(NULL, /*url_only*/TRUE));
