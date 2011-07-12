@@ -266,6 +266,9 @@ class admin_controller extends controller {
     $this->redirect('/admin/topics');
   }
   
+  /**
+   * Importiere Fotos aus dem Verzeichnis 'import' in ein Album
+   */  
   function do_topicimport() {
     $topic_id = $this->path[2];
         
