@@ -38,6 +38,8 @@ class user extends model {
   }
   
   function save($data) {  
+    global $config;
+    
     $user = $this->one('SELECT id FROM users WHERE mail = '
       . "'" . mysql_real_escape_string($data['mail']) . "'");
       
@@ -78,12 +80,13 @@ class user extends model {
       return NULL;
     }
 
-    $src = $data['avatar']['tmp_name'];
+    $src = $data['avatar']['tmp_name']; 
     if (is_uploaded_file($src)) {
-      $target = controller::image($user_id, NULL, 'avatars');
+      $target = controller::image($user_id, NULL, 'avatars'); 
       // Speichere Bilder in einer Auflösung von 100x100
       // Erst auf Minimalwerte skalieren, dann beschneiden.
-      system("{$config['convert']} {$src} -strip -gravity center -geometry '" . USER_RESOLUTION . "^' -crop " . USER_RESOLUTION . "+0+0 {$target}");
+      $cmd = "{$config['convert']} {$src} -strip -gravity center -geometry '" . USER_RESOLUTION . "^' -crop " . USER_RESOLUTION . "+0+0 {$target}";
+      system($cmd);
       unlink($src);
     }
     
