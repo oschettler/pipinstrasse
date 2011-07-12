@@ -50,7 +50,8 @@ aside.anmelden{background-image:url(../img/slogan_anmelden.png);height:171px;}
 aside.registrieren{background-image:url(../img/slogan_registrieren.png);height:229px;}
 aside.neues-kennwort{background-image:url(../img/slogan_neues-kennwort.png);height:321px;}
 footer{float:right;margin-right:5px;margin-top:5px;font-size:12px;margin-bottom:20px;padding-top:5px;height:45px;}
-footer a{text-decoration:none;color:#aaa;}
+footer a{text-decoration:none;color:#888;}
+footer form#switch-theme{width:auto;opacity:0.1;}
 .message{padding:7px;}
 .message.error{color:#791010;background-color:#ffcfcf;border:1px solid #ff0000;}
 .message.status{color:#3d7910;background-color:#e3ffcf;border:1px solid #3d7910;}

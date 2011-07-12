@@ -71,6 +71,7 @@ if ($page_head) {
         &nbsp;
         <a href="/page/impressum">Impressum</a>
       </p>  
+      <?php $this->render('_theme'); ?>
     </footer>
   </div>
 </body>

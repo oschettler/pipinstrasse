@@ -7,6 +7,12 @@ jQuery(function($) {
     $('.message').slideUp('fast');
   }, 3000);
 
+  $('#switch-theme').hover(function() {
+    $(this).css({ opacity: 1 });
+  }, function() {
+    $(this).css({ opacity: 0.1 });
+  });
+
   // Änderen Theme
   $('#switch-theme select').change(function() {
     $(this).parent().submit();

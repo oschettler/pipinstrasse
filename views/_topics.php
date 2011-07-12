@@ -5,7 +5,7 @@
       continue;
     }
     ?>
-    <li><a href="/photo/view/<?php echo $topic->p_id; ?>"><img title="<?php echo addslashes($topic->title); ?>" src="/photo/scaled/<?php echo $topic->p_id; ?>/100x100"></a></li>
+    <li><a href="/photo/view/<?php echo $topic->p_id; ?>"><img class="photo" title="<?php echo addslashes($topic->title); ?>" src="/photo/scaled/<?php echo $topic->p_id; ?>/100x100"></a></li>
     <?php
   }
   ?>

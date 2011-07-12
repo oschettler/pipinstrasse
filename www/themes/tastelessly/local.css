@@ -95,7 +95,8 @@ img.avatar {
 }
  
 #actions img.photo,
-#photos img.photo {
+#photos img.photo,
+#topics img.photo {
   display: block;
   border: solid 6px #CCC;
   margin-bottom: 4px;
@@ -227,8 +228,14 @@ ul.ui-autocomplete {
   list-style-type: none;
   float: left;
   padding: 0;
-  margin: 0 10px 10px 0;
+  margin-bottom: 4px;
 }
+
+#album li:nth-child(odd),
+#topics li:nth-child(odd) { 
+  margin-right: 6px; 
+}
+
 
 #album li a:hover,
 #topics li a:hover {
