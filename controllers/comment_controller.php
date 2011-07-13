@@ -16,6 +16,20 @@ class comment_controller extends controller {
   
   var $uses = array('comment');
   
+  function update_comment_count($type, $id) {
+    $type = preg_replace('/\W+/', '', $type);
+    $id = intval($id);
+    
+    $sql = "SELECT COUNT(*) AS n FROM comments WHERE "
+      . "object_type = '{$type}' AND "
+      . "object_id = {$id}";
+
+    $count = $this->one($sql);
+    
+    $sql = "UPDATE {$type} SET comment_count = {$count->n} WHERE id = {$id}";
+    return $this->comment->exec($sql);
+  }
+  
   function do_add() {
     if (!empty($_POST)) {
       $like = empty($_POST['like']) || !$_POST['like'] ? 0 : 1;
@@ -33,6 +47,7 @@ class comment_controller extends controller {
         $this->message(mysql_error(), 'error');
       }
       else {
+        $this->update_comment_count($_POST['type'], $_POST['id']);
         $this->message('Ihr Kommentar wurde gespeichert');
 
         $rs = mysql_query('SELECT mail FROM users WHERE id = '

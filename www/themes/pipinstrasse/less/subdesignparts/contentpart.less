@@ -44,6 +44,11 @@ ul.ui-autocomplete li {
   display: none;
 }
 
+img.avatar {
+  border: solid 4px white;
+  margin: 0 4px -4px 0;
+}
+
 /*
  * Chat
  */
@@ -93,13 +98,13 @@ div.photo {
 
   div.vignette {
     position: absolute;
-    top: -10px;
-    left: -10px;
+    top: -14px;
+    left: -14px;
     z-index: 10;
-    width: 200px;
-    height: 100px;
+    width: 400px;
     padding: 10px;
-    background-color: #BBB;
+    background-color: #AAA;
+    border: solid 4px white;
     color: white;
     opacity: 0;
     overflow: hidden;
@@ -109,8 +114,33 @@ div.photo {
       margin-right: 10px;
     }
 
-    span {
-      display: block;
+    div.meta {
+      float: left;
+      width: 190px;
+      
+      span {
+        display: block;
+      }
+
+      span.user {
+        display: block;
+        
+        img.avatar {
+          margin: 0 4px 0 0;
+        }
+        
+        a {
+          margin: 0 0 4px 34px;
+          padding-top: 4px;
+          display: block;
+          font-size: 22px;
+          color: white;
+        }
+      }
+
+      span.date {
+        clear: right;
+      }
     }
   }
 

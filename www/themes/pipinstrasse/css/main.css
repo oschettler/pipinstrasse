@@ -29,13 +29,17 @@ textarea,input.input{display:block;width:100%;}
 ul.ui-autocomplete li{background:#EEE;cursor:pointer;list-style-type:none;padding:4px;width:320px;}
 .handle{display:block;cursor:pointer;margin-bottom:10px;}
 .folded{display:none;}
+img.avatar{border:solid 4px white;margin:0 4px -4px 0;}
 #chat{position:fixed;display:none;bottom:0;right:0;width:16%;height:1em;background-color:white;border:solid 2px #888;padding:4px 10px;}
 #topics ul li,#album ul li{list-style-type:none;float:left;margin-right:10px;}
 #blocks-above{margin-bottom:10px;overflow:hidden;}
 #photos{padding-top:10px;clear:left;}
 #photo{clear:left;overflow:hidden;}
-div.photo{display:block;float:left;position:relative;margin:0 10px 6px 0;}div.photo div.vignette{position:absolute;top:-10px;left:-10px;z-index:10;width:200px;height:100px;padding:10px;background-color:#BBB;color:white;opacity:0;overflow:hidden;}div.photo div.vignette img{float:left;margin-right:10px;}
-div.photo div.vignette span{display:block;}
+div.photo{display:block;float:left;position:relative;margin:0 10px 6px 0;}div.photo div.vignette{position:absolute;top:-14px;left:-14px;z-index:10;width:400px;padding:10px;background-color:#AAA;border:solid 4px white;color:white;opacity:0;overflow:hidden;}div.photo div.vignette img{float:left;margin-right:10px;}
+div.photo div.vignette div.meta{float:left;width:190px;}div.photo div.vignette div.meta span{display:block;}
+div.photo div.vignette div.meta span.user{display:block;}div.photo div.vignette div.meta span.user img.avatar{margin:0 4px 0 0;}
+div.photo div.vignette div.meta span.user a{margin:0 0 4px 34px;padding-top:4px;display:block;font-size:22px;color:white;}
+div.photo div.vignette div.meta span.date{clear:right;}
 div.photo a.edit{display:block;position:absolute;background:white;}
 .makeComment{margin-top:20px;margin-bottom:10px;}
 .allComments{margin-top:20px;margin-bottom:10px;}
@@ -64,5 +68,4 @@ footer form#switch-theme{width:auto;opacity:0.1;}
 #home-index form{width:650px;background-color:#888;color:white;margin-bottom:10px;padding:10px;}
 #home-index textarea{display:block;width:640px;margin-bottom:10px;padding:4px;}
 #actions li{background-color:#F3F3F3;margin:0 0 10px 0;padding:10px;list-style-type:none;line-height:1.2em;overflow:hidden;}
-#actions img.avatar{border:solid 4px white;margin:0 4px -4px 0;}
 #actions img.photo{display:block;border:solid 6px #CCC;margin-right:10px;float:left;}

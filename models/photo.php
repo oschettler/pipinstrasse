@@ -20,7 +20,7 @@ class photo extends model {
 
     if ($id) {
       $sql = 'UPDATE photos SET '      
-      . 'updated = NOW(), ';
+        . 'updated = NOW(), ';
     }
     else {
       $sql = 'INSERT INTO photos SET '

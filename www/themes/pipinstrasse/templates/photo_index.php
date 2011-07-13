@@ -39,14 +39,20 @@ if ($photos) {
           echo "<a class=\"edit\" href=\"/photo/edit/{$photo->p_id}\" title=\"eigenes Foto bearbeiten\">✐</a>";
         }
         ?>
-        <a href="/photo/view/<?php echo $photo->p_id; ?>"><img src="/photo/scaled/<?php echo $photo->p_id; ?>/100x100" /></a> 
-        <?php
-        echo '<span class="user">', $this->user_link($photo), '</span><span class="date">', $this->reltime($photo->p_created), '</span>';
+        <a href="/photo/view/<?php echo $photo->p_id; ?>"><img src="/photo/scaled/<?php echo $photo->p_id; ?>/200x200" /></a> 
+        <div class="meta">
+          <?php
+          echo '<span class="user">', $this->user_link($photo), '</span><span class="date">', $this->reltime($photo->p_created), '</span>';
 
-        if ($photo->topic_id) {
-          ?><strong class="topic"><?php echo $photo->topic; ?></strong><?php
-        }
-        ?>.
+          if ($photo->topic_id) {
+            ?><strong class="topic"><?php echo $photo->topic; ?></strong><?php
+          }
+
+          if ($photo->comment_count) {
+            ?><strong class="comments"><?php echo "{$photo->comment_count} Kommentare"; ?></strong><?php
+          }
+          ?>
+        </div>
       </div>
       <a title="Detailansicht mit Kommentaren" href="/photo/view/<?php echo $photo->p_id; ?>"><img class="photo" src="/photo/scaled/<?php echo $photo->p_id; ?>/100x100" /></a> 
     </div>
