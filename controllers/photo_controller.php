@@ -175,7 +175,6 @@ class photo_controller extends controller {
       . 'ORDER BY p.created DESC LIMIT ' . (($page-1)*PHOTO_PAGE_SIZE) . ',' . PHOTO_PAGE_SIZE;
 
     $this->vars['photos'] = $this->photo->query($sql);
-    
     $this->render();
   }
   

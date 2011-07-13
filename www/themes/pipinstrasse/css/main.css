@@ -22,7 +22,7 @@ header{margin:25px 0 15px 90px;overflow:auto;}
 #invite-link a{color:#8C8F7D;text-decoration:none;}
 #invite-link:hover{background-color:#F3F3F3;}
 #invite-link a:hover{color:#2C2E22;}
-section#contentPart{background-color:#fff;width:910px;margin:0;box-shadow:0 1px 5px rgba(0, 0, 0, 0.1);border-radius:3px;padding:10px;overflow:auto;}
+section#contentPart{background-color:#fff;width:910px;margin:0;box-shadow:0 1px 5px rgba(0, 0, 0, 0.1);border-radius:3px;padding:10px;overflow:auto;}section#contentPart hr{clear:left;}
 section{width:670px;float:left;margin:0 ;}
 form{width:320px;clear:left;}
 textarea,input.input{display:block;width:100%;}
@@ -40,6 +40,7 @@ div.photo div.vignette div.meta{float:left;width:190px;}div.photo div.vignette d
 div.photo div.vignette div.meta span.user{display:block;}div.photo div.vignette div.meta span.user img.avatar{margin:0 4px 0 0;}
 div.photo div.vignette div.meta span.user a{margin:0 0 4px 34px;padding-top:4px;display:block;font-size:22px;color:white;}
 div.photo div.vignette div.meta span.date{clear:right;}
+div.photo div.vignette div.meta span.topic{font-weight:bold;}
 div.photo a.edit{display:block;position:absolute;background:white;}
 .makeComment{margin-top:20px;margin-bottom:10px;}
 .allComments{margin-top:20px;margin-bottom:10px;}

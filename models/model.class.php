@@ -59,4 +59,17 @@ class model {
     $b = array('A','A','A','A','Ae','A','AE','C','E','E','E','E','I','I','I','I','D','N','O','O','O','Oe','O','O','U','U','U','Ue','Y','ss','a','a','a','a','ae','a','ae','c','e','e','e','e','i','i','i','i','n','o','o','o','o','oe','o','u','u','u','ue','y','y','A','a','A','a','A','a','C','c','C','c','C','c','C','c','D','d','D','d','E','e','E','e','E','e','E','e','E','e','G','g','G','g','G','g','G','g','H','h','H','h','I','i','I','i','I','i','I','i','I','i','IJ','ij','J','j','K','k','L','l','L','l','L','l','L','l','l','l','N','n','N','n','N','n','n','O','o','O','o','O','o','OE','oe','R','r','R','r','R','r','S','s','S','s','S','s','S','s','T','t','T','t','T','t','U','u','U','u','U','u','U','u','U','u','U','u','W','w','Y','y','Y','Z','z','Z','z','Z','z','s','f','O','o','U','u','A','a','I','i','O','o','U','u','U','u','U','u','U','u','U','u','A','a','AE','ae','O','o'); 
     return str_replace($a, $b, $str); 
   }
+  
+  function name() {
+    return get_class($this);
+  }
+  
+  function table() {
+    return $this->name() . 's';
+  }
+  
+  function update_comment_count($id, $n) {
+    $sql = "UPDATE " . $this->table() . " SET comment_count = {$n} WHERE id = {$id}";
+    return $this->exec($sql);
+  }
 }

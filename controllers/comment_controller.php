@@ -24,10 +24,8 @@ class comment_controller extends controller {
       . "object_type = '{$type}' AND "
       . "object_id = {$id}";
 
-    $count = $this->one($sql);
-    
-    $sql = "UPDATE {$type} SET comment_count = {$count->n} WHERE id = {$id}";
-    return $this->comment->exec($sql);
+    $count = $this->comment->one($sql);
+    return $this->$type->update_comment_count($id, $count->n);
   }
   
   function do_add() {
@@ -47,8 +45,12 @@ class comment_controller extends controller {
         $this->message(mysql_error(), 'error');
       }
       else {
-        $this->update_comment_count($_POST['type'], $_POST['id']);
-        $this->message('Ihr Kommentar wurde gespeichert');
+        if (!$this->update_comment_count($_POST['type'], $_POST['id'])) {
+          $this->message(mysql_error());
+        } 
+        else {
+          $this->message('Ihr Kommentar wurde gespeichert');
+        }
 
         $rs = mysql_query('SELECT mail FROM users WHERE id = '
           . "'" . mysql_real_escape_string($_POST['an']) . "'");

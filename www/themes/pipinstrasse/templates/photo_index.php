@@ -9,7 +9,7 @@ jQuery(function($) {
     $('div.vignette', this)
       .animate({
         opacity: 1
-      }, 100);
+      }, 200);
   }, function() {
     $('div.vignette', this)
       .css({
@@ -45,11 +45,11 @@ if ($photos) {
           echo '<span class="user">', $this->user_link($photo), '</span><span class="date">', $this->reltime($photo->p_created), '</span>';
 
           if ($photo->topic_id) {
-            ?><strong class="topic"><?php echo $photo->topic; ?></strong><?php
+            ?><span class="topic"><?php echo $photo->topic; ?></span><?php
           }
 
           if ($photo->comment_count) {
-            ?><strong class="comments"><?php echo "{$photo->comment_count} Kommentare"; ?></strong><?php
+            ?><span class="comments"><?php echo $this->plural($photo->comment_count, '%d Kommentare', '1 Kommentar'); ?></span><?php
           }
           ?>
         </div>

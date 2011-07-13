@@ -355,6 +355,23 @@ class controller {
     return strftime('am %d.%m.%Y um %H:%M Uhr', strtotime($datetime));
   }
   
+  /**
+   * Gibt je nach Wert von $n korrekte Pluralform zurück
+   * Aufruf mit einem Formatparameter: Ersetzt %d
+   * Aufruf mit zwei Formatparametern: 
+   * - bei == 1 ergibt zweiten Parameter, 
+   * - sonst %d in erstem Parameter
+   */
+  function plural($n) {
+    $params = func_get_args();
+    if ($n == 1 && count($params) == 3) {
+      return $params[2];
+    }
+    else {
+      return sprintf($params[1], $n);
+    }
+  }
+  
   function show_scaled_image($default_resolution, $type, $crop = FALSE) {
     global $config;
      
