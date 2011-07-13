@@ -70,16 +70,17 @@ class user_controller extends controller {
         $this->message('Dieses Konto existiert bereits', 'error');
       }
       else {
-        if ($this->save()) {
+        if ($user_id = $this->save()) {
           $this->message("Herzlich willkommen, {$_POST['vorname']}. Ihr Nutzerkonto muss noch freigeschaltet werden.");
-
-          $user_id = $this->user->insert_id();
 
           mail($config['admin_email'], "[pipinstrasse.de] Neuer Nutzer {$_POST['mail']}", 
             "Nutzer #{$user_id} freischalten: http://{$_SERVER['HTTP_HOST']}/admin/user"
           );
 
-          $this->redirect();
+          $this->redirect('/user/login');
+        }
+        else {
+          $this->message(mysql_error());
         }
       }
     }

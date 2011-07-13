@@ -5,16 +5,23 @@ $this->page_head();
 jQuery(function($) {
   // Zeige Metadaten eines Fotos beim Drüberfahren mit der Maus
   $('div.photo').hover(function() {
+    
+    // Alle anderen entfernen
     $('div.vignette').css({ opacity: 0 });
-    $('div.vignette', this)
-      .animate({
-        opacity: 1
-      }, 200);
+    
+    // Aktuelle sanft einblenden
+    var $me = $('div.vignette', this);
+    $me.animate({ opacity: 1 }, 200);
+      
+    // Nach 3s hängende Vignetten abschiessen
+    setTimeout(function() {
+      $me.css({ opacity: 0 });
+    }, 3000);
+    
   }, function() {
-    $('div.vignette', this)
-      .css({
-        opacity: 0
-      })
+
+    // Wieder ausblenden
+    $('div.vignette', this).css({ opacity: 0 });
   });
 });
 </script>

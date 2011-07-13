@@ -73,10 +73,14 @@ class user extends model {
     }
     else {
       $sql .= 'created = NOW()';
-      $user_id = $this->user->insert_id();
     }
 
-    if (!$this->exec($sql)) {
+    if ($this->exec($sql)) {
+      if (!$user) {
+        $user_id = $this->insert_id();
+      }
+    }
+    else {
       return NULL;
     }
 

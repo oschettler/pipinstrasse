@@ -56,8 +56,8 @@ if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
       });
     } // chat_enabled
   }, 5000);
-});
 <?php
 } // Chat
 ?>
+});
 </script>
