@@ -11,7 +11,7 @@ if (empty($_POST) || $_POST['confirm'] != 'ja') {
   if ($mtime = @filemtime(DEPLOY_LOG)) {
     echo strftime("<h2>Letzter Log-Eintrag von %Y-%m-%d %H:%M:%S</h2>", $mtime);
     $out = array();
-    exec('tail -40' . DEPLOY_LOG, $out);
+    exec('tail -40 ' . DEPLOY_LOG, $out);
     echo '<pre>', join('<br>', $out), '</pre>';
   }
   else {
