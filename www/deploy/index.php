@@ -11,7 +11,7 @@ if (empty($_POST) || $_POST['confirm'] != 'ja') {
   if (file_exists(DEPLOY_LOG)) {
     $out = array();
     exec('tail ' . DEPLOY_LOG, $out);
-    echo '<pre>', join('', $out), '</pre>';
+    echo '<pre>', join('<br>', $out), '</pre>';
   }
   else {
     echo "Bisher kein " . DEPLOY_LOG;
