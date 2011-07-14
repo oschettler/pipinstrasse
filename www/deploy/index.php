@@ -1,32 +1,49 @@
 <?php
+define('DEPLOY_SCRIPT', '/tmp/deploy-pipinstrasse.sh');
+define('DEPLOY_LOG', '/tmp/deploy-pipinstrasse.log');
+
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 
 $title = 'Veröffentlichen';
 ob_start();
 if (empty($_POST) || $_POST['confirm'] != 'ja') {
-  ?>
-  <form method="POST">
-    Wollen Sie den aktuellen Stand veröffentlichen?
-    <input name="confirm" type="submit" value="ja">
-    <input name="confirm" type="submit" value="nein">
-  </form>
-  <?php
+  if (file_exists(DEPLOY_LOG)) {
+    $out = array();
+    exec('tail ' . DEPLOY_LOG, $out);
+    echo '<pre>', join('', $out), '</pre>';
+  }
+  else {
+    echo "Bisher kein " . DEPLOY_LOG;
+  }
 }
 else {
   set_time_limit(0);
   $root = realpath("{$_SERVER['DOCUMENT_ROOT']}/..");
-  exec("cd {$root}; git pull; mkdir -p import www/img/photos www/img/avatars; echo Done.", $out, $status);
-  if ($status == 0) {
-    $message = 'Erfolgreich veröffentlicht:<br>';
-    $message .= join('<br>', $out);
+  
+  $script = <<<EOS
+cd {$root}
+git pull
+mkdir -p import www/img/photos www/img/avatars
+echo Done.
+EOS;
+    
+  if (@filemtime(DEPLOY_SCRIPT)) {
+    $message = strftime('Das letzte Script wartet seit %Y-%m-%d %H:%M:%S auf Ausführung.');
   }
   else {
-    $message = 'Fehler:<br>';
-    $message .= join('<br>', $out);
-    $status = 'error';
+    $now = strftime('%Y-%m-%d %H:%M:%S');
+    file_put_contents(DEPLOY_SCRIPT, "#!/bin/bash\n#since {$now}\n\n" . $script);
+    $message = "{$now}: Skript zur Veröffentlichung angelegt.";
   }
 }
+?>
+<form method="POST">
+  Wollen Sie den aktuellen Stand veröffentlichen?
+  <input name="confirm" type="submit" value="ja">
+  <input name="confirm" type="submit" value="nein">
+</form>
+<?php
 $contents = ob_get_clean();
 ?><!DOCTYPE html>
 <html>
@@ -39,6 +56,12 @@ $contents = ob_get_clean();
     background-color: #EEE;
     padding: 0;
     margin: 0;
+  }
+  
+  form {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: solid 1px black;
   }
   
   #wrapper {
