@@ -34,6 +34,7 @@ EOS;
   else {
     $now = strftime('%Y-%m-%d %H:%M:%S');
     file_put_contents(DEPLOY_SCRIPT, "#!/bin/bash\n#since {$now}\n\n" . $script);
+    chmod(DEPLOY_SCRIPT, 0664);
     $message = "{$now}: Skript zur Veröffentlichung angelegt.";
   }
 }
