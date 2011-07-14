@@ -2,9 +2,6 @@
 
 # sudo mkdir /var/deploy
 # sudo chown olav /var/deploy
-# sudo chmod 4711 /var/deploy
-# ls -la /var/deploy/
-##drws--x--x  2 olav root 4096 2011-07-14 11:48 .
 
 script=/var/deploy/pipinstrasse.sh
 log=/var/deploy/pipinstrasse.log
