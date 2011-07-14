@@ -10,7 +10,7 @@ ob_start();
 if (empty($_POST) || $_POST['confirm'] != 'ja') {
   if (file_exists(DEPLOY_LOG)) {
     $out = array();
-    exec('tail ' . DEPLOY_LOG, $out);
+    exec('tail -40' . DEPLOY_LOG, $out);
     echo '<pre>', join('<br>', $out), '</pre>';
   }
   else {
@@ -25,6 +25,7 @@ else {
 cd {$root}
 git pull
 mkdir -p import www/img/photos www/img/avatars
+chmod -R g+rwx import www/img/photos www/img/avatars
 echo Done.
 EOS;
     

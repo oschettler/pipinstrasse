@@ -3,6 +3,9 @@
 # sudo mkdir /var/deploy
 # sudo chown olav /var/deploy
 
+# Füge Cronjob ein:
+# */1 * * * * ROOTDIR/www/deploy/deploy-cronjob.sh
+
 script=/var/deploy/pipinstrasse.sh
 log=/var/deploy/pipinstrasse.log
 
