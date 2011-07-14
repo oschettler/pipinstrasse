@@ -25,6 +25,7 @@ else {
 cd {$root}
 git pull
 mkdir -p import www/img/photos www/img/avatars
+chmod -R g+rwx import www/img/photos www/img/avatars
 echo Done.
 EOS;
     
