@@ -1,6 +1,6 @@
 <?php
-define('DEPLOY_SCRIPT', '/tmp/deploy-pipinstrasse.sh');
-define('DEPLOY_LOG', '/tmp/deploy-pipinstrasse.log');
+define('DEPLOY_SCRIPT', '/var/deploy/pipinstrasse.sh');
+define('DEPLOY_LOG', '/var/deploy/pipinstrasse.log');
 
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
