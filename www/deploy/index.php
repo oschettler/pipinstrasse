@@ -90,6 +90,15 @@ $contents = ob_get_clean();
     background: #FCC;
   }
   </style>
+  <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+    // Verstecke Statusmeldungen nach 3s
+    setTimeout(function() {
+      $('.message').slideUp('fast');
+    }, 3000);
+  });
+</script>
 </head>
 <body>
   <?php
