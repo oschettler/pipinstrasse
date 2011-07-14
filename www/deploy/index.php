@@ -8,7 +8,8 @@ ini_set('display_errors', TRUE);
 $title = 'Veröffentlichen';
 ob_start();
 if (empty($_POST) || $_POST['confirm'] != 'ja') {
-  if (file_exists(DEPLOY_LOG)) {
+  if ($mtime = @filemtime(DEPLOY_LOG)) {
+    echo strftime("<h2>Letzter Log-Eintrag von %Y-%m-%d %H:%M:%S</h2>", $mtime);
     $out = array();
     exec('tail -40' . DEPLOY_LOG, $out);
     echo '<pre>', join('<br>', $out), '</pre>';
@@ -29,8 +30,8 @@ chmod -R g+rwx import www/img/photos www/img/avatars
 echo Done.
 EOS;
     
-  if (@filemtime(DEPLOY_SCRIPT)) {
-    $message = strftime('Das letzte Script wartet seit %Y-%m-%d %H:%M:%S auf Ausführung.');
+  if ($mtime = @filemtime(DEPLOY_SCRIPT)) {
+    $message = strftime('Das letzte Script wartet seit %Y-%m-%d %H:%M:%S auf Ausführung.', $mtime);
   }
   else {
     $now = strftime('%Y-%m-%d %H:%M:%S');
