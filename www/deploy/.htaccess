@@ -1,4 +1,4 @@
 AuthType Basic
 AuthName "Deployment"
-AuthUserFile .htpasswd
+AuthUserFile /var/www/schettler/pipinstrasse/www/deploy/.htpasswd
 Require valid-user
