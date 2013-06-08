@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.1.59)
 # Datenbank: pipinstrasse
-# Erstellungsdauer: 2013-06-08 17:57:42 +0000
+# Erstellungsdauer: 2013-06-08 18:02:56 +0000
 # ************************************************************
 
 
@@ -20,189 +20,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Export von Tabelle board
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `board`;
-
-CREATE TABLE `board` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `von` int(11) NOT NULL,
-  `nachricht` text NOT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-
-# Export von Tabelle chat
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `chat`;
-
-CREATE TABLE `chat` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `von` int(11) NOT NULL,
-  `message` varchar(255) NOT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `created` (`created`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Export von Tabelle comments
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `comments`;
-
-CREATE TABLE `comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `object_type` varchar(20) NOT NULL,
-  `object_id` int(11) DEFAULT NULL,
-  `von` int(11) NOT NULL,
-  `comment` text,
-  `liked` tinyint(4) NOT NULL DEFAULT '0',
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `object` (`object_type`,`object_id`),
-  KEY `von` (`von`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-
-# Export von Tabelle invitations
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `invitations`;
-
-CREATE TABLE `invitations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `von` int(11) NOT NULL,
-  `code` varchar(20) NOT NULL,
-  `object_type` varchar(20) NOT NULL,
-  `object_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Export von Tabelle messages
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `messages`;
-
-CREATE TABLE `messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `von` int(11) NOT NULL,
-  `an` int(11) NOT NULL,
-  `gift` varchar(20) NOT NULL,
-  `nachricht` text NOT NULL,
-  `created` datetime NOT NULL,
-  `viewed` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-
-# Export von Tabelle migrations
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `migrations`;
-
-CREATE TABLE `migrations` (
-  `last_id` int(11) NOT NULL,
-  `updated` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-LOCK TABLES `migrations` WRITE;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-
-INSERT INTO `migrations` (`last_id`, `updated`)
-VALUES
-	(11,'2013-06-08 19:55:37');
-
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Export von Tabelle pages
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pages`;
-
-CREATE TABLE `pages` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `slug` varchar(100) NOT NULL DEFAULT '',
-  `public` tinyint(1) NOT NULL DEFAULT '0',
-  `title` varchar(100) NOT NULL DEFAULT '',
-  `body` text NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Export von Tabelle photos
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `photos`;
-
-CREATE TABLE `photos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `topic_id` int(11) DEFAULT NULL,
-  `von` int(11) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-
-# Export von Tabelle stream
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `stream`;
-
-CREATE TABLE `stream` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `von` int(11) NOT NULL,
-  `object_type` varchar(20) NOT NULL,
-  `object_id` int(11) NOT NULL,
-  `title` varchar(100) DEFAULT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `created` (`created`),
-  KEY `von` (`von`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-
-# Export von Tabelle topics
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `topics`;
-
-CREATE TABLE `topics` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `von` int(11) NOT NULL,
-  `shared` tinyint(1) NOT NULL COMMENT 'Alben, in die von jedem Bilder eingestellt werden dÃ¼rfen',
-  `title` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `slug` varchar(100) CHARACTER SET utf8 NOT NULL,
-  `description` text CHARACTER SET utf8 NOT NULL,
-  `created` datetime NOT NULL,
-  `updated` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `shared` (`shared`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-
 # Export von Tabelle users
 # ------------------------------------------------------------
 
@@ -210,16 +27,16 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `slug` varchar(255) NOT NULL,
-  `mail` varchar(255) NOT NULL,
-  `roles` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `recover` varchar(20) DEFAULT NULL,
-  `vorname` varchar(255) NOT NULL,
-  `nachname` varchar(255) NOT NULL,
-  `hausnummer` varchar(10) NOT NULL,
+  `slug` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `mail` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `roles` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `password` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `recover` varchar(20) CHARACTER SET latin1 DEFAULT NULL,
+  `vorname` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `nachname` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `hausnummer` varchar(10) CHARACTER SET latin1 NOT NULL,
   `hausnr_sort` int(11) NOT NULL DEFAULT '0',
-  `bio` text NOT NULL,
+  `bio` text CHARACTER SET latin1 NOT NULL,
   `invited_by` int(11) DEFAULT NULL,
   `invited` datetime DEFAULT NULL,
   `created` datetime NOT NULL,
@@ -234,7 +51,8 @@ CREATE TABLE `users` (
   KEY `online` (`online`),
   KEY `chat` (`chat`),
   KEY `hausnr_sort` (`hausnr_sort`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
