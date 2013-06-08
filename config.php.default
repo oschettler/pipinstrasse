@@ -44,5 +44,7 @@ $config = array(
     '/photo/index' => 'Fotos',
   ),
 
-  'admin_email' => 'admin@pipinstrasse.de'
+  'admin_email' => 'admin@pipinstrasse.de',
+  
+  'chat_enabled' => TRUE,
 );
