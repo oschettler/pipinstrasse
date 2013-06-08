@@ -1,4 +1,5 @@
 <?php
+if (!isset($config['autocomplete_enabled']) || $config['autocomplete_enabled']):
 $this->page_head();
 ?>
 <script src="/js/picup.js" type="text/javascript" charset="utf-8"></script>
@@ -23,6 +24,7 @@ jQuery(function($) {
 </script>
 <?php
 $this->end_page_head();
+endif; // autocomplete_enabled
 ?>
 <form method="POST" action="/photo/<?php 
 echo $this->method == 'edit' ? "edit/{$_POST['id']}" : 'add'; 

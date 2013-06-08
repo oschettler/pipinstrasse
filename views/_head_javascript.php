@@ -33,7 +33,7 @@ jQuery(function($) {
    * Chat system
    */
 <?php
-if (empty($config['chat_enabled']) || $config['chat_enabled']) {
+if (!isset($config['chat_enabled']) || $config['chat_enabled']) {
   if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
   ?>
     $('#chat #users a').live('click', function() {
