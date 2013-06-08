@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 3348
+# Version 4096
 #
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
-# Host: 127.0.0.1 (MySQL 5.1.44-log)
-# Datenbank: pipinstrasse.de
-# Erstellungsdauer: 2011-07-06 08:48:21 +0200
+# Host: localhost (MySQL 5.1.59)
+# Datenbank: pipinstrasse
+# Erstellungsdauer: 2013-06-08 17:57:42 +0000
 # ************************************************************
 
 
@@ -31,7 +31,7 @@ CREATE TABLE `board` (
   `nachricht` text NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 
@@ -47,7 +47,7 @@ CREATE TABLE `chat` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `created` (`created`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -67,7 +67,7 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`id`),
   KEY `object` (`object_type`,`object_id`),
   KEY `von` (`von`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 
@@ -85,7 +85,7 @@ CREATE TABLE `invitations` (
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -103,7 +103,7 @@ CREATE TABLE `messages` (
   `created` datetime NOT NULL,
   `viewed` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 
@@ -117,6 +117,15 @@ CREATE TABLE `migrations` (
   `updated` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `migrations` WRITE;
+/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
+
+INSERT INTO `migrations` (`last_id`, `updated`)
+VALUES
+	(11,'2013-06-08 19:55:37');
+
+/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Export von Tabelle pages
@@ -134,7 +143,7 @@ CREATE TABLE `pages` (
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
@@ -151,7 +160,7 @@ CREATE TABLE `photos` (
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 
@@ -170,7 +179,7 @@ CREATE TABLE `stream` (
   PRIMARY KEY (`id`),
   KEY `created` (`created`),
   KEY `von` (`von`)
-) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 
@@ -190,7 +199,7 @@ CREATE TABLE `topics` (
   `updated` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `shared` (`shared`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 
@@ -209,6 +218,7 @@ CREATE TABLE `users` (
   `vorname` varchar(255) NOT NULL,
   `nachname` varchar(255) NOT NULL,
   `hausnummer` varchar(10) NOT NULL,
+  `hausnr_sort` int(11) NOT NULL DEFAULT '0',
   `bio` text NOT NULL,
   `invited_by` int(11) DEFAULT NULL,
   `invited` datetime DEFAULT NULL,
@@ -222,10 +232,9 @@ CREATE TABLE `users` (
   UNIQUE KEY `slug` (`slug`),
   UNIQUE KEY `recover` (`recover`),
   KEY `online` (`online`),
-  KEY `chat` (`chat`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-
-
+  KEY `chat` (`chat`),
+  KEY `hausnr_sort` (`hausnr_sort`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

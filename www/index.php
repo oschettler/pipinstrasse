@@ -53,12 +53,20 @@ $include_path .=
   ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/{$config['dir_views']}");
   
 ini_set('include_path', $include_path);
-//D echo ini_get('include_path'); exit;
 
 require_once "controller.class.php";
 
-if (empty($_GET['url'])) {
-  $_GET['url'] = '/home';
+/*
+ * Einfacher Router, basierend auf REQUEST_URI.
+ * In Nginx, reicht zur Einrichtung folgender Eintrag:
+ *----
+ * location / {
+ *   try_files $uri $uri/ /index.php;
+ * }
+ *----
+ */
+if (empty($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/') {
+  $_SERVER['REQUEST_URI'] = '/home';
 }
 
 if (empty($_SESSION['user'])) {
@@ -74,7 +82,7 @@ if (empty($_SESSION['user'])) {
       '/home/theme',
     ) as $url) {
 
-    if (preg_match("#^{$url}(/.*)?$#", $_GET['url'])) {
+    if (preg_match("#^{$url}(/.*)?$#", $_SERVER['REQUEST_URI'])) {
       $allowed = TRUE;
       break;
     }
@@ -95,7 +103,7 @@ mysql_select_db($config['db_name']);
 mysql_query('SET NAMES UTF8');
 //mysql_query('SET CHARACTER SET UTF8');
 
-$path = explode('/', substr($_GET['url'], 1));
+$path = explode('/', substr($_SERVER['REQUEST_URI'], 1));
 
 if (count($path) < 2) {
   $path[1] = 'index';
