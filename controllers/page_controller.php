@@ -10,13 +10,14 @@ class page_controller extends controller {
   }
   
   function allowed() {
+    global $db;
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       return FALSE;
     }
     
     $sql = 'SELECT * FROM pages WHERE '
-      . "slug = '" . mysql_real_escape_string($this->path[2]) . "'";
+      . "slug = '" . mysqli_real_escape_string($db, $this->path[2]) . "'";
       
     $this->context = $this->page->one($sql);
     if (!$this->context) {

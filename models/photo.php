@@ -46,7 +46,7 @@ class photo extends model {
 
     $result = $this->exec($sql);
     if (!$result) {
-      error_log("Import: " . mysql_error());
+      error_log("Import: " . mysqli_error($db));
       return NULL;
     }
     

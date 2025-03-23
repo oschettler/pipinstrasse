@@ -81,7 +81,7 @@ class user_controller extends controller {
           $this->redirect('/user/login');
         }
         else {
-          $this->message(mysql_error());
+          $this->message(mysqli_error($db));
         }
       }
     }
@@ -186,7 +186,7 @@ class user_controller extends controller {
       $sql = "UPDATE users SET "
         . "recover = '{$code}', "
         . 'updated = NOW() '
-        . "WHERE mail = '" . mysql_real_escape_string($email) . "'";
+        . "WHERE mail = '" . mysqli_real_escape_string($db, $email) . "'";
       $unique = mysqli_query($db, $sql);
     }
     return "http://{$_SERVER['HTTP_HOST']}/user/code/{$code}";
@@ -224,15 +224,15 @@ class user_controller extends controller {
     }
 
     $sql = 'SELECT * FROM users WHERE active = 1'
-        . " AND recover = '" . mysql_real_escape_string($this->path[2]) . "'";
+        . " AND recover = '" . mysqli_real_escape_string($db, $this->path[2]) . "'";
 
     $rs = mysqli_query($db, $sql);
-    if ($_SESSION['user'] = mysql_fetch_object($rs)) {
+    if ($_SESSION['user'] = mysqli_fetch_object($rs)) {
       
       $sql = "UPDATE users SET "
         . "recover = NULL, "
         . 'updated = NOW() '
-        . "WHERE id = '" . mysql_real_escape_string($_SESSION['user']->id) . "'";
+        . "WHERE id = '" . mysqli_real_escape_string($db, _SESSION['user']->id) . "'";
       mysqli_query($db, $sql);
       
       $this->message('Sie sind jetzt angemeldet. Bitte ändern Sie Ihr Kennwort');
@@ -281,12 +281,12 @@ class user_controller extends controller {
     global $db;
     if (!empty($_POST['status'])) {
       $sql = "UPDATE users SET "
-        . "status = '" . mysql_real_escape_string($_POST['status']) . "' "
+        . "status = '" . mysqli_real_escape_string($db, $_POST['status']) . "', "
         . 'updated = NOW() '
-        . "WHERE id = {$_SERVER['user']->id}";
+        . "WHERE id = {$_SESSION['user']->id}";
       mysqli_query($db, $sql);
       
-      $this->log('status', NULL, $_POST['status']);
+      $this->log('status', 0, $_POST['status']);
       $this->message('Ihre Statusmeldung wurde gespeichert');
     }
     $this->redirect('/');
@@ -324,7 +324,7 @@ Liebe Grüße,
       else {
         foreach (explode("\n", trim($_POST['emails'])) as $email) {
           if (preg_match(USER_EMAIL_RE, $email)) {
-            $sql = "SELECT * FROM users WHERE mail = '" . mysql_real_escape_string($email) . "'";
+            $sql = "SELECT * FROM users WHERE mail = '" . mysqli_real_escape_string($db, $email) . "'";
             if ($user = mysqli_fetch_object(mysqli_query($db, $sql))) {
               $msg[] = $this->user_link($user) . ' hat bereits ein Konto hier';
             }
@@ -339,9 +339,9 @@ Liebe Grüße,
                 $code = base_convert(rand(), 10, 36);
 
                 $sql = "INSERT INTO users SET "
-                  . " mail = '" . mysql_real_escape_string($email) . "', "
-                  . " slug = '" . mysql_real_escape_string($code) . "', "
-                  . " recover = '" . mysql_real_escape_string($code) . "', "
+                  . " mail = '" . mysqli_real_escape_string($db, $email) . "', "
+                  . " slug = '" . mysqli_real_escape_string($db, $code) . "', "
+                  . " recover = '" . mysqli_real_escape_string($db, $code) . "', "
                   . " invited_by = {$_SESSION['user']->id}, "
                   . " active = 1, "
                   . " created = NOW(), "
@@ -441,12 +441,12 @@ Liebe Grüße,
 
           $sql = "INSERT INTO invitations SET "
             . " von = {$_SESSION['user']->id}, "
-            . " code = '" . mysql_real_escape_string($code) . "', "
+            . " code = '" . mysqli_real_escape_string($db, $code) . "', "
             . " object_type = 'topic', "
             . " object_id = {$topic->id}, "
             . " created = NOW()";
 
-          $unique = mysql_query($sql);
+          $unique = mysqli_query($db, $sql);
         }
       }
       $link = "http://{$_SERVER['HTTP_HOST']}/user/guest/{$code}";
@@ -461,7 +461,7 @@ Liebe Grüße,
       else {
         foreach (explode("\n", trim($_POST['emails'])) as $email) {
           if (preg_match(USER_EMAIL_RE, $email)) {
-            $sql = "SELECT * FROM users WHERE mail = '" . mysql_real_escape_string($email) . "'";
+            $sql = "SELECT * FROM users WHERE mail = '" . mysqli_real_escape_string($db, $email) . "'";
             if ($user = mysqli_fetch_object(mysqli_query($db, $sql))) {
               $msg[] = $this->user_link($user) . ' hat bereits ein Konto hier';
             }

@@ -93,7 +93,7 @@ if (empty($_SESSION['user'])) {
 
 $db = mysqli_connect($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
 mysqli_query($db, 'SET NAMES UTF8');
-//mysql_query('SET CHARACTER SET UTF8');
+//mysqli_query($db, 'SET CHARACTER SET UTF8');
 
 $path = explode('/', substr($_SERVER['REQUEST_URI'], 1));
 

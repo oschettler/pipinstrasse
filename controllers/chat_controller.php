@@ -89,15 +89,16 @@ class chat_controller extends controller {
   }
   
   function do_write() {
+    global $db;
     $this->layout = FALSE;
 
     $sql = "DELETE FROM chat WHERE created < DATE_SUB(NOW(), INTERVAL 1 DAY)";
-    mysql_query($sql);        
+    mysqli_query($db, $sql);        
     
     if (!empty($_POST['input']) && trim($_POST['input'])) {
       $sql = 'INSERT INTO chat SET '
-        . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-        . 'message = ' .  "'" . mysql_real_escape_string(strip_tags(trim($_POST['input']))) . "', "
+        . 'von = ' .  "'" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "', "
+        . 'message = ' .  "'" . mysqli_real_escape_string($db, strip_tags(trim($_POST['input']))) . "', "
         . 'created = NOW()';
       mysqli_query($db, $sql);
     }

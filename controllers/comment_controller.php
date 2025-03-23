@@ -34,20 +34,20 @@ class comment_controller extends controller {
       $like = empty($_POST['like']) || !$_POST['like'] ? 0 : 1;
       
       $sql = 'INSERT INTO comments SET '
-        . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-        . 'object_type = ' .  "'" . mysql_real_escape_string($_POST['type']) . "', "
-        . 'object_id = ' .  "'" . mysql_real_escape_string($_POST['id']) . "', "
-        . 'comment = ' .  "'" . mysql_real_escape_string($_POST['comment']) . "', "
+        . 'von = ' .  "'" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "', "
+        . 'object_type = ' .  "'" . mysqli_real_escape_string($db, $_POST['type']) . "', "
+        . 'object_id = ' .  "'" . mysqli_real_escape_string($db, $_POST['id']) . "', "
+        . 'comment = ' .  "'" . mysqli_real_escape_string($db, $_POST['comment']) . "', "
         . "liked = {$like}, "
         . 'created = NOW()';
 
       $result = mysqli_query($db, $sql);
       if (!$result) {
-        $this->message(mysql_error(), 'error');
+        $this->message(mysqli_error($db), 'error');
       }
       else {
         if (!$this->update_comment_count($_POST['type'], $_POST['id'])) {
-          $this->message(mysql_error());
+          $this->message(mysqli_error($db));
         } 
         else {
           $this->message('Ihr Kommentar wurde gespeichert');

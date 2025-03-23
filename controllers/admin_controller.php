@@ -144,6 +144,7 @@ class admin_controller extends controller {
    * Nutzerverwaltung, besonders aktivieren
    */
   function do_users() {
+    global $db;
     $this->layout = 'admin';
     $this->vars['title'] = 'Verwalten von Nutzerkonten';
 
@@ -165,7 +166,7 @@ class admin_controller extends controller {
           $this->message("Die Änderungen wurden gespeichert");
         }
         else {
-          $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+          $this->message("Die Änderungen wurden nicht gespeichert: " . mysqli_error($db));
         }
         $this->redirect();
       }
@@ -189,16 +190,16 @@ class admin_controller extends controller {
 
     if (!empty($_POST)) {
       $sql = "UPDATE topics SET"
-        . " title = '" . mysql_real_escape_string($_POST['title']) . "',"
-        . " shared = '" . mysql_real_escape_string($_POST['shared']) . "',"
+        . " title = '" . mysqli_real_escape_string($db, $_POST['title']) . "',"
+        . " shared = '" . mysqli_real_escape_string($db, $_POST['shared']) . "',"
         . " updated = NOW()"
-        . " WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
+        . " WHERE id = '" . mysqli_real_escape_string($db, $_POST['id']) . "'";
       
       if (mysqli_query($db, $sql)) {
         $this->message("Die Änderungen wurden gespeichert");
       }
       else {
-        $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+        $this->message("Die Änderungen wurden nicht gespeichert: " . mysqli_error($db));
       }
       $this->redirect();
     }
@@ -224,6 +225,7 @@ class admin_controller extends controller {
   }
   
   function do_movphotos() {
+    global $db;
     $this->layout = FALSE;
 
     $this->model('topic');
@@ -249,7 +251,7 @@ class admin_controller extends controller {
       $this->message('Die Änderungen wurden gespeichert');
     }
     else {
-      $this->message('Die Änderungen konnten nicht gespeichert werden: ' . mysql_error(), 'error');
+      $this->message('Die Änderungen konnten nicht gespeichert werden: ' . mysqli_error($db), 'error');
     }
     $this->redirect();
   }
@@ -316,6 +318,7 @@ class admin_controller extends controller {
   }
   
   function do_pages() {
+    global $db;
     $this->layout = 'admin';
     $this->vars['title'] = 'Verwalten von Seiten';
 
@@ -334,23 +337,23 @@ class admin_controller extends controller {
         ? model::slug($_POST['title'])
         : model::slug($_POST['slug']);
       
-      $sql .= " title = '" . mysql_real_escape_string($_POST['title']) . "',"
-        . " slug = '" . mysql_real_escape_string($slug) . "',"
-        . " public = '" . mysql_real_escape_string($_POST['public']) . "',"
-        . " body = '" . mysql_real_escape_string($_POST['body']) . "',";
+      $sql .= " title = '" . mysqli_real_escape_string($db, $_POST['title']) . "',"
+        . " slug = '" . mysqli_real_escape_string($db, $slug) . "',"
+        . " public = '" . mysqli_real_escape_string($db, $_POST['public']) . "',"
+        . " body = '" . mysqli_real_escape_string($db, $_POST['body']) . "',";
       
       if (empty($_POST['id'])) {
         $sql .= " created = NOW()";
       }
       else {
-        $sql .= " updated = NOW() WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
+        $sql .= " updated = NOW() WHERE id = '" . mysqli_real_escape_string($db, $_POST['id']) . "'";
       }
       
-      if (mysql_query($sql)) {
+      if (mysqli_query($db, $sql)) {
         $this->message("Die Änderungen wurden gespeichert");
       }
       else {
-        $this->message("Die Änderungen wurden nicht gespeichert: " . mysql_error());
+        $this->message("Die Änderungen wurden nicht gespeichert: " . mysqli_error($db));
       }
       $this->redirect();
     }

@@ -29,18 +29,18 @@ class list_controller extends controller {
         $code = base_convert(rand(), 10, 36);
 
         $sql = "INSERT INTO lists SET "
-          . " title = '" . mysql_real_escape_string($_POST['list']) . "', "
-          . " slug = '" . mysql_real_escape_string($code) . "', "
+          . " title = '" . mysqli_real_escape_string($db, $_POST['list']) . "', "
+          . " slug = '" . mysqli_real_escape_string($db, $code) . "', "
           . " von = {$_SESSION['user']->id}, "
           . " shared = 0, "
           . " created = NOW()";
 
-        $unique = mysql_query($sql);
+        $unique = mysqli_query($db, $sql);
       }
 
-      $result = mysql_query($sql);
+      $result = mysqli_query($db, $sql);
       if (!$result) {
-        $this->message(mysql_error(), 'error');
+        $this->message(mysqli_error($db), 'error');
       }
       else {
         $this->message('Ihre Liste wurde gespeichert');

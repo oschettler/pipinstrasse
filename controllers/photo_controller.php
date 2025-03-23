@@ -153,7 +153,7 @@ class photo_controller extends controller {
       $this->log('photo', $result_id, $title);
     }
     else {
-      $this->message('Das Bild konnte nicht gespeichert werden: ' . mysql_error(), 'error');
+      $this->message('Das Bild konnte nicht gespeichert werden: ' . mysqli_error($db), 'error');
     }
 
     $this->redirect("/photo/view/{$result_id}");

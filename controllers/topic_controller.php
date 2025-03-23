@@ -19,6 +19,7 @@ class topic_controller extends controller {
   }
   
   function do_all($mine = FALSE) {
+    global $db;
     $this->layout = FALSE;
     $topics = array('Kein Album');
 
@@ -28,13 +29,13 @@ class topic_controller extends controller {
     } 
 
     if (!empty($_GET['term'])) {
-      $sql .= "AND title LIKE '%" .  mysql_real_escape_string($_GET['term']) . "%' ";
+      $sql .= "AND title LIKE '%" .  mysqli_real_escape_string($db, $_GET['term']) . "%' ";
     }
     
     $sql .= 'ORDER BY title LIMIT 10';
 
-    $rs = mysql_query($sql);
-    while ($topic = mysql_fetch_object($rs)) {
+    $rs = mysqli_query($db, $sql);
+    while ($topic = mysqli_fetch_object($rs)) {
       $topics[] = $topic->title;
     }
     echo $result = json_encode($topics);

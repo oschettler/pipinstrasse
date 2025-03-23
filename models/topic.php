@@ -7,16 +7,16 @@ class topic extends model {
       $obj = (object)$obj;
     }
     $sql = "SELECT id, von FROM topics WHERE "
-      . "title = '" .  mysql_real_escape_string($obj->topic) . "'";
+      . "title = '" .  mysqli_real_escape_string($db, $obj->topic) . "'";
 
     if ($topic = $this->one($sql)) {
       $topic_id = $topic->id;
     }
     else {
       $sql = "INSERT INTO topics SET "
-        . "title = '" .  mysql_real_escape_string($obj->topic) . "', "
+        . "title = '" .  mysqli_real_escape_string($db, $obj->topic) . "', "
         . "von = {$_SESSION['user']->id}, "
-        . "slug = '" .  mysql_real_escape_string(self::slug($obj->topic)) . "', "
+        . "slug = '" .  mysqli_real_escape_string($db, self::slug($obj->topic)) . "', "
         . 'created = NOW()';
       $this->exec($sql);
 

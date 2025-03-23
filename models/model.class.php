@@ -13,7 +13,7 @@ class model {
     $result = array();
     $rs = mysqli_query($db, $sql);
     if (!$rs) {
-      error_log('QUERY() ERROR: ' . mysql_error());
+      error_log('QUERY() ERROR: ' . mysqli_error($db));
       return NULL;
     }
     while ($_ = mysqli_fetch_object($rs)) {
@@ -26,7 +26,7 @@ class model {
     global $db;
     $result = mysqli_query($db, $sql);
     if (!$result) {
-      error_log('EXEC() ERROR: ' . mysql_error());
+      error_log('EXEC() ERROR: ' . mysqli_error($db));
     }
     return $result;
   }
@@ -35,7 +35,7 @@ class model {
     global $db;
     $rs = mysqli_query($db, $sql);
     if (!$rs) {
-      error_log('ONE() ERROR: ' . mysql_error());
+      error_log('ONE() ERROR: ' . mysqli_error($db));
       return NULL;
     }
     return mysqli_fetch_object($rs);
@@ -45,7 +45,7 @@ class model {
     global $db;
     $rs = mysqli_query($db, $sql);
     if (!$rs) {
-      error_log('COUNT() ERROR: ' . mysql_error());
+      error_log('COUNT() ERROR: ' . mysqli_error($db));
       return NULL;
     }
     $counter = mysqli_fetch_row($rs);
