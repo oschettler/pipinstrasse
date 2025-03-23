@@ -29,6 +29,7 @@ class comment_controller extends controller {
   }
   
   function do_add() {
+    global $db;
     if (!empty($_POST)) {
       $like = empty($_POST['like']) || !$_POST['like'] ? 0 : 1;
       
@@ -40,7 +41,7 @@ class comment_controller extends controller {
         . "liked = {$like}, "
         . 'created = NOW()';
 
-      $result = mysql_query($sql);
+      $result = mysqli_query($db, $sql);
       if (!$result) {
         $this->message(mysql_error(), 'error');
       }
@@ -52,9 +53,9 @@ class comment_controller extends controller {
           $this->message('Ihr Kommentar wurde gespeichert');
         }
 
-        $rs = mysql_query('SELECT mail FROM users WHERE id = '
-          . "'" . mysql_real_escape_string($_POST['an']) . "'");
-        $recipient = mysql_fetch_object($rs);
+        $rs = mysqli_query($db, 'SELECT mail FROM users WHERE id = '
+          . "'" . mysqli_real_escape_string($db, $_POST['an']) . "'");
+        $recipient = mysqli_fetch_object($rs);
 
         $this->log('comment', $this->comment->insert_id(), $_POST['comment']);
 
@@ -69,15 +70,16 @@ class comment_controller extends controller {
   }
   
   function do_like() {
+    global $db;
     if (!empty($_POST)) {
       $sql = 'INSERT INTO comments SET '
-        . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-        . 'object_type = ' .  "'" . mysql_real_escape_string($_POST['type']) . "', "
-        . 'object_id = ' .  "'" . mysql_real_escape_string($_POST['id']) . "', "
+        . 'von = ' .  "'" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "', "
+        . 'object_type = ' .  "'" . mysqli_real_escape_string($db, $_POST['type']) . "', "
+        . 'object_id = ' .  "'" . mysqli_real_escape_string($db, $_POST['id']) . "', "
         . 'liked = 1, '
         . 'created = NOW()';
 
-      $result = mysql_query($sql);
+      $result = mysqli_query($db, $sql);
 
       $this->log('like', $this->comment->insert_id());
     }

@@ -19,14 +19,15 @@ class chat_controller extends controller {
   }
   
   function do_users() {
+    global $db;
     header('Content-type: text/javascript');
     $this->layout = FALSE;
 
     $sql = "UPDATE users SET chat = NULL WHERE chat < DATE_SUB(NOW(), INTERVAL 1 MINUTE)";
-    mysql_query($sql);    
+    mysqli_query($db, $sql);    
     
     $sql = "SELECT COUNT(*) FROM users WHERE chat IS NOT NULL";
-    $user_count = mysql_fetch_row(mysql_query($sql));
+    $user_count = mysqli_fetch_row(mysqli_query($db, $sql));
 
     $data = new stdclass;
     $data->user_count = $user_count[0];
@@ -35,6 +36,7 @@ class chat_controller extends controller {
   }
   
   function do_update() {
+    global $db;
     header('Content-type: text/javascript');
     $this->layout = FALSE;
 
@@ -46,7 +48,7 @@ class chat_controller extends controller {
     }
     
     $sql = "UPDATE users SET chat = NOW() WHERE id = {$_SESSION['user']->id}";
-    mysql_query($sql);
+    mysqli_query($db, $sql);
     
     $data = new stdclass;
     
@@ -62,8 +64,8 @@ class chat_controller extends controller {
     }
 
     $data->messages = array();
-    $rs = mysql_query($sql);
-    while ($message = mysql_fetch_object($rs)) { 
+    $rs = mysqli_query($db, $sql);
+    while ($message = mysqli_fetch_object($rs)) { 
       if ($message->id == $_SESSION['user']->id) {
         array_unshift($data->messages, '<a title="um ' . $message->created . '" p:id="' . $message->c_id . '"><strong>Ich</strong></a>: ' . $message->message);
       }
@@ -78,8 +80,8 @@ class chat_controller extends controller {
     $sql = "SELECT id, hausnummer, vorname, nachname FROM users WHERE chat IS NOT NULL AND  id != {$_SESSION['user']->id} ORDER BY hausnummer, nachname, vorname";
 
     $data->users = array();
-    $rs = mysql_query($sql);
-    while ($user = mysql_fetch_object($rs)) { 
+    $rs = mysqli_query($db, $sql);
+    while ($user = mysqli_fetch_object($rs)) { 
       $data->users[] = $this->user_link($user);
     }
     
@@ -97,7 +99,7 @@ class chat_controller extends controller {
         . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
         . 'message = ' .  "'" . mysql_real_escape_string(strip_tags(trim($_POST['input']))) . "', "
         . 'created = NOW()';
-      mysql_query($sql);
+      mysqli_query($db, $sql);
     }
   }
 }

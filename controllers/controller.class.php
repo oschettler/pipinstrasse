@@ -226,7 +226,7 @@ class controller {
     return model::remove_accent($str);
   }
 
-  function slug($str) { 
+  static function slug($str) { 
     return model::slug($str);
   }
   
@@ -283,12 +283,13 @@ class controller {
   }
 
   function message_count() {
+    global $db;
     if (empty($_SESSION['user'])) {
       return 0;
     }
     $sql = 'SELECT COUNT(*) FROM messages WHERE '
-      . "an = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
-      . "AND viewed = '0000-00-00 00:00:00'";
+      . "an = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
+      . "AND viewed IS NULL";
 
     return $this->message->count($sql);
   }
@@ -318,18 +319,18 @@ class controller {
   /**
    * Mache einen Eintrag im Action Stream
    */
-  function log($type, $id, $title) {
-    
+  function log($type, $id, $title = '(none)') {
+    global $db;
     if (strlen($title) > 80) {
       // Einige Zeichen weniger als 100, damit Backslashes noch hinein passen
       $title = substr($title, 0, 80) . '...';
     }
     
     $sql = 'INSERT INTO stream SET '
-      . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-      . 'title = ' .  "'" . mysql_real_escape_string($title) . "', "
-      . 'object_type = ' .  "'" . mysql_real_escape_string($type) . "', "
-      . 'object_id = ' .  "'" . mysql_real_escape_string($id) . "', "
+      . 'von = ' .  "'" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "', "
+      . 'title = ' .  "'" . mysqli_real_escape_string($db, $title) . "', "
+      . 'object_type = ' .  "'" . mysqli_real_escape_string($db, $type) . "', "
+      . 'object_id = ' .  "'" . mysqli_real_escape_string($db, $id) . "', "
       . 'created = NOW()';
 
     $result = $this->stream->exec($sql);

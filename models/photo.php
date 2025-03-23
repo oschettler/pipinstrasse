@@ -14,7 +14,7 @@ class photo extends model {
   }
   
   function save($data) {
-    global $config;
+    global $config, $db;
 
     $id = !empty($data['id']) && $data['id'] ? $data['id'] : 0;
 
@@ -24,7 +24,7 @@ class photo extends model {
     }
     else {
       $sql = 'INSERT INTO photos SET '
-        . 'created = NOW(), ';
+        . 'created = NOW(), updated = NOW(), ';
       
       $seq = $this->one("SELECT MAX(seq) AS seq FROM photos");
       $seq = $seq->seq + 1;
@@ -33,8 +33,8 @@ class photo extends model {
     }
     
     $sql .=
-        'von = ' .  "'" . mysql_real_escape_string($data['von']) . "', "
-      . 'title = ' .  "'" . mysql_real_escape_string($data['title']) . "' ";
+        'von = ' .  "'" . mysqli_real_escape_string($db, $data['von']) . "', "
+      . 'title = ' .  "'" . mysqli_real_escape_string($db, $data['title']) . "' ";
 
     if ($data['topic_id']) {
       $sql .= ", topic_id = {$data['topic_id']} ";
@@ -63,7 +63,7 @@ class photo extends model {
     // Ab hier wird in jedem Fall ein Bild hochgeladen
 
     $src = $data['upload']['tmp_name'];
-    if ($data['batch'] || (empty($data['batch']) && is_uploaded_file($src))) {
+    if (!empty($data['batch']) && $data['batch'] || empty($data['batch']) && is_uploaded_file($src)) {
       $target = controller::image($id);
       // Speichere Bilder in einer Auflösung von 1024x768
       system("{$config['convert']} {$src} -strip -geometry " . IMAGE_RESOLUTION . " {$target}");

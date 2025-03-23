@@ -20,7 +20,8 @@ class user_controller extends controller {
   /**
    * Action: Als Nutzer anmelden
    */
-  function do_login() { 
+  function do_login() {
+    global $db;
     $this->vars['title'] = 'Anmeldung'; 
     $this->vars['slogan'] = 'anmelden'; 
     $this->vars['head_src'] = 'schluessel';
@@ -31,13 +32,13 @@ class user_controller extends controller {
     }
     else {
       $sql = 'SELECT * FROM users WHERE active = 1'
-          . " AND mail = '" . mysql_real_escape_string($_POST['mail']) . "'"
+          . " AND mail = '" . mysqli_real_escape_string($db, $_POST['mail']) . "'"
           . ' AND password = MD5('
-          . "'" . mysql_real_escape_string($_POST['password']) . "'"
+          . "'" . mysqli_real_escape_string($db, $_POST['password']) . "'"
           . ')';
 
-      $rs = mysql_query($sql);
-      $_SESSION['user'] = mysql_fetch_object($rs); 
+      $rs = mysqli_query($db, $sql);
+      $_SESSION['user'] = mysqli_fetch_object($rs); 
       
       if ($_SESSION['user']) {
         $_SESSION['user']->guest = FALSE;
@@ -59,14 +60,14 @@ class user_controller extends controller {
    * Action: Neues Nutzerkonto anlegen. Muss dann erst freigeschalten werden.
    */
   function do_register() {
-    global $config;
+    global $config, $db;
     
     $this->vars['title'] = 'Nutzerkonto anlegen';
 
     if (!empty($_POST)) {
-      $rs = mysql_query('SELECT id FROM users WHERE mail = '
-        . "'" . mysql_real_escape_string($_POST['mail']) . "'");
-      if (mysql_fetch_object($rs)) { 
+      $rs = mysqli_query($db, 'SELECT id FROM users WHERE mail = '
+        . "'" . mysqli_real_escape_string($db, $_POST['mail']) . "'");
+      if (mysqli_fetch_object($rs)) { 
         $this->message('Dieses Konto existiert bereits', 'error');
       }
       else {
@@ -91,16 +92,17 @@ class user_controller extends controller {
    * Action: Nutzerinfo ansehen und Nachricht schreiben
    */  
   function do_view() {
+    global $db;
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       $this->redirect();
     }
 
     $sql = 'SELECT * FROM users WHERE active = 1'
-         . " AND slug = '" . mysql_real_escape_string($this->path[2]) . "'";
+         . " AND slug = '" . mysqli_real_escape_string($db, $this->path[2]) . "'";
 
-    $rs = mysql_query($sql);
-    $this->vars['user'] = $user = mysql_fetch_object($rs);
+    $rs = mysqli_query($db, $sql);
+    $this->vars['user'] = $user = mysqli_fetch_object($rs);
     if (!$user) {
       $this->message('Nachbarn nicht gefunden');
       $this->redirect('/');
@@ -113,8 +115,8 @@ class user_controller extends controller {
       . " AND von = '{$user->id}' "
       . 'ORDER BY created DESC';
 
-    $rs = mysql_query($sql); 
-    $this->vars['status'] = mysql_fetch_object($rs);
+    $rs = mysqli_query($db, $sql); 
+    $this->vars['status'] = mysqli_fetch_object($rs);
     
     // Kehre nach Schreiben einer Nachricht hierher zurück
     $_SESSION['return_to'] = $_GET['url'];
@@ -126,6 +128,7 @@ class user_controller extends controller {
    * Action: Eigene Nutzerdaten bearbeiten
    */
   function do_edit() {
+    global $db;
     if (empty($_POST)) {
       $this->vars['title'] = 'Eigenes Nutzerkonto bearbeiten';
       
@@ -151,11 +154,12 @@ class user_controller extends controller {
   }
   
   function do_index() {
+    global $db;
     $this->vars['title'] = 'Nachbarn';
 
     $sql = "SELECT COUNT(*) FROM users WHERE active = 1 AND password != ''";
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $rs = mysqli_query($db, $sql);
+    $counter = mysqli_fetch_row($rs);
     
     $page = $this->paginate(USERS_PAGE_SIZE, $counter[0], '/user/index');
         
@@ -164,9 +168,9 @@ class user_controller extends controller {
 
     $this->vars['users'] = array();
 
-    $rs = mysql_query($sql);
+    $rs = mysqli_query($db, $sql);
     
-    while ($users = mysql_fetch_object($rs)) {
+    while ($users = mysqli_fetch_object($rs)) {
       $this->vars['users'][] = $users;
     }
     
@@ -174,6 +178,7 @@ class user_controller extends controller {
   }
   
   function recover_link($email) {
+    global $db;
     $unique = FALSE;
     while (!$unique) {
       $code = base_convert(rand(), 10, 36);
@@ -182,7 +187,7 @@ class user_controller extends controller {
         . "recover = '{$code}', "
         . 'updated = NOW() '
         . "WHERE mail = '" . mysql_real_escape_string($email) . "'";
-      $unique = mysql_query($sql);
+      $unique = mysqli_query($db, $sql);
     }
     return "http://{$_SERVER['HTTP_HOST']}/user/code/{$code}";
   }
@@ -212,6 +217,7 @@ class user_controller extends controller {
    * Action: Login mit Code
    */
   function do_code() {
+    global $db;
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       $this->redirect();
@@ -220,14 +226,14 @@ class user_controller extends controller {
     $sql = 'SELECT * FROM users WHERE active = 1'
         . " AND recover = '" . mysql_real_escape_string($this->path[2]) . "'";
 
-    $rs = mysql_query($sql);
+    $rs = mysqli_query($db, $sql);
     if ($_SESSION['user'] = mysql_fetch_object($rs)) {
       
       $sql = "UPDATE users SET "
         . "recover = NULL, "
         . 'updated = NOW() '
         . "WHERE id = '" . mysql_real_escape_string($_SESSION['user']->id) . "'";
-      mysql_query($sql);
+      mysqli_query($db, $sql);
       
       $this->message('Sie sind jetzt angemeldet. Bitte ändern Sie Ihr Kennwort');
       $this->redirect('/user/edit');
@@ -272,12 +278,13 @@ class user_controller extends controller {
    * Speichere eine Status-Änderung
    */
   function do_status() {
+    global $db;
     if (!empty($_POST['status'])) {
       $sql = "UPDATE users SET "
         . "status = '" . mysql_real_escape_string($_POST['status']) . "' "
         . 'updated = NOW() '
         . "WHERE id = {$_SERVER['user']->id}";
-      mysql_query($sql);
+      mysqli_query($db, $sql);
       
       $this->log('status', NULL, $_POST['status']);
       $this->message('Ihre Statusmeldung wurde gespeichert');
@@ -289,6 +296,7 @@ class user_controller extends controller {
    * Erlaube, Externe über Ihre EMail-Adresse einzuladen
    */
   function do_invite() {
+    global $db;
     $this->vars['title'] = 'Nachbarn einladen';
     
     $my_name = "{$_SESSION['user']->vorname} {$_SESSION['user']->nachname}";
@@ -317,7 +325,7 @@ Liebe Grüße,
         foreach (explode("\n", trim($_POST['emails'])) as $email) {
           if (preg_match(USER_EMAIL_RE, $email)) {
             $sql = "SELECT * FROM users WHERE mail = '" . mysql_real_escape_string($email) . "'";
-            if ($user = mysql_fetch_object(mysql_query($sql))) {
+            if ($user = mysqli_fetch_object(mysqli_query($db, $sql))) {
               $msg[] = $this->user_link($user) . ' hat bereits ein Konto hier';
             }
             else {
@@ -339,7 +347,7 @@ Liebe Grüße,
                   . " created = NOW(), "
                   . " invited = NOW()";
 
-                $unique = mysql_query($sql);
+                $unique = mysqli_query($db, $sql);
               }
             
               $link = "http://{$_SERVER['HTTP_HOST']}/user/code/{$code}";
@@ -376,6 +384,7 @@ Liebe Grüße,
    * Lade Gäste in dieses Album ein
    */
   function do_guests() {
+    global $db;
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       $this->redirect();
@@ -385,7 +394,7 @@ Liebe Grüße,
     $sql = "SELECT * FROM topics WHERE "
       . "id = {$topic_id}";
 
-    $topic = mysql_fetch_object(mysql_query($sql));
+    $topic = mysqli_fetch_object(mysqli_query($db, $sql));
     if (!$topic) {
       $this->message('FALSCHE URL');
       $this->redirect();
@@ -416,7 +425,7 @@ Liebe Grüße,
       // vgl. user.do_invite()
 
       $sql = "SELECT code FROM invitations WHERE object_type = 'topic' AND object_id = {$topic->id} AND von = {$_SESSION['user']->id}";
-      $invite = mysql_fetch_object(mysql_query($sql));
+      $invite = mysqli_fetch_object(mysqli_query($db, $sql));
       if ($invite) {
         $code = $invite->code;
       }
@@ -453,7 +462,7 @@ Liebe Grüße,
         foreach (explode("\n", trim($_POST['emails'])) as $email) {
           if (preg_match(USER_EMAIL_RE, $email)) {
             $sql = "SELECT * FROM users WHERE mail = '" . mysql_real_escape_string($email) . "'";
-            if ($user = mysql_fetch_object(mysql_query($sql))) {
+            if ($user = mysqli_fetch_object(mysqli_query($db, $sql))) {
               $msg[] = $this->user_link($user) . ' hat bereits ein Konto hier';
             }
             else {
@@ -498,7 +507,7 @@ Liebe Grüße,
     $code = intval($this->path[2]);
 
     $sql = "SELECT * FROM invitations WHERE code = {$code}";
-    $invite = mysql_fetch_object(mysql_query($sql));
+    $invite = mysqli_fetch_object(mysqli_query($db, $sql));
     if (!$invite) {
       $this->message('Ungültige Einladung');
       $this->redirect('/');
@@ -508,7 +517,7 @@ Liebe Grüße,
     switch ($invite->object_type) {
       case 'topic':    
         $sql = "SELECT * FROM photos WHERE topic_id = {$invite->object_id} LIMIT 1";
-        $photo = mysql_fetch_object(mysql_query($sql));
+        $photo = mysqli_fetch_object(mysqli_query($db, $sql));
 
         $_SESSION['user'] = $invite;
         $this->message('Sie haben eingeschränkten Zugang');

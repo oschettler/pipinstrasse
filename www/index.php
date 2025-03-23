@@ -57,8 +57,8 @@ ini_set('include_path', $include_path);
 
 require_once "controller.class.php";
 
-if (empty($_GET['url'])) {
-  $_GET['url'] = '/home';
+if ($_SERVER['REQUEST_URI'] == '/') {
+  $_SERVER['REQUEST_URI'] = '/home';
 }
 
 if (empty($_SESSION['user'])) {
@@ -74,14 +74,14 @@ if (empty($_SESSION['user'])) {
       '/home/theme',
     ) as $url) {
 
-    if (preg_match("#^{$url}(/.*)?$#", $_GET['url'])) {
+    if (preg_match("#^{$url}(/.*)?$#", $_SERVER['REQUEST_URI'])) {
       $allowed = TRUE;
       break;
     }
   }
 
   if (!$allowed) {
-    $_SESSION['return_to'] = $_GET['url'];
+    $_SESSION['return_to'] = $_SERVER['REQUEST_URI'];
     $_SESSION['message'] = array(
       'text' => 'Die Inhalte auf diesen Seiten sind nur angemeldet zu sehen.<br>Bitte melden Sie sich an oder besuchen Sie unsere <a href="/page/intro">öffentlichen Seiten</a>.',
       'class' => 'error',
@@ -90,12 +90,12 @@ if (empty($_SESSION['user'])) {
     exit;
   }
 }
-mysql_connect($config['db_host'], $config['db_user'], $config['db_password']);
-mysql_select_db($config['db_name']);
-mysql_query('SET NAMES UTF8');
+
+$db = mysqli_connect($config['db_host'], $config['db_user'], $config['db_password'], $config['db_name']);
+mysqli_query($db, 'SET NAMES UTF8');
 //mysql_query('SET CHARACTER SET UTF8');
 
-$path = explode('/', substr($_GET['url'], 1));
+$path = explode('/', substr($_SERVER['REQUEST_URI'], 1));
 
 if (count($path) < 2) {
   $path[1] = 'index';

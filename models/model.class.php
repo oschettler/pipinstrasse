@@ -3,25 +3,28 @@
 class model {
 
   function insert_id() {
-    $insert_id = mysql_fetch_row(mysql_query('SELECT LAST_INSERT_ID()'));
+    global $db;
+    $insert_id = mysqli_fetch_row(mysqli_query($db, 'SELECT LAST_INSERT_ID()'));
     return $insert_id[0];
   }
   
   function query($sql) {
+    global $db;
     $result = array();
-    $rs = mysql_query($sql);
+    $rs = mysqli_query($db, $sql);
     if (!$rs) {
       error_log('QUERY() ERROR: ' . mysql_error());
       return NULL;
     }
-    while ($_ = mysql_fetch_object($rs)) {
+    while ($_ = mysqli_fetch_object($rs)) {
       $result[] = $_;
     }
     return $result;
   }
   
   function exec($sql) {
-    $result = mysql_query($sql);
+    global $db;
+    $result = mysqli_query($db, $sql);
     if (!$result) {
       error_log('EXEC() ERROR: ' . mysql_error());
     }
@@ -29,21 +32,23 @@ class model {
   }
   
   function one($sql) {
-    $rs = mysql_query($sql);
+    global $db;
+    $rs = mysqli_query($db, $sql);
     if (!$rs) {
       error_log('ONE() ERROR: ' . mysql_error());
       return NULL;
     }
-    return mysql_fetch_object($rs);
+    return mysqli_fetch_object($rs);
   }
   
   function count($sql) {
-    $rs = mysql_query($sql);
+    global $db;
+    $rs = mysqli_query($db, $sql);
     if (!$rs) {
       error_log('COUNT() ERROR: ' . mysql_error());
       return NULL;
     }
-    $counter = mysql_fetch_row($rs);
+    $counter = mysqli_fetch_row($rs);
     return $counter[0];
   }
   

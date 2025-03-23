@@ -38,10 +38,10 @@ class user extends model {
   }
   
   function save($data) {  
-    global $config;
+    global $config, $db;
     
     $user = $this->one('SELECT id FROM users WHERE mail = '
-      . "'" . mysql_real_escape_string($data['mail']) . "'");
+      . "'" . mysqli_real_escape_string($db, $data['mail']) . "'");
       
     if ($user) { 
       $sql = 'UPDATE users SET ';
@@ -51,19 +51,19 @@ class user extends model {
     }
 
     if (!empty($data['password'])) {
-      $sql .= 'password = MD5(' .  "'" . mysql_real_escape_string($data['password']) . "'), ";
+      $sql .= 'password = MD5(' .  "'" . mysqli_real_escape_string($db, $data['password']) . "'), ";
     }
     
     $slug = controller::slug("{$data['hausnummer']}-{$data['vorname']}-{$data['nachname']}");
     
     $sql .= 
-        'slug = ' . "'" . mysql_real_escape_string($slug) . "', "
-      . 'mail = ' . "'" . mysql_real_escape_string($data['mail']) . "', "
-      . 'vorname = ' .  "'" . mysql_real_escape_string($data['vorname']) . "', "
-      . 'nachname = ' .  "'" . mysql_real_escape_string($data['nachname']) . "', "
-      . 'hausnummer = ' .  "'" . mysql_real_escape_string($data['hausnummer']) . "', "
+        'slug = ' . "'" . mysqli_real_escape_string($db, $slug) . "', "
+      . 'mail = ' . "'" . mysqli_real_escape_string($db, $data['mail']) . "', "
+      . 'vorname = ' .  "'" . mysqli_real_escape_string($db, $data['vorname']) . "', "
+      . 'nachname = ' .  "'" . mysqli_real_escape_string($db, $data['nachname']) . "', "
+      . 'hausnummer = ' .  "'" . mysqli_real_escape_string($db, $data['hausnummer']) . "', "
       . 'hausnr_sort = ' . intval($data['hausnummer']) . ', '
-      . 'bio = ' .  "'" . mysql_real_escape_string($data['bio']) . "', ";
+      . 'bio = ' .  "'" . mysqli_real_escape_string($db, $data['bio']) . "', ";
       
     if ($user) {
       $sql .= 'updated = NOW()';
@@ -72,7 +72,7 @@ class user extends model {
       $sql .= " WHERE id = {$user_id}";
     }
     else {
-      $sql .= 'created = NOW()';
+      $sql .= 'created = NOW(), updated = NOW()';
     }
 
     if ($this->exec($sql)) {

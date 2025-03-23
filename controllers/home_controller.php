@@ -15,22 +15,23 @@ This is the MIT Open Source License of http://www.opensource.org/licenses/MIT
 class home_controller extends controller {
 
   function do_index() {
+    global $db;
     $this->vars['title'] = 'Pipinstraße';
 
     $sql = 'SELECT s.created as s_created, s.id AS s_id, s.*, u.* FROM stream s LEFT JOIN users u ON s.von = u.id WHERE '
-      . " von != '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
+      . " von != '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
       . 'ORDER BY s.created DESC LIMIT 10';
 
     $this->vars['stream'] = array();
 
-    $rs = mysql_query($sql); 
-    while ($action = mysql_fetch_object($rs)) {
+    $rs = mysqli_query($db, $sql); 
+    while ($action = mysqli_fetch_object($rs)) {
       
       $sql2 = "SELECT u.id, u.vorname, u.nachname, u.hausnummer FROM comments c LEFT JOIN users u ON c.von = u.id WHERE c.object_type = 'stream' AND c.object_id = {$action->s_id} LIMIT 3";
       
       $action->likes = array(); 
-      $rs2 = mysql_query($sql2); 
-      while ($like = mysql_fetch_object($rs2)) {
+      $rs2 = mysqli_query($db, $sql2); 
+      while ($like = mysqli_fetch_object($rs2)) {
         $action->likes[] = $like;
       }
       

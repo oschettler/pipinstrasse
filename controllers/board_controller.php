@@ -21,17 +21,18 @@ class board_controller extends controller {
    * Action: Das schwarze Brett anschauen
    */
   function do_index() {
+    global $db;
     $this->vars['title'] = "Schwarzes Brett";
     
     if (!empty($_POST) && !empty($_POST['nachricht'])) {
       $sql = 'INSERT INTO board SET '
-        . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-        . 'nachricht = ' .  "'" . mysql_real_escape_string($_POST['nachricht']) . "', "
+        . 'von = ' .  "'" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "', "
+        . 'nachricht = ' .  "'" . mysqli_real_escape_string($db, $_POST['nachricht']) . "', "
         . 'created = NOW()';
 
-      $result = mysql_query($sql);
+      $result = mysqli_query($db, $sql);
       if (!$result) {
-        $this->message(mysql_error(), 'error');
+        $this->message(mysqli_error($db), 'error');
       }
       else {
         $this->message('Ihre Nachricht wurde gespeichert');

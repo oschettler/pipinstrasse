@@ -58,7 +58,7 @@ if (!empty($_SESSION['user']) && !$_SESSION['user']->guest) {
   <?php
   if (empty($_SESSION['user'])) {
   ?>
-  <img id="map"  src="http://maps.google.com/maps/api/staticmap?markers=Pipinstrasse%2C+53111+Bonn&zoom=16&size=470x470&sensor=false" />
+  <!--img id="map"  src="http://maps.google.com/maps/api/staticmap?markers=Pipinstrasse%2C+53111+Bonn&zoom=16&size=470x470&sensor=false" /-->
   <?php
   }
   else {

@@ -1,4 +1,5 @@
 <?php
+global $db;
 $this->page_head();
 ?>
 <script type="text/javascript" charset="utf-8">
@@ -76,8 +77,8 @@ $this->end_page_head();
 
       case 'comment':
         $sql = "SELECT * FROM comments WHERE id = {$action->object_id}";
-        $rs = mysql_query($sql);
-        $comment = mysql_fetch_object($rs);
+        $rs = mysqli_query($db, $sql);
+        $comment = mysqli_fetch_object($rs);
 
         switch ($comment->object_type) {
           case 'photo':

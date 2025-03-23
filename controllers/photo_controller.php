@@ -66,7 +66,7 @@ class photo_controller extends controller {
          */ 
         $sql = "SELECT p.id as p_id, p.*, t.* FROM topics t "
           . 'LEFT JOIN photos p ON p.topic_id = t.id '
-          . 'GROUP BY t.id '
+          . 'GROUP BY t.id, p.id '
           . 'ORDER BY t.created DESC LIMIT 10';
 
         $topics = $this->topic->query($sql);
@@ -84,7 +84,7 @@ class photo_controller extends controller {
   }
   
   function do_add($id = 0) {
-    global $config;
+    global $config, $db;
     
     if (empty($_POST) || empty($_FILES)) {
       $this->redirect('/photo/index');
@@ -97,7 +97,7 @@ class photo_controller extends controller {
 
     if (!empty($_POST['topic'])) {
       $topic = $this->topic->one("SELECT id, von, shared FROM topics WHERE "
-        . "title = '" .  mysql_real_escape_string($_POST['topic']) . "'"
+        . "title = '" .  mysqli_real_escape_string($db, $_POST['topic']) . "'"
       );
       if ($topic) {
         if (!$topic->shared && $topic->von != $_SESSION['user']->id) {
@@ -108,10 +108,12 @@ class photo_controller extends controller {
       }
       else {
         $sql = "INSERT INTO topics SET "
-          . "title = '" .  mysql_real_escape_string($_POST['topic']) . "', "
+          . "title = '" .  mysqli_real_escape_string($db, $_POST['topic']) . "', "
           . "von = {$_SESSION['user']->id}, "
-          . "slug = '" .  mysql_real_escape_string($this->slug($_POST['topic'])) . "', "
-          . 'created = NOW()';
+          . "shared = 0, "
+          . "description = '', "
+          . "slug = '" .  mysqli_real_escape_string($db, $this->slug($_POST['topic'])) . "', "
+          . 'created = NOW(), updated = NOW()';
         $this->topic->exec($sql);
 
         $topic_id = $this->topic->insert_id();

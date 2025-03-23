@@ -22,24 +22,25 @@ class message_controller extends controller {
    * Action: Schreibe eine Nachricht
    */
   function do_write() {
+    global $db;
     if (!empty($_POST)) {
       $sql = 'INSERT INTO messages SET '
-        . 'von = ' .  "'" . mysql_real_escape_string($_SESSION['user']->id) . "', "
-        . 'an = ' .  "'" . mysql_real_escape_string($_POST['an']) . "', "
-        . 'gift = ' .  "'" . mysql_real_escape_string($_POST['gift']) . "', "
-        . 'nachricht = ' .  "'" . mysql_real_escape_string($_POST['nachricht']) . "', "
-        . 'created = NOW()';
+        . 'von = ' .  "'" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "', "
+        . 'an = ' .  "'" . mysqli_real_escape_string($db, $_POST['an']) . "', "
+        . 'gift = ' .  "'" . mysqli_real_escape_string($db, $_POST['gift']) . "', "
+        . 'nachricht = ' .  "'" . mysqli_real_escape_string($db, $_POST['nachricht']) . "', "
+        . 'created = NOW(), viewed = NOW()';
 
-      $result = mysql_query($sql);
+      $result = mysqli_query($db, $sql);
       if (!$result) {
-        $this->message(mysql_error(), 'error');
+        $this->message(mysqli_error($db), 'error');
       }
       else {
         $this->message('Ihre Nachricht wurde gespeichert');
 
-        $rs = mysql_query('SELECT mail FROM users WHERE id = '
-          . "'" . mysql_real_escape_string($_POST['an']) . "'");
-        $recipient = mysql_fetch_object($rs);
+        $rs = mysqli_query($db, 'SELECT mail FROM users WHERE id = '
+          . "'" . mysqli_real_escape_string($db, $_POST['an']) . "'");
+        $recipient = mysqli_fetch_object($rs);
 
         $insert_id = $this->message->insert_id();
 
@@ -57,6 +58,7 @@ class message_controller extends controller {
    * Action: Lies eine Nachricht
    */
   function do_view() {
+    global $db;
     if (count($this->path) != 3) {
       $this->message('FALSCHE URL');
       $this->redirect();
@@ -66,10 +68,10 @@ class message_controller extends controller {
     FROM messages m 
     LEFT JOIN users u ON m.von = u.id 
     WHERE m.id = '
-      . "'" . mysql_real_escape_string($this->path[2]) . "'";
+      . "'" . mysqli_real_escape_string($db, $this->path[2]) . "'";
 
     $rs = mysql_query($sql);
-    $this->vars['message'] = $message = mysql_fetch_object($rs);
+    $this->vars['message'] = $message = mysqli_fetch_object($rs);
 
     if ($message->an != $_SESSION['user']->id && $message->von != $_SESSION['user']->id) {
       $this->message('Diese Nachricht ist nicht an Sie gerichtet');
@@ -77,7 +79,7 @@ class message_controller extends controller {
     }
     
     $sql = 'UPDATE messages SET viewed = NOW() WHERE id = '
-      . "'" . mysql_real_escape_string($this->path[2]) . "'";
+      . "'" . mysqli_real_escape_string($db, $this->path[2]) . "'";
     mysql_query($sql);
 
     $this->vars['title'] = "Nachricht von {$message->vorname} {$message->nachname} aus Nummer {$message->hausnummer}";
@@ -86,11 +88,12 @@ class message_controller extends controller {
   }
   
   function do_index() {
+    global $db;
     $this->vars['title'] = "Ihre letzten Nachrichten";
 
     $sql = 'SELECT COUNT(*) FROM messages WHERE '
-      . "an = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
-      . "OR von = '" . mysql_real_escape_string($_SESSION['user']->id) . "'";
+      . "an = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
+      . "OR von = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "'";
     $count = $this->message->count($sql);
     
     $page = $this->paginate(MESSAGE_PAGE_SIZE, $count, '/message/index');
@@ -105,8 +108,8 @@ class message_controller extends controller {
     LEFT JOIN users von ON m.von = von.id 
     LEFT JOIN users an ON m.an = an.id 
     WHERE '
-      . "an = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
-      . "OR von = '" . mysql_real_escape_string($_SESSION['user']->id) . "' "
+      . "an = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
+      . "OR von = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
       . 'ORDER BY m.created DESC LIMIT ' . (($page-1)*MESSAGE_PAGE_SIZE) . ',' . MESSAGE_PAGE_SIZE;
 
     $this->vars['messages'] = $this->message->query($sql);

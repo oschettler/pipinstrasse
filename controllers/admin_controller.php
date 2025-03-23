@@ -45,12 +45,12 @@ class admin_controller extends controller {
    * Die Nummer der letzten Datei wird in Tabelle migrations gespeichert.
    */
   function do_migrate() {
-    global $config;
+    global $config, $db;
     $this->layout = 'admin';
     $this->vars['title'] = 'Datenbank aktualisieren';
     
     $this->layout = 'admin';
-    $migration = mysql_fetch_object(mysql_query('SELECT last_id FROM migrations'));
+    $migration = mysqli_fetch_object(mysqli_query($db, 'SELECT last_id FROM migrations'));
 
     echo "Aktualisiere die Datenbank seit Migration #{$migration->last_id} ...<pre>\n";
     
@@ -87,7 +87,7 @@ class admin_controller extends controller {
         default:
           echo " - WARNING: Typ {$entry[1]} nicht unterstützt\n";
       }
-      mysql_query("UPDATE migrations SET last_id = {$n}, updated = NOW()");
+      mysqli_query($db, "UPDATE migrations SET last_id = {$n}, updated = NOW()");
     }
     echo "</pre>Fertig.\n";
   }
@@ -119,9 +119,10 @@ class admin_controller extends controller {
   }
   
   function admin_paginate($model, $order = NULL) {
+    global $db;
     $sql = "SELECT COUNT(*) FROM {$model}";
-    $rs = mysql_query($sql);
-    $counter = mysql_fetch_row($rs);
+    $rs = mysqli_query($db, $sql);
+    $counter = mysqli_fetch_row($rs);
 
     $page = $this->paginate(ADMIN_PAGE_SIZE, $counter[0], '/admin/' . $model);
 
@@ -133,8 +134,8 @@ class admin_controller extends controller {
 
     $this->vars[$model] = array();
 
-    $rs = mysql_query($sql);
-    while ($_ = mysql_fetch_object($rs)) {
+    $rs = mysqli_query($db, $sql);
+    while ($_ = mysqli_fetch_object($rs)) {
       $this->vars[$model][] = $_;
     }
   }
@@ -179,6 +180,7 @@ class admin_controller extends controller {
    * Albenverwaltung, besonders Setzen des "shared"-Zustanded
    */
   function do_topics() {
+    global $db;
     $this->layout = 'admin';
     $this->vars['title'] = 'Verwalten von Fotoalben';
 
@@ -192,7 +194,7 @@ class admin_controller extends controller {
         . " updated = NOW()"
         . " WHERE id = '" . mysql_real_escape_string($_POST['id']) . "'";
       
-      if (mysql_query($sql)) {
+      if (mysqli_query($db, $sql)) {
         $this->message("Die Änderungen wurden gespeichert");
       }
       else {
