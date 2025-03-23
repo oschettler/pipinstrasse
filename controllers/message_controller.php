@@ -70,7 +70,7 @@ class message_controller extends controller {
     WHERE m.id = '
       . "'" . mysqli_real_escape_string($db, $this->path[2]) . "'";
 
-    $rs = mysql_query($sql);
+    $rs = mysqli_query($db, $sql);
     $this->vars['message'] = $message = mysqli_fetch_object($rs);
 
     if ($message->an != $_SESSION['user']->id && $message->von != $_SESSION['user']->id) {
@@ -80,7 +80,7 @@ class message_controller extends controller {
     
     $sql = 'UPDATE messages SET viewed = NOW() WHERE id = '
       . "'" . mysqli_real_escape_string($db, $this->path[2]) . "'";
-    mysql_query($sql);
+    mysqli_query($db, $sql);
 
     $this->vars['title'] = "Nachricht von {$message->vorname} {$message->nachname} aus Nummer {$message->hausnummer}";
     
@@ -101,8 +101,8 @@ class message_controller extends controller {
     $sql = 'SELECT 
       m.created as m_created, 
       m.id AS m_id, 
-      von.id AS von_id, 
-      an.id AS an_id, 
+      m.von AS von_id, 
+      m.an AS an_id, 
       m.*, von.* 
     FROM messages m 
     LEFT JOIN users von ON m.von = von.id 
@@ -111,14 +111,10 @@ class message_controller extends controller {
       . "an = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
       . "OR von = '" . mysqli_real_escape_string($db, $_SESSION['user']->id) . "' "
       . 'ORDER BY m.created DESC LIMIT ' . (($page-1)*MESSAGE_PAGE_SIZE) . ',' . MESSAGE_PAGE_SIZE;
-
+    
     $this->vars['messages'] = $this->message->query($sql);
     foreach ($this->vars['messages'] as $i => $message) {
-      $sql = 'SELECT * 
-      FROM users  
-      WHERE '
-        . "id = {$message->an_id}";
-      
+      $sql = 'SELECT * FROM users WHERE ' . "id = {$message->an_id}";
       $this->vars['messages'][$i]->an = $this->user->one($sql);
     }
     $this->render();
