@@ -343,8 +343,16 @@ Liebe Grüße,
                   . " slug = '" . mysqli_real_escape_string($db, $code) . "', "
                   . " recover = '" . mysqli_real_escape_string($db, $code) . "', "
                   . " invited_by = {$_SESSION['user']->id}, "
+                  . " roles = 'visitor', "
+                  . " password = '', "
+                  . " vorname = '', "
+                  . " nachname = '', "
+                  . " hausnummer = '', "
+                  . " bio = '', "
+                  . " status = '', "
                   . " active = 1, "
                   . " created = NOW(), "
+                  . " updated = NOW(), "
                   . " invited = NOW()";
 
                 $unique = mysqli_query($db, $sql);

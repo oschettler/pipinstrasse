@@ -343,7 +343,7 @@ class admin_controller extends controller {
         . " body = '" . mysqli_real_escape_string($db, $_POST['body']) . "',";
       
       if (empty($_POST['id'])) {
-        $sql .= " created = NOW()";
+        $sql .= " created = NOW(), updated = NOW()";
       }
       else {
         $sql .= " updated = NOW() WHERE id = '" . mysqli_real_escape_string($db, $_POST['id']) . "'";

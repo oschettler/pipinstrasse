@@ -3,6 +3,7 @@
 class topic extends model {
   
   function save($obj) {
+    global $db;
     if (is_array($obj)) {
       $obj = (object)$obj;
     }
