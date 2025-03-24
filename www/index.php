@@ -53,11 +53,19 @@ $include_path .=
   ':' . realpath("{$_SERVER['DOCUMENT_ROOT']}/{$config['dir_views']}");
   
 ini_set('include_path', $include_path);
-//D echo ini_get('include_path'); exit;
 
 require_once "controller.class.php";
 
-if ($_SERVER['REQUEST_URI'] == '/') {
+/*
+ * Einfacher Router, basierend auf REQUEST_URI.
+ * In Nginx, reicht zur Einrichtung folgender Eintrag:
+ *----
+ * location / {
+ *   try_files $uri $uri/ /index.php;
+ * }
+ *----
+ */
+if (empty($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '/') {
   $_SERVER['REQUEST_URI'] = '/home';
 }
 

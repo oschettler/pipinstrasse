@@ -132,7 +132,7 @@ class photo_controller extends controller {
       }
     }
     else {
-      $title = $_FILES['bild']['name'];
+      $title = $_POST['title'];
     }
 
     $result_id = $this->photo->save(array(
